@@ -10,11 +10,11 @@
     --background: 263 47% 20%; /* Purple #2D1B4E */
     --foreground: 240 10% 90%; /* Silver text */
 
-    --card: 0 0% 100%; /* White */
-    --card-foreground: 240 33% 14%; /* Charcoal */
+    --card: 263 40% 16%; /* Dark purple - no white */
+    --card-foreground: 220 9% 91%; /* Silver text */
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 33% 14%;
+    --popover: 263 40% 16%;
+    --popover-foreground: 220 9% 91%;
 
     --primary: 43 72% 52%; /* Gold #D4AF37 */
     --primary-foreground: 240 33% 14%; /* Charcoal */
@@ -68,10 +68,10 @@
   .dark {
     --background: 263 50% 12%;
     --foreground: 220 9% 91%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 33% 14%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 33% 14%;
+    --card: 263 40% 16%;
+    --card-foreground: 220 9% 91%;
+    --popover: 263 40% 16%;
+    --popover-foreground: 220 9% 91%;
     --primary: 43 72% 52%;
     --primary-foreground: 240 33% 14%;
     --secondary: 160 63% 46%;
