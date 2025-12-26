@@ -112,7 +112,7 @@ export default function CategoryPage() {
         </section>
 
         {/* Filters */}
-        <div className="sticky top-16 z-40 bg-card border-b-2 border-primary py-4">
+        <div className="sticky top-16 z-40 gradient-stats border-b border-primary/30 py-4">
           <div className="container mx-auto px-4">
             <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
               {/* Search */}
@@ -126,14 +126,14 @@ export default function CategoryPage() {
                   placeholder="Search events..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border-2 border-secondary rounded-lg bg-card text-card-foreground input-teal focus:border-primary transition-colors"
+                  className="w-full pl-10 pr-4 py-2 border border-primary/40 rounded-lg bg-background/50 text-foreground placeholder:text-silver/50 input-teal focus:border-primary transition-colors"
                 />
               </div>
 
               {/* Filter Pills */}
-              <div className="flex flex-wrap gap-4 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-card-foreground text-sm font-medium">Fee:</span>
+              <div className="flex flex-wrap gap-3 md:gap-4 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-silver text-sm font-medium">Fee:</span>
                   <div className="flex gap-1 flex-wrap">
                     {feeOptions.map((option) => (
                       <button
@@ -144,7 +144,7 @@ export default function CategoryPage() {
                         className={`px-3 py-1 text-xs rounded-full transition-colors ${
                           filters.fee === option
                             ? "bg-primary text-primary-foreground font-semibold"
-                            : "bg-muted/20 text-card-foreground hover:bg-primary/20"
+                            : "bg-muted/40 text-silver hover:bg-primary/20"
                         }`}
                       >
                         {option}
@@ -153,8 +153,8 @@ export default function CategoryPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-card-foreground text-sm font-medium">Type:</span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-silver text-sm font-medium">Type:</span>
                   <div className="flex gap-1 flex-wrap">
                     {typeOptions.map((option) => (
                       <button
@@ -165,7 +165,7 @@ export default function CategoryPage() {
                         className={`px-3 py-1 text-xs rounded-full transition-colors ${
                           filters.type === option
                             ? "bg-primary text-primary-foreground font-semibold"
-                            : "bg-muted/20 text-card-foreground hover:bg-primary/20"
+                            : "bg-muted/40 text-silver hover:bg-primary/20"
                         }`}
                       >
                         {option}
@@ -174,8 +174,8 @@ export default function CategoryPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-card-foreground text-sm font-medium">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-silver text-sm font-medium">
                     Status:
                   </span>
                   <div className="flex gap-1 flex-wrap">
@@ -188,7 +188,7 @@ export default function CategoryPage() {
                         className={`px-3 py-1 text-xs rounded-full transition-colors ${
                           filters.status === option
                             ? "bg-primary text-primary-foreground font-semibold"
-                            : "bg-muted/20 text-card-foreground hover:bg-primary/20"
+                            : "bg-muted/40 text-silver hover:bg-primary/20"
                         }`}
                       >
                         {option}
@@ -202,7 +202,7 @@ export default function CategoryPage() {
         </div>
 
         {/* Events Grid */}
-        <main className="py-12">
+        <main className="py-12 gradient-stats">
           <div className="container mx-auto px-4">
             {filteredEvents.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
