@@ -7,7 +7,6 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import EventRegistrationPage from "./pages/EventRegistrationPage";
-import DelegateDetailsPage from "./pages/DelegateDetailsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +22,6 @@ const App = () => (
           <Route path="/events" element={<AllEventsPage />} />
           <Route path="/events/:categoryId" element={<CategoryPage />} />
           <Route path="/events/:categoryId/:eventId/register" element={<EventRegistrationPage />} />
-          <Route path="/delegate/:tierId" element={<DelegateDetailsPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
