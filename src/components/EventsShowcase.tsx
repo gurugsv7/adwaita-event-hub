@@ -96,24 +96,24 @@ const categoryData = [
 
 export function EventsShowcase() {
   return (
-    <section id="events" className="py-12 md:py-20 gradient-stats">
-      <div className="container mx-auto px-3 md:px-4">
+    <section id="events" className="py-20 gradient-stats">
+      <div className="container mx-auto px-4">
         {/* Section Header */}
-        <div className="max-w-2xl mb-8 md:mb-16">
-          <p className="text-secondary text-xs md:text-sm font-medium uppercase tracking-widest mb-2 md:mb-3">
+        <div className="max-w-2xl mb-16">
+          <p className="text-secondary text-sm font-medium uppercase tracking-widest mb-3">
             Explore Categories
           </p>
-          <h2 className="font-serif text-primary text-2xl md:text-3xl lg:text-5xl font-bold mb-3 md:mb-6">
+          <h2 className="font-serif text-primary text-3xl md:text-5xl font-bold mb-6">
             50+ Events Across 8 Domains
           </h2>
-          <p className="text-silver/80 text-sm md:text-lg leading-relaxed">
+          <p className="text-silver/80 text-lg leading-relaxed">
             Whether you're a performer, athlete, artist, or innovator—there's a stage waiting
-            for you. Tap any category to explore.
+            for you. Click on any category to discover all events and register.
           </p>
         </div>
 
-        {/* Responsive Grid: 2 cols mobile, 2 cols tablet, 4 cols desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4 auto-rows-fr">
+        {/* Bento Grid Layout */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 auto-rows-fr">
           {categoryData.map((category) => (
             <CategoryCard key={category.id} {...category} />
           ))}
