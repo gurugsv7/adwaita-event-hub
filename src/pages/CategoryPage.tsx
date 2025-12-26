@@ -211,6 +211,7 @@ export default function CategoryPage() {
                     key={event.id}
                     event={event}
                     borderColor={category.borderColor}
+                    categoryId={category.id}
                   />
                 ))}
               </div>
