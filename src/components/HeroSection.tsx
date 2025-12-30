@@ -1,4 +1,61 @@
 import { ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
+
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+
+  useEffect(() => {
+    const targetDate = new Date("2026-02-12T00:00:00").getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      if (difference > 0) {
+        setTimeLeft({
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+          seconds: Math.floor((difference % (1000 * 60)) / 1000),
+        });
+      }
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const timeUnits = [
+    { label: "Days", value: timeLeft.days },
+    { label: "Hours", value: timeLeft.hours },
+    { label: "Minutes", value: timeLeft.minutes },
+    { label: "Seconds", value: timeLeft.seconds },
+  ];
+
+  return (
+    <div className="flex gap-3 md:gap-6 justify-center mb-8">
+      {timeUnits.map((unit) => (
+        <div
+          key={unit.label}
+          className="flex flex-col items-center bg-background/20 backdrop-blur-sm border border-primary/30 rounded-lg px-3 py-2 md:px-5 md:py-4 min-w-[60px] md:min-w-[80px]"
+        >
+          <span className="font-serif font-bold text-primary text-2xl md:text-4xl drop-shadow-[0_0_10px_hsl(45,70%,53%,0.5)]">
+            {String(unit.value).padStart(2, "0")}
+          </span>
+          <span className="text-silver/80 text-[10px] md:text-xs uppercase tracking-wider mt-1">
+            {unit.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function HeroSection() {
   return (
@@ -29,6 +86,10 @@ export function HeroSection() {
         <p className="text-silver text-lg md:text-xl mb-6 font-light">
           Where Medicine Meets Culture
         </p>
+        
+        {/* Countdown Timer */}
+        <CountdownTimer />
+        
         <p className="text-silver/80 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed">
           Join us for the grandest inter-college cultural extravaganza featuring 50+ events, 
           ₹5,50,000 prize pool, and participants from 100+ colleges across the nation.
