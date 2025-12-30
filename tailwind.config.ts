@@ -93,11 +93,54 @@ export default {
           from: { opacity: "0", transform: "translateY(10px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "spin-slow": {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        "spin-reverse": {
+          from: { transform: "rotate(360deg)" },
+          to: { transform: "rotate(0deg)" },
+        },
+        "portal-pulse": {
+          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
+          "50%": { opacity: "0.6", transform: "scale(1.05)" },
+        },
+        "portal-breathe": {
+          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
+          "50%": { opacity: "0.7", transform: "scale(1.1)" },
+        },
+        "float-slow": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "50%": { transform: "translate(20px, -30px)" },
+        },
+        "float-medium": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "50%": { transform: "translate(-15px, 25px)" },
+        },
+        "float-fast": {
+          "0%, 100%": { transform: "translate(0, 0)" },
+          "50%": { transform: "translate(10px, -15px)" },
+        },
+        "orbit": {
+          from: { transform: "rotate(0deg) translateX(100px) rotate(0deg)" },
+          to: { transform: "rotate(360deg) translateX(100px) rotate(-360deg)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
+        "spin-slow": "spin-slow 30s linear infinite",
+        "spin-reverse": "spin-reverse 25s linear infinite",
+        "portal-pulse": "portal-pulse 4s ease-in-out infinite",
+        "portal-breathe": "portal-breathe 6s ease-in-out infinite",
+        "float-slow": "float-slow 8s ease-in-out infinite",
+        "float-medium": "float-medium 6s ease-in-out infinite",
+        "float-fast": "float-fast 4s ease-in-out infinite",
+        "orbit": "orbit 10s linear infinite",
+      },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
     },
   },
