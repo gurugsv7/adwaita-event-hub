@@ -16,9 +16,7 @@ export default function EventRegistrationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const category = categories.find((c) => c.id === categoryId);
-  const event = category?.subCategories
-    .flatMap((sub) => sub.events)
-    .find((e) => e.id === eventId);
+  const event = category?.events.find((e) => e.id === eventId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
