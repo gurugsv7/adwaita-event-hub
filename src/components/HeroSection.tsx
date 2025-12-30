@@ -14,10 +14,10 @@ export function HeroSection() {
         {/* Central Portal */}
         <div className="absolute inset-0 flex items-center justify-center">
           {/* Portal glow backdrop */}
-          <div className="absolute w-[300px] h-[400px] md:w-[400px] md:h-[550px] rounded-[50%] bg-gradient-to-b from-gold/20 via-primary/30 to-teal/20 blur-3xl animate-portal-breathe" />
+          <div className="absolute w-[350px] h-[480px] md:w-[400px] md:h-[550px] rounded-[50%] bg-gradient-to-b from-gold/20 via-primary/30 to-teal/20 blur-3xl animate-portal-breathe" />
           
           {/* Main portal oval */}
-          <div className="absolute w-[250px] h-[350px] md:w-[320px] md:h-[450px] rounded-[50%] border-[3px] border-gold/60 shadow-[0_0_60px_hsl(45,70%,53%,0.4),inset_0_0_60px_hsl(45,70%,53%,0.2)] animate-portal-pulse">
+          <div className="absolute w-[300px] h-[420px] md:w-[320px] md:h-[450px] rounded-[50%] border-[3px] border-gold/60 shadow-[0_0_60px_hsl(45,70%,53%,0.4),inset_0_0_60px_hsl(45,70%,53%,0.2)] animate-portal-pulse">
             {/* Inner portal gradient */}
             <div className="absolute inset-2 rounded-[50%] bg-gradient-to-b from-primary/40 via-[hsl(263,60%,20%)] to-teal/30 animate-swirl" />
             
@@ -31,9 +31,9 @@ export function HeroSection() {
           </div>
           
           {/* Energy ripples emanating from portal */}
-          <div className="absolute w-[350px] h-[500px] md:w-[500px] md:h-[700px] rounded-[50%] border border-gold/20 animate-ripple-1" />
-          <div className="absolute w-[450px] h-[620px] md:w-[650px] md:h-[900px] rounded-[50%] border border-primary/15 animate-ripple-2" />
-          <div className="absolute w-[550px] h-[750px] md:w-[800px] md:h-[1100px] rounded-[50%] border border-teal/10 animate-ripple-3" />
+          <div className="absolute w-[420px] h-[580px] md:w-[500px] md:h-[700px] rounded-[50%] border border-gold/20 animate-ripple-1" />
+          <div className="absolute w-[520px] h-[720px] md:w-[650px] md:h-[900px] rounded-[50%] border border-primary/15 animate-ripple-2" />
+          <div className="absolute w-[620px] h-[860px] md:w-[800px] md:h-[1100px] rounded-[50%] border border-teal/10 animate-ripple-3" />
         </div>
 
         {/* Floating mystical runes */}
