@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Search, ArrowRight } from "lucide-react";
+import { ArrowLeft, Search, ArrowRight, Calendar, IndianRupee } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -19,64 +19,48 @@ const getStatusColor = (status: string) => {
   }
 };
 
-const formatPrize = (amount: number) => {
-  if (amount >= 1000) {
-    return `₹${amount / 1000}K`;
-  }
-  return `₹${amount}`;
-};
-
 interface EventCardProps {
   event: {
     id: string;
     title: string;
+    description: string;
     fee: number;
     teamType: string;
+    day: string;
     status: string;
-    prizes: { first: number; second: number; third: number };
   };
   categoryId: string;
   index: number;
+  borderColor: string;
 }
 
-function EventCard({ event, categoryId, index }: EventCardProps) {
+function EventCard({ event, categoryId, index, borderColor }: EventCardProps) {
+  const getBorderColorClass = () => {
+    switch (borderColor) {
+      case "border-gold":
+        return "border-l-primary";
+      case "border-orange":
+        return "border-l-orange-500";
+      case "border-teal":
+        return "border-l-secondary";
+      default:
+        return "border-l-primary";
+    }
+  };
+
   return (
     <div
-      className="group bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-primary/10 hover:border-primary/40 animate-fade-in"
-      style={{ animationDelay: `${index * 50}ms` }}
+      className={`group bg-card/60 backdrop-blur-sm border border-border/40 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/50 animate-fade-in border-l-4 ${getBorderColorClass()}`}
+      style={{ animationDelay: `${index * 80}ms` }}
     >
       {/* Event Header */}
-      <div className="p-5 pb-4 border-b border-border/30">
-        <h3 className="font-serif font-bold text-foreground text-lg group-hover:text-primary transition-colors">
-          {event.title}
-        </h3>
-      </div>
-
-      {/* Event Details */}
-      <div className="p-5 space-y-3">
-        <div className="flex justify-between items-center">
-          <span className="text-silver/70 text-sm">Fee:</span>
-          <span className="text-foreground font-medium">
-            {event.fee === 0 ? "Free" : `₹${event.fee}`}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <span className="text-silver/70 text-sm">Type:</span>
-          <span className="text-foreground font-medium">{event.teamType}</span>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <span className="text-silver/70 text-sm">Prize:</span>
-          <span className="text-primary font-semibold">
-            {formatPrize(event.prizes.first)}
-          </span>
-        </div>
-        
-        <div className="flex justify-between items-center">
-          <span className="text-silver/70 text-sm">Status:</span>
+      <div className="p-5 pb-3">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="font-serif font-bold text-foreground text-lg md:text-xl group-hover:text-primary transition-colors leading-tight">
+            {event.title}
+          </h3>
           <span
-            className={`px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(
+            className={`shrink-0 px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(
               event.status
             )}`}
           >
@@ -85,13 +69,39 @@ function EventCard({ event, categoryId, index }: EventCardProps) {
         </div>
       </div>
 
+      {/* Event Description */}
+      <div className="px-5 pb-4">
+        <p className="text-silver/80 text-sm leading-relaxed line-clamp-3">
+          {event.description}
+        </p>
+      </div>
+
+      {/* Event Meta */}
+      <div className="px-5 pb-4">
+        <div className="flex flex-wrap items-center gap-4 text-sm">
+          <div className="flex items-center gap-1.5 text-silver/70">
+            <IndianRupee size={14} className="text-primary" />
+            <span className="font-medium text-foreground">
+              {event.fee === 0 ? "Free" : `₹${event.fee}`}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-silver/70">
+            <Calendar size={14} className="text-secondary" />
+            <span>{event.day}</span>
+          </div>
+          <div className="text-silver/60 text-xs bg-background/40 px-2 py-1 rounded">
+            {event.teamType}
+          </div>
+        </div>
+      </div>
+
       {/* Register Button */}
-      <div className="p-5 pt-3">
+      <div className="p-5 pt-2 border-t border-border/20">
         <Link
           to={`/events/${categoryId}/${event.id}/register`}
           className="flex items-center justify-center gap-2 w-full py-3 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground font-medium rounded-lg transition-all duration-300 group/btn"
         >
-          <span>Register Now</span>
+          <span>View Details & Register</span>
           <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
         </Link>
       </div>
@@ -105,27 +115,18 @@ export default function CategoryPage() {
 
   const category = categories.find((c) => c.id === categoryId);
 
-  const filteredSubCategories = useMemo(() => {
+  const filteredEvents = useMemo(() => {
     if (!category) return [];
 
     if (searchQuery === "") {
-      return category.subCategories;
+      return category.events;
     }
 
-    return category.subCategories
-      .map((subCat) => ({
-        ...subCat,
-        events: subCat.events.filter((event) =>
-          event.title.toLowerCase().includes(searchQuery.toLowerCase())
-        ),
-      }))
-      .filter((subCat) => subCat.events.length > 0);
+    return category.events.filter((event) =>
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      event.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }, [category, searchQuery]);
-
-  const totalEvents = useMemo(() => {
-    if (!category) return 0;
-    return category.subCategories.reduce((acc, sub) => acc + sub.events.length, 0);
-  }, [category]);
 
   if (!category) {
     return (
@@ -146,7 +147,7 @@ export default function CategoryPage() {
         <title>{category.title} | ADWAITA 2026</title>
         <meta
           name="description"
-          content={`Explore ${category.title} events at ADWAITA 2026. ${totalEvents} events with exciting prizes.`}
+          content={`Explore ${category.title} events at ADWAITA 2026. ${category.events.length} events with exciting prizes.`}
         />
       </Helmet>
 
@@ -154,39 +155,41 @@ export default function CategoryPage() {
         <Navbar />
 
         {/* Hero Header */}
-        <section className="gradient-hero py-16 md:py-24">
+        <section className="gradient-hero py-12 md:py-20">
           <div className="container mx-auto px-4">
+            {/* Back Button */}
             <Link
               to="/#events"
               className="inline-flex items-center gap-2 text-silver/70 hover:text-silver transition-colors mb-8 group"
             >
               <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-              <span className="text-sm">Back to All Categories</span>
+              <span className="text-sm font-medium">Back to Events</span>
             </Link>
 
-            <div className="flex items-start gap-6">
-              <span className="text-5xl md:text-7xl">{category.emoji}</span>
-              <div>
-                <h1 className="font-serif font-bold text-primary text-3xl md:text-5xl mb-3">
-                  {category.title}
-                </h1>
-                <div className="border-l-4 border-secondary pl-4">
-                  <p className="text-silver text-sm md:text-base">
-                    Secretary:{" "}
-                    <span className="font-medium">{category.secretary.name}</span>
-                    <span className="mx-2">|</span>
-                    <a
-                      href={`tel:${category.secretary.phone}`}
-                      className="hover:text-secondary transition-colors"
-                    >
-                      {category.secretary.phone}
-                    </a>
-                  </p>
-                </div>
-                <p className="text-silver/60 text-sm mt-3">
-                  {totalEvents} events available
-                </p>
+            {/* Centered Category Title */}
+            <div className="text-center mb-8">
+              <h1 className="font-serif font-bold text-primary text-3xl md:text-5xl lg:text-6xl tracking-wider">
+                {category.displayTitle}
+              </h1>
+              <div className="w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mt-4" />
+            </div>
+
+            {/* Secretary Info */}
+            <div className="text-center">
+              <div className="inline-flex items-center gap-2 text-silver/80 text-sm md:text-base bg-background/20 backdrop-blur-sm px-4 py-2 rounded-full border border-primary/20">
+                <span>Secretary:</span>
+                <span className="font-medium text-foreground">{category.secretary.name}</span>
+                <span className="text-primary/50">|</span>
+                <a
+                  href={`tel:${category.secretary.phone}`}
+                  className="hover:text-secondary transition-colors"
+                >
+                  {category.secretary.phone}
+                </a>
               </div>
+              <p className="text-silver/50 text-sm mt-4">
+                {category.events.length} events available
+              </p>
             </div>
           </div>
         </section>
@@ -194,7 +197,7 @@ export default function CategoryPage() {
         {/* Search Bar */}
         <div className="sticky top-16 z-40 gradient-stats border-b border-primary/30 py-4">
           <div className="container mx-auto px-4">
-            <div className="relative w-full max-w-md">
+            <div className="relative w-full max-w-md mx-auto">
               <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary"
                 size={18}
@@ -204,47 +207,25 @@ export default function CategoryPage() {
                 placeholder="Search events..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-primary/40 rounded-lg bg-background/50 text-foreground placeholder:text-silver/50 input-teal focus:border-primary transition-colors"
+                className="w-full pl-10 pr-4 py-2.5 border border-primary/40 rounded-lg bg-background/50 text-foreground placeholder:text-silver/50 input-teal focus:border-primary transition-colors"
               />
             </div>
           </div>
         </div>
 
-        {/* Events by Sub-Category */}
+        {/* Events List */}
         <main className="py-12 gradient-stats">
           <div className="container mx-auto px-4">
-            {filteredSubCategories.length > 0 ? (
-              <div className="space-y-12">
-                {filteredSubCategories.map((subCategory, subIndex) => (
-                  <section
-                    key={subCategory.id}
-                    className="animate-fade-in"
-                    style={{ animationDelay: `${subIndex * 100}ms` }}
-                  >
-                    {/* Sub-Category Header */}
-                    <div className="flex items-center gap-3 mb-6">
-                      <span className="text-2xl">{subCategory.icon}</span>
-                      <h2 className="font-serif font-bold text-xl md:text-2xl text-foreground">
-                        {subCategory.name}
-                      </h2>
-                      <div className="flex-1 h-px bg-gradient-to-r from-primary/40 to-transparent ml-4" />
-                      <span className="text-silver/60 text-sm">
-                        {subCategory.events.length} events
-                      </span>
-                    </div>
-
-                    {/* Events Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                      {subCategory.events.map((event, eventIndex) => (
-                        <EventCard
-                          key={event.id}
-                          event={event}
-                          categoryId={category.id}
-                          index={eventIndex}
-                        />
-                      ))}
-                    </div>
-                  </section>
+            {filteredEvents.length > 0 ? (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+                {filteredEvents.map((event, index) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    categoryId={category.id}
+                    index={index}
+                    borderColor={category.borderColor}
+                  />
                 ))}
               </div>
             ) : (
