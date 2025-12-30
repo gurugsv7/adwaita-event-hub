@@ -97,33 +97,48 @@ export default {
           from: { transform: "rotate(0deg)" },
           to: { transform: "rotate(360deg)" },
         },
-        "spin-reverse": {
-          from: { transform: "rotate(360deg)" },
-          to: { transform: "rotate(0deg)" },
-        },
         "portal-pulse": {
-          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
-          "50%": { opacity: "0.6", transform: "scale(1.05)" },
+          "0%, 100%": { opacity: "0.8", boxShadow: "0 0 60px hsl(45,70%,53%,0.4), inset 0 0 60px hsl(45,70%,53%,0.2)" },
+          "50%": { opacity: "1", boxShadow: "0 0 100px hsl(45,70%,53%,0.6), inset 0 0 80px hsl(45,70%,53%,0.3)" },
         },
         "portal-breathe": {
-          "0%, 100%": { opacity: "0.4", transform: "scale(1)" },
-          "50%": { opacity: "0.7", transform: "scale(1.1)" },
+          "0%, 100%": { opacity: "0.5", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.08)" },
         },
-        "float-slow": {
-          "0%, 100%": { transform: "translate(0, 0)" },
-          "50%": { transform: "translate(20px, -30px)" },
+        "ripple-1": {
+          "0%": { opacity: "0.4", transform: "scale(0.9)" },
+          "50%": { opacity: "0.2", transform: "scale(1)" },
+          "100%": { opacity: "0.4", transform: "scale(0.9)" },
         },
-        "float-medium": {
-          "0%, 100%": { transform: "translate(0, 0)" },
-          "50%": { transform: "translate(-15px, 25px)" },
+        "ripple-2": {
+          "0%": { opacity: "0.3", transform: "scale(0.95)" },
+          "50%": { opacity: "0.15", transform: "scale(1.02)" },
+          "100%": { opacity: "0.3", transform: "scale(0.95)" },
         },
-        "float-fast": {
-          "0%, 100%": { transform: "translate(0, 0)" },
-          "50%": { transform: "translate(10px, -15px)" },
+        "ripple-3": {
+          "0%": { opacity: "0.2", transform: "scale(1)" },
+          "50%": { opacity: "0.1", transform: "scale(1.03)" },
+          "100%": { opacity: "0.2", transform: "scale(1)" },
         },
-        "orbit": {
-          from: { transform: "rotate(0deg) translateX(100px) rotate(0deg)" },
-          to: { transform: "rotate(360deg) translateX(100px) rotate(-360deg)" },
+        "float-rune": {
+          "0%, 100%": { opacity: "0.3", transform: "translateY(0) rotate(0deg)" },
+          "50%": { opacity: "0.6", transform: "translateY(-20px) rotate(10deg)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.3", transform: "scale(1)" },
+          "50%": { opacity: "0.8", transform: "scale(1.5)" },
+        },
+        "wisp-1": {
+          "0%, 100%": { opacity: "0", strokeDashoffset: "100" },
+          "50%": { opacity: "1", strokeDashoffset: "0" },
+        },
+        "wisp-2": {
+          "0%, 100%": { opacity: "0", strokeDashoffset: "-100" },
+          "50%": { opacity: "0.8", strokeDashoffset: "0" },
+        },
+        "wisp-3": {
+          "0%, 100%": { opacity: "0", strokeDashoffset: "80" },
+          "50%": { opacity: "0.6", strokeDashoffset: "0" },
         },
       },
       animation: {
@@ -131,16 +146,16 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
         "spin-slow": "spin-slow 30s linear infinite",
-        "spin-reverse": "spin-reverse 25s linear infinite",
         "portal-pulse": "portal-pulse 4s ease-in-out infinite",
         "portal-breathe": "portal-breathe 6s ease-in-out infinite",
-        "float-slow": "float-slow 8s ease-in-out infinite",
-        "float-medium": "float-medium 6s ease-in-out infinite",
-        "float-fast": "float-fast 4s ease-in-out infinite",
-        "orbit": "orbit 10s linear infinite",
-      },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "ripple-1": "ripple-1 5s ease-in-out infinite",
+        "ripple-2": "ripple-2 6s ease-in-out infinite 0.5s",
+        "ripple-3": "ripple-3 7s ease-in-out infinite 1s",
+        "float-rune": "float-rune 5s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 3s ease-in-out infinite",
+        "wisp-1": "wisp-1 8s ease-in-out infinite",
+        "wisp-2": "wisp-2 10s ease-in-out infinite 2s",
+        "wisp-3": "wisp-3 9s ease-in-out infinite 4s",
       },
     },
   },
