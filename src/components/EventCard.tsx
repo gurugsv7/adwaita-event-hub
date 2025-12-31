@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronDown, ChevronUp, Phone, DollarSign, Users, Clock, Trophy, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -47,6 +47,7 @@ const getEventGradient = (title: string) => {
 
 export function EventCard({ event, borderColor = "border-gold", categoryId }: EventCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -131,17 +132,16 @@ export function EventCard({ event, borderColor = "border-gold", categoryId }: Ev
         </button>
 
         {/* Register Button */}
-        <Link to={`/events/${categoryId}/${event.id}/register`}>
-          <Button 
-            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold group/btn"
-            disabled={event.status === "Closed"}
-          >
-            {event.status === "Closed" ? "Registration Closed" : "Register Now"}
-            {event.status !== "Closed" && (
-              <ArrowRight size={16} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
-            )}
-          </Button>
-        </Link>
+        <Button 
+          className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold group/btn"
+          disabled={event.status === "Closed"}
+          onClick={() => navigate(`/register?event=${event.id}`)}
+        >
+          {event.status === "Closed" ? "Registration Closed" : "Register Now"}
+          {event.status !== "Closed" && (
+            <ArrowRight size={16} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
+          )}
+        </Button>
       </div>
 
       {/* Expanded Content */}
