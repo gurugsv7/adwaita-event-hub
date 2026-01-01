@@ -13,6 +13,21 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("Home");
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href: string) => {
+    e.preventDefault();
+    setActiveItem(label);
+    const targetId = href.replace('#', '');
+    const element = document.getElementById(targetId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, label: string, href: string) => {
+    handleNavClick(e, label, href);
+    setIsOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 bg-charcoal">
       <div className="container mx-auto px-4">
@@ -28,7 +43,7 @@ export function Navbar() {
               <a
                 key={item.label}
                 href={item.href}
-                onClick={() => setActiveItem(item.label)}
+                onClick={(e) => handleNavClick(e, item.label, item.href)}
                 className={`text-sm transition-colors duration-200 ${
                   activeItem === item.label
                     ? "text-primary border-b-2 border-primary pb-1"
@@ -65,10 +80,7 @@ export function Navbar() {
                 <a
                   key={item.label}
                   href={item.href}
-                  onClick={() => {
-                    setActiveItem(item.label);
-                    setIsOpen(false);
-                  }}
+                  onClick={(e) => handleMobileNavClick(e, item.label, item.href)}
                   className={`text-sm py-2 transition-colors duration-200 ${
                     activeItem === item.label
                       ? "text-primary border-l-2 border-primary pl-4"
