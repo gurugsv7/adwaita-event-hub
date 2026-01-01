@@ -129,26 +129,61 @@ const DelegatePassPage = () => {
       return;
     }
 
+    // Validate phone (basic validation for Indian numbers)
+    const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
+    if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
+      toast({
+        title: "Invalid phone number",
+        description: "Please enter a valid phone number",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       // Generate a unique delegate ID
       const delegateId = `DEL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-      // Here you would typically save to database and redirect to payment
-      // For now, we'll show a success message with the payment instructions
+      // Save to database
+      const { error } = await supabase
+        .from('delegates')
+        .insert({
+          delegate_id: delegateId,
+          name: formData.fullName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          phone: formData.phone.trim(),
+          institution: formData.institution.trim(),
+          tier: selectedTier,
+          tier_price: selectedPass?.price || 0,
+          payment_status: 'pending',
+        });
+
+      if (error) {
+        console.error('Error saving delegate registration:', error);
+        throw error;
+      }
+
       toast({
-        title: "Registration initiated!",
-        description: `Please proceed to payment for your ${selectedPass?.name} pass. Your Delegate ID: ${delegateId}`,
+        title: "Registration successful!",
+        description: `Your Delegate ID: ${delegateId}. Please proceed to payment for your ${selectedPass?.name} pass (₹${selectedPass?.price}).`,
       });
 
-      // You can navigate to a payment page or show payment modal here
-      // navigate(`/payment?delegateId=${delegateId}&tier=${selectedTier}`);
+      // Reset form
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        institution: "",
+      });
+      setSelectedTier("");
       
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Delegate registration error:', error);
       toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
+        title: "Registration failed",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
