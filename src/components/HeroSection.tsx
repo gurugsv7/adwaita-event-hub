@@ -68,10 +68,12 @@ export function HeroSection() {
         autoPlay
         muted
         loop
+        playsInline
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
         style={{ transform: 'scale(1.3)' }}
       >
-        <source src="/Untitled video - Made with Clipchamp.mp4" type="video/mp4" />
+        <source src="https://tmimemaapjsjhiknnuea.supabase.co/storage/v1/object/public/site-assets/Untitled%20video%20-%20Made%20with%20Clipchamp.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
