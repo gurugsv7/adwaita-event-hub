@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navItems = [
   { label: "Home", href: "#home" },
   { label: "Events", href: "#events" },
-  { label: "Schedule", href: "#schedule" },
   { label: "FAQs", href: "#faqs" },
   { label: "Contact", href: "#contact" },
 ];
@@ -18,9 +18,9 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <a href="#home" className="text-primary font-serif font-bold text-lg">
+          <Link to="/" className="text-primary font-serif font-bold text-lg">
             ADWAITA 2026
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
@@ -41,12 +41,12 @@ export function Navbar() {
           </div>
 
           {/* Register Button */}
-          <a
-            href="#register"
+          <Link
+            to="/categories"
             className="hidden md:block btn-gold text-sm py-2 px-4 rounded"
           >
             Register Now
-          </a>
+          </Link>
 
           {/* Mobile Menu Button */}
           <button
@@ -78,12 +78,13 @@ export function Navbar() {
                   {item.label}
                 </a>
               ))}
-              <a
-                href="#register"
+              <Link
+                to="/categories"
                 className="btn-gold text-sm py-3 px-4 rounded text-center mt-2"
+                onClick={() => setIsOpen(false)}
               >
                 Register Now
-              </a>
+              </Link>
             </div>
           </div>
         )}
