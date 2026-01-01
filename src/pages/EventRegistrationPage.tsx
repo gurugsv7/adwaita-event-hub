@@ -27,8 +27,18 @@ const EventRegistrationPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Support brochure-friendly category slugs (aliases)
+  const CATEGORY_SLUG_ALIASES: Record<string, string> = {
+    "literature-and-debate": "literature",
+    graphix: "design",
+    "other-events": "other",
+    graphics: "design",
+  };
+
+  const resolvedCategoryId = categoryId ? (CATEGORY_SLUG_ALIASES[categoryId] ?? categoryId) : undefined;
+
   // Find the event from categories data
-  const category = categories.find((c) => c.id === categoryId);
+  const category = categories.find((c) => c.id === resolvedCategoryId);
   const eventInfo = category?.events.find((e) => e.id === eventId);
 
   // Parse team size from teamType

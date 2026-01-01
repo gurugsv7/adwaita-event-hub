@@ -18,7 +18,7 @@ KEY EVENT CATEGORIES:
 2. FINE ARTS: Rangoli, Face Painting, Mehendi, Collage Making, Pot Painting, etc.
 3. TECHNICAL: Coding challenges, Hackathons, Tech quizzes, Robotics
 4. SPORTS: Cricket, Football, Basketball, Badminton, Chess, Carrom
-5. ACADEMIC: Quiz competitions, Paper presentations, Debates
+5. ACADEMIC: Quiz competitions, Paper presentations, Paper presentations
 6. PHOTOGRAPHY: Photo walks, Theme photography, Photo editing
 7. LITERATURE: Essay writing, Poetry, Creative writing, Storytelling
 8. SPECIAL EVENTS: Pro-shows, DJ nights, Celebrity performances
@@ -31,9 +31,12 @@ DELEGATE PASSES:
 IMPORTANT NOTES:
 - Delegate pass is mandatory for most events (some presentations are exempt)
 - Registration is non-refundable
-- Each event has specific fees, team sizes, and prize pools
 
-PERSONALITY: Be enthusiastic, helpful, and use occasional emojis. Keep responses concise but informative. Guide users to register at /register or get delegate passes at /delegate-pass.`;
+REGISTRATION LINKS:
+- Event registration happens on each event page, e.g. /culturals/solo-singing-freestyle
+- You can also browse categories at /events
+
+PERSONALITY: Be enthusiastic, helpful, and use occasional emojis. Keep responses concise but informative. If asked to register, tell the user to open the specific event page URL, or direct them to /events to pick an event. For delegate passes use /delegate-pass.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {

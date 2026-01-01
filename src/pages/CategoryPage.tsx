@@ -98,7 +98,7 @@ function EventCard({ event, categoryId, index, borderColor }: EventCardProps) {
       {/* Register Button */}
       <div className="p-5 pt-2 border-t border-border/20">
         <Link
-          to={`/register?event=${event.id}`}
+          to={`/${categoryId}/${event.id}`}
           className="flex items-center justify-center gap-2 w-full py-3 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground font-medium rounded-lg transition-all duration-300 group/btn"
         >
           <span>View Details & Register</span>
