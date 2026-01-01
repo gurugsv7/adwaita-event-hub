@@ -149,26 +149,36 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation
+    // Validation - Team captain (index 0) requires full details
     if (!members[0].name || !members[0].phone || !email || !institution) {
       toast({
         title: "Missing required fields",
-        description: "Please fill in all required fields",
+        description: "Please fill in all required fields for team captain",
         variant: "destructive",
       });
       return;
     }
 
-    // Validate all member phones
-    for (const member of members) {
-      if (member.phone && !validatePhone(member.phone)) {
+    // Validate all team members have names
+    for (let i = 1; i < members.length; i++) {
+      if (!members[i].name) {
         toast({
-          title: "Invalid phone number",
-          description: "Phone must be 10 digits or +91 followed by 10 digits",
+          title: "Missing team member name",
+          description: `Please enter name for Member ${i + 1}`,
           variant: "destructive",
         });
         return;
       }
+    }
+
+    // Validate captain's phone only
+    if (!validatePhone(members[0].phone)) {
+      toast({
+        title: "Invalid phone number",
+        description: "Team captain's phone must be 10 digits or +91 followed by 10 digits",
+        variant: "destructive",
+      });
+      return;
     }
 
     // Email validation
@@ -377,61 +387,88 @@ const RegisterPage = () => {
                     <p className="text-silver/70 text-sm mb-4">
                       {eventInfo.teamSize > 1 ? `Member ${index + 1}` : "Your Details"}
                       {index === 0 && eventInfo.teamSize > 1 && (
-                        <span className="text-secondary ml-2">(Team Lead)</span>
+                        <span className="text-secondary ml-2">(Team Captain - Full Details Required)</span>
                       )}
                     </p>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div>
-                        <Label htmlFor={`name-${index}`} className="text-silver/70">
-                          Full Name <span className="text-red-400">*</span>
-                        </Label>
-                        <Input
-                          id={`name-${index}`}
-                          value={member.name}
-                          onChange={(e) => handleMemberChange(index, "name", e.target.value)}
-                          placeholder="Enter full name"
-                          className="bg-background border-primary/20 text-silver mt-1"
-                          required={index === 0}
-                        />
+                    
+                    {/* Team Captain (index 0) gets full form */}
+                    {index === 0 ? (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <Label htmlFor={`name-${index}`} className="text-silver/70">
+                            Full Name <span className="text-red-400">*</span>
+                          </Label>
+                          <Input
+                            id={`name-${index}`}
+                            value={member.name}
+                            onChange={(e) => handleMemberChange(index, "name", e.target.value)}
+                            placeholder="Enter full name"
+                            className="bg-background border-primary/20 text-silver mt-1"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`phone-${index}`} className="text-silver/70">
+                            Phone <span className="text-red-400">*</span>
+                          </Label>
+                          <Input
+                            id={`phone-${index}`}
+                            value={member.phone}
+                            onChange={(e) => handleMemberChange(index, "phone", e.target.value)}
+                            placeholder="+91 or 10 digits"
+                            className="bg-background border-primary/20 text-silver mt-1"
+                            required
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor={`year-${index}`} className="text-silver/70">
+                            Year of Study
+                          </Label>
+                          <Select
+                            value={member.year}
+                            onValueChange={(value) => handleMemberChange(index, "year", value)}
+                          >
+                            <SelectTrigger className="bg-background border-primary/20 text-silver mt-1">
+                              <SelectValue placeholder="Select year" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1st Year</SelectItem>
+                              <SelectItem value="2">2nd Year</SelectItem>
+                              <SelectItem value="3">3rd Year</SelectItem>
+                              <SelectItem value="4">4th Year</SelectItem>
+                              <SelectItem value="5">5th Year</SelectItem>
+                              <SelectItem value="pg">Post Graduate</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor={`phone-${index}`} className="text-silver/70">
-                          Phone <span className="text-red-400">*</span>
-                        </Label>
-                        <Input
-                          id={`phone-${index}`}
-                          value={member.phone}
-                          onChange={(e) => handleMemberChange(index, "phone", e.target.value)}
-                          placeholder="+91 or 10 digits"
-                          className="bg-background border-primary/20 text-silver mt-1"
-                          required={index === 0}
-                        />
+                    ) : (
+                      /* Other team members only need name */
+                      <div className="grid grid-cols-1 gap-4">
+                        <div>
+                          <Label htmlFor={`name-${index}`} className="text-silver/70">
+                            Full Name <span className="text-red-400">*</span>
+                          </Label>
+                          <Input
+                            id={`name-${index}`}
+                            value={member.name}
+                            onChange={(e) => handleMemberChange(index, "name", e.target.value)}
+                            placeholder="Enter team member's name"
+                            className="bg-background border-primary/20 text-silver mt-1"
+                            required
+                          />
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor={`year-${index}`} className="text-silver/70">
-                          Year of Study
-                        </Label>
-                        <Select
-                          value={member.year}
-                          onValueChange={(value) => handleMemberChange(index, "year", value)}
-                        >
-                          <SelectTrigger className="bg-background border-primary/20 text-silver mt-1">
-                            <SelectValue placeholder="Select year" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1st Year</SelectItem>
-                            <SelectItem value="2">2nd Year</SelectItem>
-                            <SelectItem value="3">3rd Year</SelectItem>
-                            <SelectItem value="4">4th Year</SelectItem>
-                            <SelectItem value="5">5th Year</SelectItem>
-                            <SelectItem value="pg">Post Graduate</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>
+
+              {eventInfo.teamSize > 1 && (
+                <p className="text-silver/50 text-xs mt-4 italic">
+                  * Only the Team Captain's complete details are required. Other team members only need to provide their names.
+                </p>
+              )}
             </div>
 
             {/* Contact & Institution */}
