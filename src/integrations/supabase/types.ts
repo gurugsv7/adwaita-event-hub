@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      delegates: {
+        Row: {
+          created_at: string
+          delegate_id: string
+          email: string
+          id: string
+          institution: string
+          name: string
+          payment_screenshot_url: string | null
+          payment_status: string
+          phone: string
+          tier: string
+          tier_price: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          delegate_id: string
+          email: string
+          id?: string
+          institution: string
+          name: string
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone: string
+          tier: string
+          tier_price: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          delegate_id?: string
+          email?: string
+          id?: string
+          institution?: string
+          name?: string
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone?: string
+          tier?: string
+          tier_price?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       registrations: {
         Row: {
           category_name: string
