@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { categories } from "@/data/events";
+import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
 
 // Build EVENT_INFO map from categories data
 interface EventInfo {
@@ -18,6 +20,7 @@ interface EventInfo {
   delegateRequired: boolean;
   teamSize: number;
   category: string;
+  categoryId: string;
   day: string;
   duration: string;
   description: string;
@@ -46,6 +49,7 @@ const buildEventInfoMap = (): Record<string, EventInfo> => {
         delegateRequired: event.fee > 0,
         teamSize,
         category: event.category,
+        categoryId: category.id,
         day: event.day,
         duration: event.duration,
         description: event.description,
@@ -122,6 +126,26 @@ const RegisterPage = () => {
     }
   };
 
+  const uploadPaymentScreenshot = async (file: File, regId: string): Promise<string | null> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${regId}-${Date.now()}.${fileExt}`;
+    
+    const { data, error } = await supabase.storage
+      .from('payment-screenshots')
+      .upload(fileName, file);
+    
+    if (error) {
+      console.error('Error uploading file:', error);
+      return null;
+    }
+    
+    const { data: urlData } = supabase.storage
+      .from('payment-screenshots')
+      .getPublicUrl(fileName);
+    
+    return urlData.publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -161,38 +185,59 @@ const RegisterPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Simulate file upload and registration
-      // In production: Upload to Cloudinary, insert to Supabase, send email via EmailJS
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
       // Generate registration ID
       const timestamp = Date.now().toString();
       const regId = `EVT-${timestamp.slice(-6)}`;
+
+      // Upload payment screenshot if provided
+      let paymentUrl: string | null = null;
+      if (paymentScreenshot) {
+        paymentUrl = await uploadPaymentScreenshot(paymentScreenshot, regId);
+        if (!paymentUrl) {
+          toast({
+            title: "Upload failed",
+            description: "Failed to upload payment screenshot. Please try again.",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Insert registration into database
+      const { error: insertError } = await supabase
+        .from('registrations')
+        .insert({
+          registration_id: regId,
+          event_id: eventInfo.id,
+          event_name: eventInfo.name,
+          category_name: eventInfo.category,
+          name: members[0].name,
+          email: email,
+          phone: members[0].phone,
+          year: members[0].year || null,
+          institution: institution,
+          participant_category: category,
+          team_members: members as unknown as Json,
+          delegate_id: delegateId || null,
+          coupon_code: coupon || null,
+          payment_screenshot_url: paymentUrl,
+          fee_amount: eventInfo.price,
+        });
+
+      if (insertError) {
+        console.error('Error inserting registration:', insertError);
+        throw new Error('Failed to save registration');
+      }
+
       setRegistrationId(regId);
-
-      // Template params that would be sent to email service
-      const templateParams = {
-        event_name: eventInfo?.name,
-        team_members: members.map((m) => `${m.name} (${m.phone})`).join(", "),
-        registrant_name: members[0].name,
-        delegate_id: delegateId,
-        registrant_email: email,
-        registrant_phone: members[0].phone,
-        registrant_institution: institution,
-        registrant_year: members[0].year,
-        registrant_category: category,
-        payment_screenshot_url: paymentScreenshot ? "uploaded" : "",
-        coupon_code: coupon,
-      };
-
-      console.log("Registration submitted:", templateParams);
-
       setIsSuccess(true);
       toast({
         title: "Registration Successful!",
         description: `Your registration ID is ${regId}`,
       });
     } catch (error) {
+      console.error('Registration error:', error);
       toast({
         title: "Registration failed",
         description: "Please try again later",
@@ -243,7 +288,7 @@ const RegisterPage = () => {
             <p className="text-2xl font-mono text-primary font-bold">{registrationId}</p>
           </div>
           <p className="text-silver/50 text-sm mb-6">
-            A confirmation email has been sent to <span className="text-silver">{email}</span>
+            A confirmation has been recorded for <span className="text-silver">{email}</span>
           </p>
           <div className="flex gap-3 justify-center">
             <Link to="/events">
@@ -453,67 +498,19 @@ const RegisterPage = () => {
 
             {/* Payment Section */}
             <div className="bg-muted/20 border border-primary/20 rounded-xl p-6">
-              <h2 className="text-xl font-serif text-primary mb-6">Payment Details</h2>
-              
+              <h2 className="text-xl font-serif text-primary mb-6 flex items-center gap-2">
+                <IndianRupee size={20} className="text-secondary" />
+                Payment Details
+              </h2>
+
               <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-silver/70 text-sm">Registration Fee</p>
-                    <p className="text-2xl font-bold text-primary">₹{eventInfo.price}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-silver/70 text-sm">UPI / Bank Transfer</p>
-                    <p className="text-secondary font-mono">adwaita2026@upi</p>
-                  </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-silver">Registration Fee</span>
+                  <span className="text-2xl font-bold text-primary">₹{eventInfo.price}</span>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <Label htmlFor="screenshot" className="text-silver/70">
-                    Payment Screenshot <span className="text-red-400">*</span>
-                  </Label>
-                  <div className="mt-1">
-                    <label
-                      htmlFor="screenshot"
-                      className={`flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
-                        paymentScreenshot
-                          ? "border-secondary bg-secondary/10"
-                          : "border-primary/30 hover:border-primary/50 bg-background"
-                      }`}
-                    >
-                      {paymentScreenshot ? (
-                        <div className="flex items-center gap-2 text-secondary">
-                          <CheckCircle2 size={20} />
-                          <span className="text-sm">{paymentScreenshot.name}</span>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setPaymentScreenshot(null);
-                            }}
-                            className="ml-2 text-silver/50 hover:text-red-400"
-                          >
-                            <X size={16} />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col items-center justify-center">
-                          <Upload size={24} className="text-silver/50 mb-2" />
-                          <p className="text-sm text-silver/70">Click to upload screenshot</p>
-                          <p className="text-xs text-silver/50">PNG, JPG up to 4MB</p>
-                        </div>
-                      )}
-                      <input
-                        id="screenshot"
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                </div>
                 <div>
                   <Label htmlFor="coupon" className="text-silver/70">
                     Coupon Code <span className="text-silver/50">(optional)</span>
@@ -521,42 +518,90 @@ const RegisterPage = () => {
                   <Input
                     id="coupon"
                     value={coupon}
-                    onChange={(e) => setCoupon(e.target.value.toUpperCase())}
+                    onChange={(e) => setCoupon(e.target.value)}
                     placeholder="Enter coupon code"
-                    className="bg-background border-primary/20 text-silver mt-1 uppercase"
+                    className="bg-background border-primary/20 text-silver mt-1"
                   />
+                </div>
+                <div>
+                  <Label htmlFor="screenshot" className="text-silver/70">
+                    Payment Screenshot
+                  </Label>
+                  <div className="mt-1">
+                    <label
+                      htmlFor="screenshot"
+                      className="flex items-center justify-center gap-2 px-4 py-3 bg-background border border-dashed border-primary/30 rounded-lg cursor-pointer hover:border-primary/50 transition-colors"
+                    >
+                      {paymentScreenshot ? (
+                        <div className="flex items-center gap-2 text-secondary">
+                          <CheckCircle2 size={16} />
+                          <span className="text-sm truncate max-w-[200px]">{paymentScreenshot.name}</span>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setPaymentScreenshot(null);
+                            }}
+                            className="text-silver/50 hover:text-red-400"
+                          >
+                            <X size={16} />
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <Upload size={16} className="text-silver/50" />
+                          <span className="text-silver/50 text-sm">Upload screenshot (max 4MB)</span>
+                        </>
+                      )}
+                    </label>
+                    <input
+                      id="screenshot"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Event Incharge */}
-            <div className="bg-secondary/10 border border-secondary/30 rounded-xl p-4 flex items-center justify-between">
-              <div>
-                <p className="text-silver/70 text-sm">Event Incharge</p>
-                <p className="text-primary font-semibold">{eventInfo.incharge.name}</p>
+            <div className="bg-muted/20 border border-primary/20 rounded-xl p-6">
+              <h2 className="text-xl font-serif text-primary mb-4">Need Help?</h2>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center">
+                  <Phone size={20} className="text-secondary" />
+                </div>
+                <div>
+                  <p className="text-silver font-medium">{eventInfo.incharge.name}</p>
+                  <p className="text-silver/50 text-sm">Event Incharge</p>
+                  <a
+                    href={`tel:${eventInfo.incharge.phone}`}
+                    className="text-secondary hover:underline text-sm"
+                  >
+                    {eventInfo.incharge.phone}
+                  </a>
+                </div>
               </div>
-              <a
-                href={`tel:${eventInfo.incharge.phone}`}
-                className="flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors"
-              >
-                <Phone size={16} />
-                <span>{eventInfo.incharge.phone}</span>
-              </a>
             </div>
 
             {/* Submit Button */}
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold py-6 text-lg"
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground py-6 text-lg font-semibold"
             >
               {isSubmitting ? (
                 <>
-                  <Loader2 size={20} className="animate-spin mr-2" />
-                  Processing Registration...
+                  <Loader2 className="mr-2 animate-spin" size={20} />
+                  Registering...
                 </>
               ) : (
-                "Complete Registration"
+                <>
+                  Complete Registration
+                  <span className="ml-2">→</span>
+                </>
               )}
             </Button>
           </form>
