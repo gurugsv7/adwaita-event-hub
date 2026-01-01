@@ -133,8 +133,8 @@ const EventChatbot = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "fixed bottom-6 right-6 z-50 group",
-          "w-16 h-16 rounded-full",
+          "fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 group",
+          "w-12 h-12 sm:w-16 sm:h-16 rounded-full",
           "bg-gradient-to-br from-gold via-primary to-teal",
           "shadow-2xl shadow-gold/30",
           "flex items-center justify-center",
@@ -144,11 +144,11 @@ const EventChatbot = () => {
         )}
       >
         {isOpen ? (
-          <X className="w-7 h-7 text-charcoal" />
+          <X className="w-5 h-5 sm:w-7 sm:h-7 text-charcoal" />
         ) : (
           <div className="relative">
-            <MessageCircle className="w-7 h-7 text-charcoal" />
-            <Sparkles className="w-4 h-4 text-charcoal absolute -top-2 -right-2 animate-bounce" />
+            <MessageCircle className="w-5 h-5 sm:w-7 sm:h-7 text-charcoal" />
+            <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-charcoal absolute -top-1.5 -right-1.5 sm:-top-2 sm:-right-2 animate-bounce" />
           </div>
         )}
       </button>
@@ -156,62 +156,62 @@ const EventChatbot = () => {
       {/* Chat Window */}
       <div
         className={cn(
-          "fixed bottom-24 right-6 z-50",
-          "w-[380px] max-w-[calc(100vw-2rem)]",
+          "fixed bottom-20 right-4 sm:bottom-24 sm:right-6 z-50",
+          "w-[300px] sm:w-[380px] max-w-[calc(100vw-2rem)]",
           "transition-all duration-500 ease-out",
           isOpen
             ? "opacity-100 translate-y-0 scale-100"
             : "opacity-0 translate-y-8 scale-95 pointer-events-none"
         )}
       >
-        <div className="bg-card/95 backdrop-blur-xl border-2 border-gold/30 rounded-3xl overflow-hidden shadow-2xl shadow-gold/20">
+        <div className="bg-card/95 backdrop-blur-xl border-2 border-gold/30 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl shadow-gold/20">
           {/* Header */}
-          <div className="bg-gradient-to-r from-gold/20 via-primary/10 to-teal/20 border-b border-gold/20 px-5 py-4">
-            <div className="flex items-center gap-3">
+          <div className="bg-gradient-to-r from-gold/20 via-primary/10 to-teal/20 border-b border-gold/20 px-4 py-3 sm:px-5 sm:py-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold to-teal flex items-center justify-center shadow-lg">
-                  <Bot className="w-6 h-6 text-charcoal" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br from-gold to-teal flex items-center justify-center shadow-lg">
+                  <Bot className="w-5 h-5 sm:w-6 sm:h-6 text-charcoal" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-card animate-pulse" />
+                <div className="absolute -bottom-0.5 -right-0.5 sm:-bottom-1 sm:-right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-card animate-pulse" />
               </div>
               <div>
-                <h3 className="font-heading text-lg text-foreground flex items-center gap-2">
+                <h3 className="font-heading text-base sm:text-lg text-foreground flex items-center gap-1.5 sm:gap-2">
                   ADWAITA AI
-                  <Sparkles className="w-4 h-4 text-gold" />
+                  <Sparkles className="w-3 h-3 sm:w-4 sm:h-4 text-gold" />
                 </h3>
-                <p className="text-xs text-silver/70">Your Fest Guide • Online</p>
+                <p className="text-[10px] sm:text-xs text-silver/70">Your Fest Guide • Online</p>
               </div>
             </div>
           </div>
 
           {/* Messages */}
-          <ScrollArea className="h-[350px] p-4" ref={scrollRef}>
-            <div className="space-y-4">
+          <ScrollArea className="h-[260px] sm:h-[350px] p-3 sm:p-4" ref={scrollRef}>
+            <div className="space-y-3 sm:space-y-4">
               {messages.map((message, index) => (
                 <div
                   key={index}
                   className={cn(
-                    "flex gap-3 animate-fade-in",
+                    "flex gap-2 sm:gap-3 animate-fade-in",
                     message.role === "user" ? "flex-row-reverse" : ""
                   )}
                 >
                   <div
                     className={cn(
-                      "w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0",
+                      "w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0",
                       message.role === "user"
                         ? "bg-gradient-to-br from-teal to-secondary"
                         : "bg-gradient-to-br from-gold to-primary"
                     )}
                   >
                     {message.role === "user" ? (
-                      <User className="w-4 h-4 text-charcoal" />
+                      <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-charcoal" />
                     ) : (
-                      <Bot className="w-4 h-4 text-charcoal" />
+                      <Bot className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-charcoal" />
                     )}
                   </div>
                   <div
                     className={cn(
-                      "max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed",
+                      "max-w-[75%] px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm leading-relaxed",
                       message.role === "user"
                         ? "bg-gradient-to-br from-teal/20 to-secondary/10 text-foreground rounded-tr-sm"
                         : "bg-gradient-to-br from-gold/10 to-primary/5 text-foreground rounded-tl-sm border border-gold/10"
@@ -219,8 +219,8 @@ const EventChatbot = () => {
                   >
                     {message.content || (
                       <div className="flex items-center gap-2">
-                        <Loader2 className="w-4 h-4 animate-spin text-gold" />
-                        <span className="text-silver/70">Thinking...</span>
+                        <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-gold" />
+                        <span className="text-silver/70 text-xs sm:text-sm">Thinking...</span>
                       </div>
                     )}
                   </div>
@@ -230,31 +230,31 @@ const EventChatbot = () => {
           </ScrollArea>
 
           {/* Input */}
-          <div className="border-t border-gold/20 p-4 bg-background/50">
-            <div className="flex gap-3">
+          <div className="border-t border-gold/20 p-3 sm:p-4 bg-background/50">
+            <div className="flex gap-2 sm:gap-3">
               <Input
                 ref={inputRef}
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about events, passes..."
-                className="flex-1 bg-background/80 border-gold/20 focus:border-gold rounded-xl placeholder:text-silver/40"
+                placeholder="Ask about events..."
+                className="flex-1 bg-background/80 border-gold/20 focus:border-gold rounded-lg sm:rounded-xl placeholder:text-silver/40 text-sm"
                 disabled={isLoading}
               />
               <Button
                 onClick={handleSend}
                 disabled={!input.trim() || isLoading}
-                className="w-12 h-10 rounded-xl bg-gradient-to-r from-gold to-primary text-charcoal hover:opacity-90 transition-opacity"
+                className="w-10 h-9 sm:w-12 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-r from-gold to-primary text-charcoal hover:opacity-90 transition-opacity"
               >
                 {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
+                  <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" />
                 ) : (
-                  <Send className="w-5 h-5" />
+                  <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                 )}
               </Button>
             </div>
-            <p className="text-[10px] text-silver/40 text-center mt-2">
-              Powered by ADWAITA AI • Ask anything about the fest!
+            <p className="text-[9px] sm:text-[10px] text-silver/40 text-center mt-2">
+              Powered by ADWAITA AI
             </p>
           </div>
         </div>
