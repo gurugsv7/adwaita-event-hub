@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { DelegatePassSection } from "@/components/DelegatePassSection";
@@ -10,10 +10,18 @@ import { Helmet } from "react-helmet";
 import EventChatbot from "@/components/EventChatbot";
 
 const VIDEO_SRC = "/Untitled video - Made with Clipchamp.mp4";
+const LOADING_SHOWN_KEY = "adwaita_loading_shown";
 
 const Index = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    // Only show loading screen on first visit in this session
+    return !sessionStorage.getItem(LOADING_SHOWN_KEY);
+  });
 
+  const handleLoadComplete = () => {
+    sessionStorage.setItem(LOADING_SHOWN_KEY, "true");
+    setIsLoading(false);
+  };
   return (
     <>
       <Helmet>
@@ -31,7 +39,7 @@ const Index = () => {
       {isLoading && (
         <LoadingScreen
           videoSrc={VIDEO_SRC}
-          onLoadComplete={() => setIsLoading(false)}
+          onLoadComplete={handleLoadComplete}
         />
       )}
 
