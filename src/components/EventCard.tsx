@@ -135,7 +135,7 @@ export function EventCard({ event, borderColor = "border-gold", categoryId }: Ev
         <Button 
           className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-semibold group/btn"
           disabled={event.status === "Closed"}
-          onClick={() => navigate(`/register?event=${event.id}`)}
+          onClick={() => navigate(`/${categoryId}/${event.id}`)}
         >
           {event.status === "Closed" ? "Registration Closed" : "Register Now"}
           {event.status !== "Closed" && (

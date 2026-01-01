@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import AllEventsPage from "./pages/AllEventsPage";
 import RegisterPage from "./pages/RegisterPage";
+import EventRegistrationPage from "./pages/EventRegistrationPage";
 import DelegatePassPage from "./pages/DelegatePassPage";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +25,8 @@ const App = () => (
           <Route path="/events/:categoryId" element={<CategoryPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/delegate-pass" element={<DelegatePassPage />} />
+          {/* Clean URLs for event registration: /:categoryId/:eventId */}
+          <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
