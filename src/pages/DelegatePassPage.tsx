@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { 
   ArrowLeft, Crown, Star, Zap, Check, Mail, Phone, 
   CreditCard, FileCheck, Send, Sparkles, AlertTriangle,
-  Building2, User, ChevronRight, QrCode
+  Building2, User, ChevronRight, QrCode, Upload, X, CheckCircle2
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import paymentQR from "@/assets/payment-qr.jpg";
+
+const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
 const passes = [
   {
@@ -96,9 +98,25 @@ const DelegatePassPage = () => {
     phone: "",
     institution: "",
   });
+  const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+        toast({
+          title: "File too large",
+          description: "Please upload an image smaller than 4MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      setPaymentScreenshot(file);
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -141,11 +159,41 @@ const DelegatePassPage = () => {
       return;
     }
 
+    // Validate payment screenshot
+    if (!paymentScreenshot) {
+      toast({
+        title: "Payment screenshot required",
+        description: "Please upload your payment screenshot to complete registration",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
       // Generate a unique delegate ID
       const delegateId = `DEL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+
+      // Upload payment screenshot
+      let paymentScreenshotUrl = null;
+      const fileExt = paymentScreenshot.name.split('.').pop();
+      const fileName = `delegate_${delegateId}_${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabase.storage
+        .from('payment-screenshots')
+        .upload(fileName, paymentScreenshot);
+
+      if (uploadError) {
+        console.error('Error uploading payment screenshot:', uploadError);
+        throw new Error('Failed to upload payment screenshot');
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('payment-screenshots')
+        .getPublicUrl(fileName);
+      
+      paymentScreenshotUrl = urlData.publicUrl;
 
       // Save to database
       const { error } = await supabase
@@ -159,6 +207,7 @@ const DelegatePassPage = () => {
           tier: selectedTier,
           tier_price: selectedPass?.price || 0,
           payment_status: 'pending',
+          payment_screenshot_url: paymentScreenshotUrl,
         });
 
       if (error) {
@@ -168,7 +217,7 @@ const DelegatePassPage = () => {
 
       toast({
         title: "Registration successful!",
-        description: `Your Delegate ID: ${delegateId}. Please proceed to payment for your ${selectedPass?.name} pass (₹${selectedPass?.price}).`,
+        description: `Your Delegate ID: ${delegateId}. Your ${selectedPass?.name} pass will be verified shortly.`,
       });
 
       // Reset form
@@ -179,6 +228,7 @@ const DelegatePassPage = () => {
         institution: "",
       });
       setSelectedTier("");
+      setPaymentScreenshot(null);
       
     } catch (error: any) {
       console.error('Delegate registration error:', error);
@@ -463,6 +513,49 @@ const DelegatePassPage = () => {
                         </div>
                       </div>
 
+                      {/* Payment Screenshot Upload */}
+                      <div className="space-y-2">
+                        <Label className="text-sm text-silver/80 flex items-center gap-2">
+                          <Upload className="w-4 h-4" />
+                          Payment Screenshot <span className="text-accent">*</span>
+                        </Label>
+                        <div>
+                          <label
+                            htmlFor="delegate-screenshot"
+                            className="flex items-center justify-center gap-2 px-4 py-4 bg-background/50 border border-dashed border-gold/30 rounded-xl cursor-pointer hover:border-gold/50 transition-colors"
+                          >
+                            {paymentScreenshot ? (
+                              <div className="flex items-center gap-2 text-teal">
+                                <CheckCircle2 className="w-5 h-5" />
+                                <span className="text-sm truncate max-w-[200px]">{paymentScreenshot.name}</span>
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setPaymentScreenshot(null);
+                                  }}
+                                  className="text-silver/50 hover:text-red-400 ml-2"
+                                >
+                                  <X className="w-4 h-4" />
+                                </button>
+                              </div>
+                            ) : (
+                              <>
+                                <Upload className="w-5 h-5 text-silver/50" />
+                                <span className="text-silver/50 text-sm">Upload payment screenshot (max 4MB)</span>
+                              </>
+                            )}
+                          </label>
+                          <input
+                            id="delegate-screenshot"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </div>
+                      </div>
+
                       <Button
                         type="submit"
                         disabled={isSubmitting}
@@ -472,7 +565,7 @@ const DelegatePassPage = () => {
                           "Processing..."
                         ) : (
                           <>
-                            Proceed to Payment
+                            Get Delegate Pass
                             <ChevronRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                           </>
                         )}
