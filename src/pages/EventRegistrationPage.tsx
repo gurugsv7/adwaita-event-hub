@@ -30,9 +30,8 @@ const EventRegistrationPage = () => {
   // Support brochure-friendly category slugs (aliases)
   const CATEGORY_SLUG_ALIASES: Record<string, string> = {
     "literature-and-debate": "literature",
-    graphix: "design",
     "other-events": "other",
-    graphics: "design",
+    graphics: "graphix",
   };
 
   const resolvedCategoryId = categoryId ? (CATEGORY_SLUG_ALIASES[categoryId] ?? categoryId) : undefined;
