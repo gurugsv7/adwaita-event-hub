@@ -27,7 +27,7 @@ const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 const passes = [
   {
     id: "platinum",
-    name: "PLATINUM",
+    name: "SIGIL OF DOMINION",
     price: 850,
     tagline: "Top Tier Access",
     icon: Crown,
@@ -42,7 +42,7 @@ const passes = [
   },
   {
     id: "gold",
-    name: "GOLD",
+    name: "SIGIL OF VALOR",
     price: 450,
     tagline: "Premium Experience",
     icon: Star,
@@ -56,7 +56,7 @@ const passes = [
   },
   {
     id: "silver",
-    name: "SILVER",
+    name: "SIGIL OF PASSAGE",
     price: 250,
     tagline: "Essential Access",
     icon: Zap,
