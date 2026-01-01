@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const categoryLinks = [
   {
     emoji: "🎤",
@@ -88,7 +90,21 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary/20 pt-6 text-center">
+        <div className="border-t border-primary/20 pt-6 text-center space-y-3">
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link
+              to="/brochure-links"
+              className="text-silver text-xs hover:text-primary hover:underline transition-colors"
+            >
+              Event registration links
+            </Link>
+            <a
+              href="#events"
+              className="text-silver text-xs hover:text-primary hover:underline transition-colors"
+            >
+              Explore events
+            </a>
+          </div>
           <p className="text-silver text-xs">
             © 2025 ADWAITA 2026 | Organized by Government Medical College
           </p>
