@@ -12,6 +12,7 @@ import academicImg from "@/assets/category-academic.jpg";
 import photographyImg from "@/assets/category-photography.jpg";
 import technicalImg from "@/assets/category-technical.jpg";
 import otherImg from "@/assets/category-other.jpg";
+import graphixImg from "@/assets/category-graphix.jpg";
 
 const allCategories = [
   {
@@ -95,6 +96,17 @@ const allCategories = [
     prizePool: "₹20K+",
     accentColor: "teal" as const,
     image: otherImg,
+  },
+  {
+    id: "graphix",
+    title: "Graphix",
+    description:
+      "Graphic designing events - poster challenges, meme creation, and digital art contests.",
+    eventCount: 3,
+    prizePool: "₹4K+",
+    accentColor: "gold" as const,
+    image: graphixImg,
+    featured: true,
   },
 ];
 
