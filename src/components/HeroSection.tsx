@@ -1,5 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useVideoCache } from "@/hooks/useVideoCache";
+
+const VIDEO_URL = "https://tmimemaapjsjhiknnuea.supabase.co/storage/v1/object/public/site-assets/Untitled%20video%20-%20Made%20with%20Clipchamp.mp4";
 
 function CountdownTimer() {
   const [timeLeft, setTimeLeft] = useState({
@@ -58,6 +61,8 @@ function CountdownTimer() {
 }
 
 export function HeroSection() {
+  const { cachedUrl } = useVideoCache(VIDEO_URL);
+
   return (
     <section
       id="home"
@@ -73,7 +78,7 @@ export function HeroSection() {
         className="absolute inset-0 w-full h-full object-cover"
         style={{ transform: 'scale(1.3)' }}
       >
-        <source src="https://tmimemaapjsjhiknnuea.supabase.co/storage/v1/object/public/site-assets/Untitled%20video%20-%20Made%20with%20Clipchamp.mp4" type="video/mp4" />
+        <source src={cachedUrl} type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
