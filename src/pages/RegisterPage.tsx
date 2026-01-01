@@ -192,6 +192,16 @@ const RegisterPage = () => {
       return;
     }
 
+    // Payment screenshot required for paid events
+    if (eventInfo.price > 0 && !paymentScreenshot) {
+      toast({
+        title: "Payment screenshot required",
+        description: "Please upload your payment screenshot to complete registration",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
