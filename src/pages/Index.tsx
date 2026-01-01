@@ -7,6 +7,7 @@ import { FAQAccordion } from "@/components/FAQAccordion";
 import { Footer } from "@/components/Footer";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { Helmet } from "react-helmet";
+import EventChatbot from "@/components/EventChatbot";
 
 const VIDEO_SRC = "/Untitled video - Made with Clipchamp.mp4";
 
@@ -41,6 +42,7 @@ const Index = () => {
         <EventsShowcase />
         <FAQAccordion />
         <Footer />
+        <EventChatbot />
       </div>
     </>
   );
