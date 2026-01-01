@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { 
   ArrowLeft, Crown, Star, Zap, Check, Mail, Phone, 
   CreditCard, FileCheck, Send, Sparkles, AlertTriangle,
-  Building2, User, ChevronRight
+  Building2, User, ChevronRight, QrCode
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import paymentQR from "@/assets/payment-qr.jpg";
 
 const passes = [
   {
@@ -436,6 +437,31 @@ const DelegatePassPage = () => {
                           </ul>
                         </div>
                       )}
+
+                      {/* Payment QR Code */}
+                      <div className="bg-background/30 border border-gold/20 rounded-xl p-5">
+                        <div className="flex flex-col items-center text-center">
+                          <div className="flex items-center gap-2 mb-4">
+                            <QrCode className="w-5 h-5 text-gold" />
+                            <span className="text-sm font-medium text-foreground">Scan to Pay</span>
+                          </div>
+                          <div className="bg-white p-3 rounded-xl shadow-lg mb-4">
+                            <img 
+                              src={paymentQR} 
+                              alt="Payment QR Code" 
+                              className="w-40 h-40 object-contain"
+                            />
+                          </div>
+                          <p className="text-xs text-silver/60">
+                            Scan this QR code with any UPI app to make payment
+                          </p>
+                          {selectedPass && (
+                            <p className="text-sm text-gold font-medium mt-2">
+                              Amount: ₹{selectedPass.price}
+                            </p>
+                          )}
+                        </div>
+                      </div>
 
                       <Button
                         type="submit"

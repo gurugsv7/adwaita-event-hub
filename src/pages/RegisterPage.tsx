@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, Upload, Users, IndianRupee, Trophy, Clock, Phone, X, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, Users, IndianRupee, Trophy, Clock, Phone, X, CheckCircle2, Loader2, QrCode } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { categories } from "@/data/events";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
+import paymentQR from "@/assets/payment-qr.jpg";
 
 // Build EVENT_INFO map from categories data
 interface EventInfo {
@@ -557,6 +558,26 @@ const RegisterPage = () => {
                 </div>
               </div>
 
+              {/* Payment QR Code */}
+              <div className="bg-background/50 border border-primary/20 rounded-xl p-6 mb-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className="flex items-center gap-2 mb-4">
+                    <QrCode size={20} className="text-secondary" />
+                    <span className="text-silver font-medium">Scan to Pay</span>
+                  </div>
+                  <div className="bg-white p-3 rounded-xl shadow-lg mb-4">
+                    <img 
+                      src={paymentQR} 
+                      alt="Payment QR Code" 
+                      className="w-48 h-48 object-contain"
+                    />
+                  </div>
+                  <p className="text-xs text-silver/60">
+                    Scan this QR code with any UPI app to make payment
+                  </p>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <Label htmlFor="coupon" className="text-silver/70">
@@ -572,7 +593,7 @@ const RegisterPage = () => {
                 </div>
                 <div>
                   <Label htmlFor="screenshot" className="text-silver/70">
-                    Payment Screenshot
+                    Payment Screenshot <span className="text-accent">*</span>
                   </Label>
                   <div className="mt-1">
                     <label
