@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { DelegatePassSection } from "@/components/DelegatePassSection";
@@ -5,9 +6,14 @@ import { EventsShowcase } from "@/components/EventsShowcase";
 import { StatisticsSection } from "@/components/StatisticsSection";
 import { FAQAccordion } from "@/components/FAQAccordion";
 import { Footer } from "@/components/Footer";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { Helmet } from "react-helmet";
 
+const VIDEO_SRC = "/Untitled video - Made with Clipchamp.mp4";
+
 const Index = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
     <>
       <Helmet>
@@ -22,7 +28,14 @@ const Index = () => {
         />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      {isLoading && (
+        <LoadingScreen
+          videoSrc={VIDEO_SRC}
+          onLoadComplete={() => setIsLoading(false)}
+        />
+      )}
+
+      <div className={`min-h-screen bg-background ${isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}`}>
         <Navbar />
         <HeroSection />
         <DelegatePassSection />
