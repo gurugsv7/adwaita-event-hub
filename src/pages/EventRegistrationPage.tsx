@@ -40,18 +40,31 @@ const EventRegistrationPage = () => {
   const category = categories.find((c) => c.id === resolvedCategoryId);
   const eventInfo = category?.events.find((e) => e.id === eventId);
 
-  // Parse team size from teamType
-  const getTeamSize = () => {
-    if (!eventInfo) return 1;
-    const teamTypeMatch = eventInfo.teamType.match(/\d+/);
-    if (teamTypeMatch) return parseInt(teamTypeMatch[0]);
-    if (eventInfo.teamType.toLowerCase().includes("individual")) return 1;
-    return 1;
+  const parseTeamSize = (teamType: string): { min: number; max: number; isVariable: boolean } => {
+    if (teamType.toLowerCase().includes("individual")) {
+      return { min: 1, max: 1, isVariable: false };
+    }
+
+    const rangeMatch = teamType.match(/\((\d+)-(\d+)\)/);
+    if (rangeMatch) {
+      return { min: parseInt(rangeMatch[1]), max: parseInt(rangeMatch[2]), isVariable: true };
+    }
+
+    const singleMatch = teamType.match(/\d+/);
+    if (singleMatch) {
+      const size = parseInt(singleMatch[0]);
+      return { min: size, max: size, isVariable: false };
+    }
+
+    return { min: 1, max: 1, isVariable: false };
   };
 
-  const teamSize = getTeamSize();
+  const { min: teamSizeMin, max: teamSizeMax, isVariable: isVariableTeam } = eventInfo
+    ? parseTeamSize(eventInfo.teamType)
+    : { min: 1, max: 1, isVariable: false };
 
   const [members, setMembers] = useState<TeamMember[]>([{ name: "", phone: "", year: "" }]);
+  const [selectedTeamSize, setSelectedTeamSize] = useState<number>(teamSizeMin);
   const [email, setEmail] = useState("");
   const [institution, setInstitution] = useState("");
   const [participantCategory, setParticipantCategory] = useState("student");
@@ -62,16 +75,28 @@ const EventRegistrationPage = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [registrationId, setRegistrationId] = useState("");
 
-  // Initialize team members based on event team size
+  // Initialize team members
   useEffect(() => {
-    if (teamSize > 1) {
-      const initialMembers: TeamMember[] = [];
-      for (let i = 0; i < teamSize; i++) {
-        initialMembers.push({ name: "", phone: "", year: "" });
-      }
-      setMembers(initialMembers);
+    if (!eventInfo) return;
+
+    const initialSize = isVariableTeam ? teamSizeMin : teamSizeMin;
+    setSelectedTeamSize(initialSize);
+
+    const initialMembers: TeamMember[] = [];
+    for (let i = 0; i < initialSize; i++) {
+      initialMembers.push({ name: "", phone: "", year: "" });
     }
-  }, [teamSize]);
+    setMembers(initialMembers);
+  }, [eventInfo, isVariableTeam, teamSizeMin]);
+
+  const handleTeamSizeChange = (newSize: number) => {
+    setSelectedTeamSize(newSize);
+    const newMembers: TeamMember[] = [];
+    for (let i = 0; i < newSize; i++) {
+      newMembers.push(members[i] ?? { name: "", phone: "", year: "" });
+    }
+    setMembers(newMembers);
+  };
 
   // Handle 404 if event not found
   if (!eventInfo || !category) {
@@ -110,28 +135,56 @@ const EventRegistrationPage = () => {
   };
 
   const validateForm = () => {
-    // Validate all team members
-    for (let i = 0; i < members.length; i++) {
+    const requireFullDetailsForAll = selectedTeamSize <= 2;
+
+    // Captain always needs full details
+    if (!members[0]?.name.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please enter Team Captain name",
+        variant: "destructive",
+      });
+      return false;
+    }
+    if (!members[0]?.phone.trim()) {
+      toast({
+        title: "Missing information",
+        description: "Please enter Team Captain phone number",
+        variant: "destructive",
+      });
+      return false;
+    }
+    if (!members[0]?.year) {
+      toast({
+        title: "Missing information",
+        description: "Please select Team Captain year of study",
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Other members: name always required, phone/year only when team <= 2
+    for (let i = 1; i < members.length; i++) {
       if (!members[i].name.trim()) {
         toast({
           title: "Missing information",
-          description: `Please enter name for ${teamSize > 1 ? `Team Member ${i + 1}` : "yourself"}`,
+          description: `Please enter name for Member ${i + 1}`,
           variant: "destructive",
         });
         return false;
       }
-      if (!members[i].phone.trim()) {
+      if (requireFullDetailsForAll && !members[i].phone.trim()) {
         toast({
           title: "Missing information",
-          description: `Please enter phone number for ${teamSize > 1 ? `Team Member ${i + 1}` : "yourself"}`,
+          description: `Please enter phone number for Member ${i + 1}`,
           variant: "destructive",
         });
         return false;
       }
-      if (!members[i].year) {
+      if (requireFullDetailsForAll && !members[i].year) {
         toast({
           title: "Missing information",
-          description: `Please select year of study for ${teamSize > 1 ? `Team Member ${i + 1}` : "yourself"}`,
+          description: `Please select year of study for Member ${i + 1}`,
           variant: "destructive",
         });
         return false;
@@ -411,53 +464,93 @@ const EventRegistrationPage = () => {
                   <div className="bg-card/80 border border-gold/30 rounded-2xl p-6">
                     <h2 className="font-heading text-xl text-foreground mb-6 flex items-center gap-2">
                       <Users className="w-5 h-5 text-gold" />
-                      {teamSize > 1 ? "Team Members" : "Your Details"}
+                      {selectedTeamSize > 1 ? "Team Members" : "Your Details"}
                     </h2>
+
+                    {isVariableTeam && (
+                      <div className="mb-6">
+                        <Label className="text-silver/70">How many team members? <span className="text-accent">*</span></Label>
+                        <div className="mt-2 max-w-xs">
+                          <Select value={String(selectedTeamSize)} onValueChange={(v) => handleTeamSizeChange(parseInt(v))}>
+                            <SelectTrigger className="bg-background/50 border-gold/20">
+                              <SelectValue placeholder="Select team size" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Array.from({ length: teamSizeMax - teamSizeMin + 1 }, (_, i) => teamSizeMin + i).map((size) => (
+                                <SelectItem key={size} value={String(size)}>
+                                  {size} Members
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <p className="text-xs text-silver/50 mt-2">Allowed: {teamSizeMin} to {teamSizeMax} members</p>
+                      </div>
+                    )}
 
                     <div className="space-y-6">
                       {members.map((member, index) => (
                         <div key={index} className="bg-background/50 border border-gold/10 rounded-xl p-4">
-                          {teamSize > 1 && (
+                          {selectedTeamSize > 1 && (
                             <p className="text-sm font-medium text-gold mb-4">
-                              {index === 0 ? "Team Leader" : `Member ${index + 1}`}
+                              {index === 0
+                                ? selectedTeamSize > 2
+                                  ? "Team Captain"
+                                  : "Member 1"
+                                : `Member ${index + 1}`}
                             </p>
                           )}
-                          <div className="grid md:grid-cols-3 gap-4">
+
+                          {/* For teams > 2: captain full details, others name only */}
+                          {/* For teams <= 2: all full details */}
+                          {(index === 0 || selectedTeamSize <= 2) ? (
+                            <div className="grid md:grid-cols-3 gap-4">
+                              <div className="space-y-2">
+                                <Label className="text-silver/70">Full Name <span className="text-accent">*</span></Label>
+                                <Input
+                                  value={member.name}
+                                  onChange={(e) => handleMemberChange(index, "name", e.target.value)}
+                                  placeholder="Enter full name"
+                                  className="bg-background/50 border-gold/20"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-silver/70">Phone <span className="text-accent">*</span></Label>
+                                <Input
+                                  value={member.phone}
+                                  onChange={(e) => handleMemberChange(index, "phone", e.target.value)}
+                                  placeholder="+91 XXXXX XXXXX"
+                                  className="bg-background/50 border-gold/20"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label className="text-silver/70">Year <span className="text-accent">*</span></Label>
+                                <Select value={member.year} onValueChange={(val) => handleMemberChange(index, "year", val)}>
+                                  <SelectTrigger className="bg-background/50 border-gold/20">
+                                    <SelectValue placeholder="Select year" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="1st Year">1st Year</SelectItem>
+                                    <SelectItem value="2nd Year">2nd Year</SelectItem>
+                                    <SelectItem value="3rd Year">3rd Year</SelectItem>
+                                    <SelectItem value="Final Year">Final Year</SelectItem>
+                                    <SelectItem value="Intern">Intern</SelectItem>
+                                    <SelectItem value="PG">PG</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                          ) : (
                             <div className="space-y-2">
-                              <Label className="text-silver/70">Full Name <span className="text-accent">*</span></Label>
+                              <Label className="text-silver/70">Member Name <span className="text-accent">*</span></Label>
                               <Input
                                 value={member.name}
                                 onChange={(e) => handleMemberChange(index, "name", e.target.value)}
-                                placeholder="Enter full name"
+                                placeholder="Enter member name"
                                 className="bg-background/50 border-gold/20"
                               />
                             </div>
-                            <div className="space-y-2">
-                              <Label className="text-silver/70">Phone <span className="text-accent">*</span></Label>
-                              <Input
-                                value={member.phone}
-                                onChange={(e) => handleMemberChange(index, "phone", e.target.value)}
-                                placeholder="+91 XXXXX XXXXX"
-                                className="bg-background/50 border-gold/20"
-                              />
-                            </div>
-                            <div className="space-y-2">
-                              <Label className="text-silver/70">Year <span className="text-accent">*</span></Label>
-                              <Select value={member.year} onValueChange={(val) => handleMemberChange(index, "year", val)}>
-                                <SelectTrigger className="bg-background/50 border-gold/20">
-                                  <SelectValue placeholder="Select year" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="1st Year">1st Year</SelectItem>
-                                  <SelectItem value="2nd Year">2nd Year</SelectItem>
-                                  <SelectItem value="3rd Year">3rd Year</SelectItem>
-                                  <SelectItem value="Final Year">Final Year</SelectItem>
-                                  <SelectItem value="Intern">Intern</SelectItem>
-                                  <SelectItem value="PG">PG</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
+                          )}
                         </div>
                       ))}
                     </div>
