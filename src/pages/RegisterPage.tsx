@@ -150,17 +150,21 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validation - Team captain (index 0) requires full details
+    // For teams > 2: Only captain needs full details
+    // For teams <= 2: All members need full details
+    const requireFullDetailsForAll = eventInfo.teamSize <= 2;
+
+    // Validate captain always needs full details
     if (!members[0].name || !members[0].phone || !email || !institution) {
       toast({
         title: "Missing required fields",
-        description: "Please fill in all required fields for team captain",
+        description: "Please fill in all required fields",
         variant: "destructive",
       });
       return;
     }
 
-    // Validate all team members have names
+    // Validate other team members
     for (let i = 1; i < members.length; i++) {
       if (!members[i].name) {
         toast({
@@ -170,13 +174,30 @@ const RegisterPage = () => {
         });
         return;
       }
+      // For teams <= 2, validate phone for all members
+      if (requireFullDetailsForAll && !members[i].phone) {
+        toast({
+          title: "Missing phone number",
+          description: `Please enter phone for Member ${i + 1}`,
+          variant: "destructive",
+        });
+        return;
+      }
+      if (requireFullDetailsForAll && !validatePhone(members[i].phone)) {
+        toast({
+          title: "Invalid phone number",
+          description: `Member ${i + 1}'s phone must be 10 digits or +91 followed by 10 digits`,
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
-    // Validate captain's phone only
+    // Validate captain's phone
     if (!validatePhone(members[0].phone)) {
       toast({
         title: "Invalid phone number",
-        description: "Team captain's phone must be 10 digits or +91 followed by 10 digits",
+        description: "Phone must be 10 digits or +91 followed by 10 digits",
         variant: "destructive",
       });
       return;
@@ -397,13 +418,14 @@ const RegisterPage = () => {
                   >
                     <p className="text-silver/70 text-sm mb-4">
                       {eventInfo.teamSize > 1 ? `Member ${index + 1}` : "Your Details"}
-                      {index === 0 && eventInfo.teamSize > 1 && (
+                      {index === 0 && eventInfo.teamSize > 2 && (
                         <span className="text-secondary ml-2">(Team Captain - Full Details Required)</span>
                       )}
                     </p>
                     
-                    {/* Team Captain (index 0) gets full form */}
-                    {index === 0 ? (
+                    {/* For teams > 2 members: Team Captain (index 0) gets full form, others only name */}
+                    {/* For teams <= 2 members: Everyone gets full form */}
+                    {(index === 0 || eventInfo.teamSize <= 2) ? (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                           <Label htmlFor={`name-${index}`} className="text-silver/70">
@@ -475,7 +497,7 @@ const RegisterPage = () => {
                 ))}
               </div>
 
-              {eventInfo.teamSize > 1 && (
+              {eventInfo.teamSize > 2 && (
                 <p className="text-silver/50 text-xs mt-4 italic">
                   * Only the Team Captain's complete details are required. Other team members only need to provide their names.
                 </p>
