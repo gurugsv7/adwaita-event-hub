@@ -160,9 +160,9 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
           )} />
         </div>
 
-        {/* Background Icon Element */}
+        {/* Background Icon Element - Hidden on mobile */}
         <div className={cn(
-          "absolute -right-8 -top-8 transition-all duration-700 ease-out",
+          "absolute -right-8 -top-8 transition-all duration-700 ease-out hidden md:block",
           isHovered ? "opacity-20 scale-110 rotate-12" : "opacity-10 scale-100 rotate-0"
         )}>
           <EventIcon 
@@ -172,38 +172,34 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
           />
         </div>
 
-        {/* Audio Waveform Decoration */}
+        {/* Audio Waveform Decoration - Hidden on mobile */}
         <div className={cn(
-          "absolute bottom-0 left-0 right-0 h-16 overflow-hidden opacity-10 transition-opacity duration-500",
+          "absolute bottom-0 left-0 right-0 h-12 overflow-hidden opacity-10 transition-opacity duration-500 hidden md:block",
           isHovered && "opacity-20"
         )}>
-          <div className="flex items-end justify-center gap-1 h-full pb-4">
+          <div className="flex items-end justify-center gap-1 h-full pb-2">
             {[...Array(24)].map((_, i) => (
               <div
                 key={i}
-                className={cn(
-                  "w-1 bg-gradient-to-t rounded-full transition-all duration-300",
-                  accentGradient.replace("from-", "from-").replace("via-", "via-").replace("to-", "to-")
-                )}
+                className="w-1 bg-gradient-to-t rounded-full"
                 style={{
                   height: `${Math.sin((i / 24) * Math.PI) * 100 * (0.3 + Math.random() * 0.7)}%`,
-                  animationDelay: `${i * 50}ms`,
-                  background: `linear-gradient(to top, var(--primary), var(--secondary))`
+                  background: `linear-gradient(to top, hsl(var(--primary)), hsl(var(--secondary)))`
                 }}
               />
             ))}
           </div>
         </div>
 
-        {/* Content Container with Asymmetrical Layout */}
-        <div className="relative z-10 p-6 md:p-8">
+        {/* Content Container - Compact on mobile */}
+        <div className="relative z-10 p-4 md:p-6 lg:p-8">
           
           {/* Top Row: Title & Status */}
-          <div className="flex items-start justify-between gap-4 mb-6">
-            {/* Title Section - Offset Left */}
-            <div className="flex-1 pr-4">
+          <div className="flex items-start justify-between gap-2 md:gap-4 mb-3 md:mb-5">
+            {/* Title Section */}
+            <div className="flex-1 min-w-0">
               <h3 className={cn(
-                "font-serif font-bold text-2xl md:text-3xl leading-tight tracking-tight",
+                "font-serif font-bold text-lg md:text-2xl lg:text-3xl leading-tight tracking-tight",
                 "text-foreground transition-colors duration-300",
                 "group-hover:text-primary"
               )}>
@@ -212,69 +208,66 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
               
               {/* Category Chip */}
               <div className={cn(
-                "inline-flex items-center gap-1.5 mt-3 px-3 py-1.5",
+                "inline-flex items-center gap-1 mt-2 md:mt-3 px-2 md:px-3 py-1 md:py-1.5",
                 "bg-gradient-to-r from-primary/20 to-secondary/20",
                 "border border-primary/30 rounded-full",
-                "text-xs font-medium text-foreground/80"
+                "text-[10px] md:text-xs font-medium text-foreground/80"
               )}>
-                <EventIcon size={12} className="text-primary" />
-                <span>{event.teamType}</span>
+                <EventIcon size={10} className="text-primary md:w-3 md:h-3" />
+                <span className="truncate max-w-[80px] md:max-w-none">{event.teamType}</span>
               </div>
             </div>
 
-            {/* Animated Status Badge - Offset Right */}
+            {/* Animated Status Badge */}
             <div className={cn(
-              "shrink-0 flex items-center gap-2 px-4 py-2",
-              "rounded-xl border backdrop-blur-sm",
+              "shrink-0 flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1 md:py-1.5",
+              "rounded-lg md:rounded-xl border backdrop-blur-sm",
               "transition-all duration-300",
               statusConfig.bg,
               statusConfig.border,
               isHovered && `shadow-lg ${statusConfig.glow}`
             )}>
               {/* Pulsing Dot */}
-              <span className="relative flex h-2 w-2">
+              <span className="relative flex h-1.5 w-1.5 md:h-2 md:w-2">
                 <span className={cn(
                   "absolute inline-flex h-full w-full rounded-full opacity-75",
                   statusConfig.dot,
                   statusConfig.pulse && "animate-ping"
                 )} />
                 <span className={cn(
-                  "relative inline-flex rounded-full h-2 w-2",
+                  "relative inline-flex rounded-full h-1.5 w-1.5 md:h-2 md:w-2",
                   statusConfig.dot
                 )} />
               </span>
-              <span className={cn("text-sm font-semibold", statusConfig.text)}>
+              <span className={cn("text-[10px] md:text-xs font-semibold", statusConfig.text)}>
                 {event.status}
               </span>
             </div>
           </div>
 
-          {/* Description - Slides in on hover */}
-          <div className={cn(
-            "overflow-hidden transition-all duration-500 ease-out",
-            isHovered ? "max-h-24 opacity-100 mb-6" : "max-h-16 opacity-80 mb-4"
-          )}>
-            <p className="text-silver/80 text-sm md:text-base leading-relaxed line-clamp-3">
+          {/* Description - More compact on mobile */}
+          <div className="mb-3 md:mb-4">
+            <p className="text-silver/80 text-xs md:text-sm leading-relaxed line-clamp-2">
               {event.description}
             </p>
           </div>
 
-          {/* Metadata Grid - Modern Timeline Layout */}
-          <div className="flex flex-wrap items-center gap-3 mb-6">
+          {/* Metadata Grid - Compact horizontal on mobile */}
+          <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-3 md:mb-5">
             {/* Fee */}
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2.5",
-              "bg-background/50 backdrop-blur-sm rounded-xl",
+              "flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2",
+              "bg-background/50 backdrop-blur-sm rounded-lg md:rounded-xl",
               "border border-border/40",
               "transition-all duration-300",
               isHovered && "border-primary/40 bg-background/70"
             )}>
-              <div className="p-1.5 rounded-lg bg-primary/20">
-                <IndianRupee size={14} className="text-primary" />
+              <div className="p-1 md:p-1.5 rounded-md md:rounded-lg bg-primary/20">
+                <IndianRupee size={12} className="text-primary md:w-3.5 md:h-3.5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-silver/60 uppercase tracking-wider">Fee</span>
-                <span className="font-bold text-foreground">
+                <span className="text-[8px] md:text-[10px] text-silver/60 uppercase tracking-wider leading-none">Fee</span>
+                <span className="font-bold text-foreground text-xs md:text-sm">
                   {event.fee === 0 ? "Free" : `₹${event.fee}`}
                 </span>
               </div>
@@ -282,50 +275,50 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
 
             {/* Day */}
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2.5",
-              "bg-background/50 backdrop-blur-sm rounded-xl",
+              "flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2",
+              "bg-background/50 backdrop-blur-sm rounded-lg md:rounded-xl",
               "border border-border/40",
               "transition-all duration-300",
               isHovered && "border-secondary/40 bg-background/70"
             )}>
-              <div className="p-1.5 rounded-lg bg-secondary/20">
-                <Calendar size={14} className="text-secondary" />
+              <div className="p-1 md:p-1.5 rounded-md md:rounded-lg bg-secondary/20">
+                <Calendar size={12} className="text-secondary md:w-3.5 md:h-3.5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-silver/60 uppercase tracking-wider">Schedule</span>
-                <span className="font-bold text-foreground">{event.day}</span>
+                <span className="text-[8px] md:text-[10px] text-silver/60 uppercase tracking-wider leading-none">Day</span>
+                <span className="font-bold text-foreground text-xs md:text-sm">{event.day}</span>
               </div>
             </div>
 
             {/* Team Type */}
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2.5",
-              "bg-background/50 backdrop-blur-sm rounded-xl",
+              "flex items-center gap-1.5 md:gap-2 px-2 md:px-3 py-1.5 md:py-2",
+              "bg-background/50 backdrop-blur-sm rounded-lg md:rounded-xl",
               "border border-border/40",
               "transition-all duration-300",
               isHovered && "border-accent/40 bg-background/70"
             )}>
-              <div className="p-1.5 rounded-lg bg-accent/20">
-                <Users size={14} className="text-accent-foreground" />
+              <div className="p-1 md:p-1.5 rounded-md md:rounded-lg bg-accent/20">
+                <Users size={12} className="text-accent-foreground md:w-3.5 md:h-3.5" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs text-silver/60 uppercase tracking-wider">Type</span>
-                <span className="font-bold text-foreground text-sm">
-                  {event.teamType.length > 12 ? event.teamType.substring(0, 12) + "..." : event.teamType}
+                <span className="text-[8px] md:text-[10px] text-silver/60 uppercase tracking-wider leading-none">Type</span>
+                <span className="font-bold text-foreground text-xs md:text-sm">
+                  {event.teamType.length > 10 ? event.teamType.substring(0, 10) + ".." : event.teamType}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button - Compact on mobile */}
           <Link
             to={`/${categoryId}/${event.id}`}
             className={cn(
-              "relative flex items-center justify-center gap-3 w-full py-4 px-6",
+              "relative flex items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
               "bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10",
               "hover:from-primary hover:via-primary hover:to-primary",
               "text-primary hover:text-primary-foreground",
-              "font-semibold text-base rounded-xl",
+              "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
               "border border-primary/30 hover:border-primary",
               "transition-all duration-500 ease-out",
               "group/btn overflow-hidden",
@@ -341,7 +334,7 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
             
             <span className="relative z-10">View Details & Register</span>
             <ArrowRight 
-              size={18} 
+              size={16} 
               className={cn(
                 "relative z-10 transition-transform duration-300",
                 "group-hover/btn:translate-x-2"
