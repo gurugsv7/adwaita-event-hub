@@ -19,7 +19,9 @@ interface EventInfo {
   price: number;
   prize: number;
   delegateRequired: boolean;
-  teamSize: number;
+  teamSizeMin: number;
+  teamSizeMax: number;
+  isVariableTeam: boolean;
   category: string;
   categoryId: string;
   day: string;
@@ -28,19 +30,36 @@ interface EventInfo {
   incharge: { name: string; phone: string };
 }
 
+const parseTeamSize = (teamType: string): { min: number; max: number; isVariable: boolean } => {
+  if (teamType.toLowerCase().includes("individual")) {
+    return { min: 1, max: 1, isVariable: false };
+  }
+  
+  // Match patterns like "Group (4-8)", "Team (2-8)", "Group (8-15)"
+  const rangeMatch = teamType.match(/\((\d+)-(\d+)\)/);
+  if (rangeMatch) {
+    return {
+      min: parseInt(rangeMatch[1]),
+      max: parseInt(rangeMatch[2]),
+      isVariable: true
+    };
+  }
+  
+  // Match patterns like "Team (3)" or just extract first number
+  const singleMatch = teamType.match(/\d+/);
+  if (singleMatch) {
+    const size = parseInt(singleMatch[0]);
+    return { min: size, max: size, isVariable: false };
+  }
+  
+  return { min: 1, max: 1, isVariable: false };
+};
+
 const buildEventInfoMap = (): Record<string, EventInfo> => {
   const map: Record<string, EventInfo> = {};
   categories.forEach((category) => {
     category.events.forEach((event) => {
-      // Parse team size from teamType
-      let teamSize = 1;
-      const teamTypeMatch = event.teamType.match(/\d+/);
-      if (teamTypeMatch) {
-        teamSize = parseInt(teamTypeMatch[0]);
-      }
-      if (event.teamType.toLowerCase().includes("individual")) {
-        teamSize = 1;
-      }
+      const { min, max, isVariable } = parseTeamSize(event.teamType);
       
       map[event.id] = {
         id: event.id,
@@ -48,7 +67,9 @@ const buildEventInfoMap = (): Record<string, EventInfo> => {
         price: event.fee,
         prize: event.prizes.first,
         delegateRequired: event.fee > 0,
-        teamSize,
+        teamSizeMin: min,
+        teamSizeMax: max,
+        isVariableTeam: isVariable,
         category: event.category,
         categoryId: category.id,
         day: event.day,
@@ -80,6 +101,7 @@ const RegisterPage = () => {
   const eventInfo = EVENT_INFO[eventKey];
   
   const [members, setMembers] = useState<TeamMember[]>([{ name: "", phone: "", year: "" }]);
+  const [selectedTeamSize, setSelectedTeamSize] = useState<number>(0);
   const [email, setEmail] = useState("");
   const [institution, setInstitution] = useState("");
   const [category, setCategory] = useState("student");
@@ -92,14 +114,40 @@ const RegisterPage = () => {
 
   // Initialize team members based on event team size
   useEffect(() => {
-    if (eventInfo && eventInfo.teamSize > 1) {
-      const initialMembers: TeamMember[] = [];
-      for (let i = 0; i < eventInfo.teamSize; i++) {
-        initialMembers.push({ name: "", phone: "", year: "" });
+    if (eventInfo) {
+      if (eventInfo.isVariableTeam) {
+        // For variable teams, start with minimum and let user select
+        setSelectedTeamSize(eventInfo.teamSizeMin);
+        const initialMembers: TeamMember[] = [];
+        for (let i = 0; i < eventInfo.teamSizeMin; i++) {
+          initialMembers.push({ name: "", phone: "", year: "" });
+        }
+        setMembers(initialMembers);
+      } else if (eventInfo.teamSizeMin > 1) {
+        setSelectedTeamSize(eventInfo.teamSizeMin);
+        const initialMembers: TeamMember[] = [];
+        for (let i = 0; i < eventInfo.teamSizeMin; i++) {
+          initialMembers.push({ name: "", phone: "", year: "" });
+        }
+        setMembers(initialMembers);
       }
-      setMembers(initialMembers);
     }
   }, [eventInfo]);
+
+  // Handle team size change for variable teams
+  const handleTeamSizeChange = (newSize: number) => {
+    setSelectedTeamSize(newSize);
+    const newMembers: TeamMember[] = [];
+    for (let i = 0; i < newSize; i++) {
+      // Preserve existing member data if available
+      if (members[i]) {
+        newMembers.push(members[i]);
+      } else {
+        newMembers.push({ name: "", phone: "", year: "" });
+      }
+    }
+    setMembers(newMembers);
+  };
 
   const handleMemberChange = (index: number, field: keyof TeamMember, value: string) => {
     const newMembers = [...members];
@@ -152,7 +200,7 @@ const RegisterPage = () => {
     
     // For teams > 2: Only captain needs full details
     // For teams <= 2: All members need full details
-    const requireFullDetailsForAll = eventInfo.teamSize <= 2;
+    const requireFullDetailsForAll = selectedTeamSize <= 2;
 
     // Validate captain always needs full details
     if (!members[0].name || !members[0].phone || !email || !institution) {
@@ -385,7 +433,9 @@ const RegisterPage = () => {
               </div>
               <div className="bg-muted/30 border border-primary/20 rounded-lg px-4 py-2 text-center min-w-[100px]">
                 <Users size={16} className="text-secondary mx-auto mb-1" />
-                <p className="text-primary font-bold">{eventInfo.teamSize}</p>
+                <p className="text-primary font-bold">
+                  {eventInfo.isVariableTeam ? `${eventInfo.teamSizeMin}-${eventInfo.teamSizeMax}` : eventInfo.teamSizeMin}
+                </p>
                 <p className="text-silver/50 text-xs">Team Size</p>
               </div>
               <div className="bg-muted/30 border border-primary/20 rounded-lg px-4 py-2 text-center min-w-[100px]">
@@ -406,8 +456,38 @@ const RegisterPage = () => {
             <div className="bg-muted/20 border border-primary/20 rounded-xl p-6">
               <h2 className="text-xl font-serif text-primary mb-6 flex items-center gap-2">
                 <Users size={20} className="text-secondary" />
-                {eventInfo.teamSize > 1 ? "Team Members" : "Participant Details"}
+                {selectedTeamSize > 1 ? "Team Members" : "Participant Details"}
               </h2>
+
+              {/* Team Size Selector for variable teams */}
+              {eventInfo.isVariableTeam && (
+                <div className="mb-6">
+                  <Label className="text-silver/70 mb-2 block">
+                    How many team members? <span className="text-red-400">*</span>
+                  </Label>
+                  <Select
+                    value={selectedTeamSize.toString()}
+                    onValueChange={(value) => handleTeamSizeChange(parseInt(value))}
+                  >
+                    <SelectTrigger className="bg-background border-primary/20 text-silver w-full max-w-xs">
+                      <SelectValue placeholder="Select team size" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from(
+                        { length: eventInfo.teamSizeMax - eventInfo.teamSizeMin + 1 },
+                        (_, i) => eventInfo.teamSizeMin + i
+                      ).map((size) => (
+                        <SelectItem key={size} value={size.toString()}>
+                          {size} Members
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-silver/50 text-xs mt-2">
+                    Team size must be between {eventInfo.teamSizeMin} and {eventInfo.teamSizeMax} members
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-6">
                 {members.map((member, index) => (
@@ -417,15 +497,15 @@ const RegisterPage = () => {
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
                     <p className="text-silver/70 text-sm mb-4">
-                      {eventInfo.teamSize > 1 ? `Member ${index + 1}` : "Your Details"}
-                      {index === 0 && eventInfo.teamSize > 2 && (
+                      {selectedTeamSize > 1 ? `Member ${index + 1}` : "Your Details"}
+                      {index === 0 && selectedTeamSize > 2 && (
                         <span className="text-secondary ml-2">(Team Captain - Full Details Required)</span>
                       )}
                     </p>
                     
                     {/* For teams > 2 members: Team Captain (index 0) gets full form, others only name */}
                     {/* For teams <= 2 members: Everyone gets full form */}
-                    {(index === 0 || eventInfo.teamSize <= 2) ? (
+                    {(index === 0 || selectedTeamSize <= 2) ? (
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                           <Label htmlFor={`name-${index}`} className="text-silver/70">
@@ -497,7 +577,7 @@ const RegisterPage = () => {
                 ))}
               </div>
 
-              {eventInfo.teamSize > 2 && (
+              {selectedTeamSize > 2 && (
                 <p className="text-silver/50 text-xs mt-4 italic">
                   * Only the Team Captain's complete details are required. Other team members only need to provide their names.
                 </p>
