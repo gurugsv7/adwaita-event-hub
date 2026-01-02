@@ -1,113 +1,11 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, Search, ArrowRight, Calendar, IndianRupee } from "lucide-react";
+import { ArrowLeft, Search } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { ModernEventCard } from "@/components/ModernEventCard";
 import { categories } from "@/data/events";
-
-const getStatusColor = (status: string) => {
-  switch (status) {
-    case "Open":
-      return "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
-    case "Coming Soon":
-      return "bg-amber-500/20 text-amber-400 border-amber-500/30";
-    case "Closed":
-      return "bg-red-500/20 text-red-400 border-red-500/30";
-    default:
-      return "bg-muted/20 text-muted-foreground border-muted/30";
-  }
-};
-
-interface EventCardProps {
-  event: {
-    id: string;
-    title: string;
-    description: string;
-    fee: number;
-    teamType: string;
-    day: string;
-    status: string;
-  };
-  categoryId: string;
-  index: number;
-  borderColor: string;
-}
-
-function EventCard({ event, categoryId, index, borderColor }: EventCardProps) {
-  const getBorderColorClass = () => {
-    switch (borderColor) {
-      case "border-gold":
-        return "border-l-primary";
-      case "border-orange":
-        return "border-l-orange-500";
-      case "border-teal":
-        return "border-l-secondary";
-      default:
-        return "border-l-primary";
-    }
-  };
-
-  return (
-    <div
-      className={`group bg-card/60 backdrop-blur-sm border border-border/40 rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary/15 hover:border-primary/50 animate-fade-in border-l-4 ${getBorderColorClass()}`}
-      style={{ animationDelay: `${index * 80}ms` }}
-    >
-      {/* Event Header */}
-      <div className="p-5 pb-3">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="font-serif font-bold text-foreground text-lg md:text-xl group-hover:text-primary transition-colors leading-tight">
-            {event.title}
-          </h3>
-          <span
-            className={`shrink-0 px-3 py-1 text-xs font-medium rounded-full border ${getStatusColor(
-              event.status
-            )}`}
-          >
-            {event.status}
-          </span>
-        </div>
-      </div>
-
-      {/* Event Description */}
-      <div className="px-5 pb-4">
-        <p className="text-silver/80 text-sm leading-relaxed line-clamp-3">
-          {event.description}
-        </p>
-      </div>
-
-      {/* Event Meta */}
-      <div className="px-5 pb-4">
-        <div className="flex flex-wrap items-center gap-4 text-sm">
-          <div className="flex items-center gap-1.5 text-silver/70">
-            <IndianRupee size={14} className="text-primary" />
-            <span className="font-medium text-foreground">
-              {event.fee === 0 ? "Free" : `₹${event.fee}`}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 text-silver/70">
-            <Calendar size={14} className="text-secondary" />
-            <span>{event.day}</span>
-          </div>
-          <div className="text-silver/60 text-xs bg-background/40 px-2 py-1 rounded">
-            {event.teamType}
-          </div>
-        </div>
-      </div>
-
-      {/* Register Button */}
-      <div className="p-5 pt-2 border-t border-border/20">
-        <Link
-          to={`/${categoryId}/${event.id}`}
-          className="flex items-center justify-center gap-2 w-full py-3 bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground font-medium rounded-lg transition-all duration-300 group/btn"
-        >
-          <span>View Details & Register</span>
-          <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-        </Link>
-      </div>
-    </div>
-  );
-}
 
 export default function CategoryPage() {
   const { categoryId } = useParams<{ categoryId: string }>();
@@ -217,9 +115,9 @@ export default function CategoryPage() {
         <main className="py-12 gradient-stats">
           <div className="container mx-auto px-4">
             {filteredEvents.length > 0 ? (
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
                 {filteredEvents.map((event, index) => (
-                  <EventCard
+                  <ModernEventCard
                     key={event.id}
                     event={event}
                     categoryId={category.id}
