@@ -7,7 +7,7 @@ export const EMAILJS_CONFIG = {
   SERVICE_ID: 'service_wtt60xf',
   EVENT_TEMPLATE_ID: 'template_0uzpwjc',
   DELEGATE_TEMPLATE_ID: 'template_kh3a565',
-  PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Please provide your EmailJS public key
+  PUBLIC_KEY: 'acbz69d146b3J-jEm',
 };
 
 // Category to email mapping
