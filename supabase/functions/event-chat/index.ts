@@ -5,7 +5,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const BASE_URL = "https://adwaita2026.lovable.app";
+const BASE_URL = "https://www.igmcrisigma.com";
 
 const EVENTS_CONTEXT = `You are ADWAITA AI, the friendly and enthusiastic assistant for ADWAITA 2026 - a vibrant college fest. You help visitors with event information, registration, and delegate passes.
 
