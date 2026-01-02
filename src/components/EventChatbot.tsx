@@ -10,6 +10,30 @@ interface Message {
   content: string;
 }
 
+// Function to parse message content and make URLs clickable
+const parseMessageContent = (content: string) => {
+  // Regex to match URLs
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const parts = content.split(urlRegex);
+  
+  return parts.map((part, index) => {
+    if (part.match(urlRegex)) {
+      return (
+        <a
+          key={index}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gold hover:text-gold/80 underline underline-offset-2 break-all"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+};
+
 const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/event-chat`;
 
 const EventChatbot = () => {
@@ -211,13 +235,16 @@ const EventChatbot = () => {
                   </div>
                   <div
                     className={cn(
-                      "max-w-[75%] px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm leading-relaxed",
+                      "max-w-[75%] px-3 py-2 sm:px-4 sm:py-3 rounded-xl sm:rounded-2xl text-xs sm:text-sm leading-relaxed break-words overflow-hidden",
                       message.role === "user"
                         ? "bg-gradient-to-br from-teal/20 to-secondary/10 text-foreground rounded-tr-sm"
                         : "bg-gradient-to-br from-gold/10 to-primary/5 text-foreground rounded-tl-sm border border-gold/10"
                     )}
+                    style={{ wordBreak: "break-word", overflowWrap: "break-word" }}
                   >
-                    {message.content || (
+                    {message.content ? (
+                      <span className="whitespace-pre-wrap">{parseMessageContent(message.content)}</span>
+                    ) : (
                       <div className="flex items-center gap-2">
                         <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-gold" />
                         <span className="text-silver/70 text-xs sm:text-sm">Thinking...</span>
