@@ -4,10 +4,10 @@ import emailjs from '@emailjs/browser';
 // Service ID: Create an email service in EmailJS dashboard
 // Template IDs: Create templates for event registration and delegate pass
 export const EMAILJS_CONFIG = {
-  SERVICE_ID: 'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-  EVENT_TEMPLATE_ID: 'YOUR_EVENT_TEMPLATE_ID', // Template for event registration
-  DELEGATE_TEMPLATE_ID: 'YOUR_DELEGATE_TEMPLATE_ID', // Template for delegate pass
-  PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Replace with your EmailJS public key
+  SERVICE_ID: 'service_wtt60xf',
+  EVENT_TEMPLATE_ID: 'template_0uzpwjc',
+  DELEGATE_TEMPLATE_ID: 'template_kh3a565',
+  PUBLIC_KEY: 'YOUR_PUBLIC_KEY', // Please provide your EmailJS public key
 };
 
 // Category to email mapping
