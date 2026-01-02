@@ -21,6 +21,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import paymentQR from "@/assets/payment-qr.jpg";
+import { sendDelegatePassEmail } from "@/lib/emailService";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
@@ -214,6 +215,17 @@ const DelegatePassPage = () => {
         console.error('Error saving delegate registration:', error);
         throw error;
       }
+
+      // Send confirmation email to college
+      sendDelegatePassEmail({
+        delegateId,
+        name: formData.fullName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        phone: formData.phone.trim(),
+        institution: formData.institution.trim(),
+        tierName: selectedPass?.name || selectedTier,
+        tierPrice: selectedPass?.price || 0,
+      }).catch(err => console.error('Email send failed:', err));
 
       toast({
         title: "Registration successful!",

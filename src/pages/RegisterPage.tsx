@@ -11,6 +11,7 @@ import { categories } from "@/data/events";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import paymentQR from "@/assets/payment-qr.jpg";
+import { sendEventRegistrationEmail } from "@/lib/emailService";
 
 // Build EVENT_INFO map from categories data
 interface EventInfo {
@@ -322,6 +323,24 @@ const RegisterPage = () => {
 
       setRegistrationId(regId);
       setIsSuccess(true);
+
+      // Send confirmation email to college
+      sendEventRegistrationEmail({
+        registrationId: regId,
+        eventName: eventInfo.name,
+        categoryName: eventInfo.category,
+        captainName: members[0].name.trim(),
+        captainPhone: members[0].phone.trim(),
+        captainYear: members[0].year,
+        email: email.trim().toLowerCase(),
+        institution: institution.trim(),
+        teamMembers: members,
+        feeAmount: eventInfo.price,
+        delegateId: delegateId.trim() || undefined,
+        couponCode: coupon.trim() || undefined,
+        participantCategory: category,
+      }).catch(err => console.error('Email send failed:', err));
+
       toast({
         title: "Registration Successful!",
         description: `Your registration ID is ${regId}`,

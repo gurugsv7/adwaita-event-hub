@@ -13,6 +13,7 @@ import type { Json } from "@/integrations/supabase/types";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import paymentQR from "@/assets/payment-qr.jpg";
+import { sendEventRegistrationEmail } from "@/lib/emailService";
 
 interface TeamMember {
   name: string;
@@ -301,6 +302,23 @@ const EventRegistrationPage = () => {
 
       setRegistrationId(regId);
       setIsSuccess(true);
+      
+      // Send confirmation email to college
+      sendEventRegistrationEmail({
+        registrationId: regId,
+        eventName: eventInfo.title,
+        categoryName: category.title,
+        captainName: members[0].name.trim(),
+        captainPhone: members[0].phone.trim(),
+        captainYear: members[0].year,
+        email: email.trim().toLowerCase(),
+        institution: institution.trim(),
+        teamMembers: members,
+        feeAmount: eventInfo.fee,
+        delegateId: delegateId.trim() || undefined,
+        couponCode: coupon.trim() || undefined,
+        participantCategory,
+      }).catch(err => console.error('Email send failed:', err));
       
       toast({
         title: "Registration successful!",
