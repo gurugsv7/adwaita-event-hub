@@ -37,16 +37,6 @@ const allCategories = [
     image: sportsImg,
   },
   {
-    id: "fine-arts",
-    title: "Fine Arts",
-    description:
-      "Unleash your creativity through painting, mehendi, mandala, and more visual artistry.",
-    eventCount: 8,
-    prizePool: "₹25K+",
-    accentColor: "gold" as const,
-    image: fineArtsImg,
-  },
-  {
     id: "literature",
     title: "Literature & Debate",
     description:
@@ -57,14 +47,14 @@ const allCategories = [
     image: literatureImg,
   },
   {
-    id: "academic",
-    title: "Academic",
+    id: "fine-arts",
+    title: "Fine Arts",
     description:
-      "Showcase your medical knowledge through quizzes and themed challenges.",
-    eventCount: 1,
-    prizePool: "₹10K+",
+      "Unleash your creativity through painting, mehendi, mandala, and more visual artistry.",
+    eventCount: 8,
+    prizePool: "₹25K+",
     accentColor: "gold" as const,
-    image: academicImg,
+    image: fineArtsImg,
   },
   {
     id: "photography",
@@ -75,6 +65,27 @@ const allCategories = [
     prizePool: "₹30K+",
     accentColor: "teal" as const,
     image: photographyImg,
+  },
+  {
+    id: "graphix",
+    title: "Graphix",
+    description:
+      "Graphic designing events - poster challenges, meme creation, and digital art contests.",
+    eventCount: 3,
+    prizePool: "₹4K+",
+    accentColor: "gold" as const,
+    image: graphixImg,
+    featured: true,
+  },
+  {
+    id: "ssc",
+    title: "SSC - Social Service",
+    description:
+      "Green campus drive, upcycling art, fundraiser expo, and charity events for noble causes.",
+    eventCount: 4,
+    prizePool: "Charity",
+    accentColor: "teal" as const,
+    image: otherImg,
   },
   {
     id: "technical",
@@ -98,25 +109,14 @@ const allCategories = [
     image: otherImg,
   },
   {
-    id: "graphix",
-    title: "Graphix",
+    id: "academic",
+    title: "Academic",
     description:
-      "Graphic designing events - poster challenges, meme creation, and digital art contests.",
-    eventCount: 3,
-    prizePool: "₹4K+",
+      "Showcase your medical knowledge through quizzes and themed challenges.",
+    eventCount: 1,
+    prizePool: "₹10K+",
     accentColor: "gold" as const,
-    image: graphixImg,
-    featured: true,
-  },
-  {
-    id: "ssc",
-    title: "SSC - Social Service",
-    description:
-      "Green campus drive, upcycling art, fundraiser expo, and charity events for noble causes.",
-    eventCount: 4,
-    prizePool: "Charity",
-    accentColor: "teal" as const,
-    image: otherImg,
+    image: academicImg,
   },
 ];
 
