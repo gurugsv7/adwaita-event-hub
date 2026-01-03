@@ -30,8 +30,8 @@ const allCategories = [
     id: "sports",
     title: "Sports",
     description:
-      "Compete in high-intensity sporting events. From cricket to chess, prove your athletic prowess.",
-    eventCount: 13,
+      "Compete in high-intensity sporting events. From cricket to football, prove your athletic prowess.",
+    eventCount: 14,
     prizePool: "₹1L+",
     accentColor: "orange" as const,
     image: sportsImg,
@@ -107,6 +107,16 @@ const allCategories = [
     accentColor: "gold" as const,
     image: graphixImg,
     featured: true,
+  },
+  {
+    id: "ssc",
+    title: "SSC - Social Service",
+    description:
+      "Green campus drive, upcycling art, fundraiser expo, and charity events for noble causes.",
+    eventCount: 4,
+    prizePool: "Charity",
+    accentColor: "teal" as const,
+    image: otherImg,
   },
 ];
 
