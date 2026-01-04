@@ -1218,8 +1218,8 @@ export const categories: Category[] = [
         ],
       },
       {
-        id: "sing-in-the-rain",
-        title: "Sing in the Rain",
+        id: "sing-in-the-storm",
+        title: "Sing in the Storm",
         description: "A light-hearted musical competition that blends fun, memory, and melody! Multiple interactive surprise rounds testing your knowledge of songs, presence of mind, and musical enthusiasm.",
         category: "Other",
         fee: 300,
