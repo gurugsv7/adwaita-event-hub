@@ -2,11 +2,12 @@ import emailjs from '@emailjs/browser';
 
 // EmailJS Configuration - User needs to set these up at https://www.emailjs.com/
 // Service ID: Create an email service in EmailJS dashboard
-// Template IDs: Create templates for event registration and delegate pass
+// Template IDs: Create templates for event registration, delegate pass, and concert booking
 export const EMAILJS_CONFIG = {
   SERVICE_ID: 'service_wtt60xf',
   EVENT_TEMPLATE_ID: 'template_0uzpwjc',
   DELEGATE_TEMPLATE_ID: 'template_kh3a565',
+  CONCERT_TEMPLATE_ID: 'template_concert', // Create this template in EmailJS
   PUBLIC_KEY: 'acbz69d146b3J-jEm',
 };
 
@@ -73,6 +74,19 @@ interface DelegateEmailParams {
   institution: string;
   tierName: string;
   tierPrice: number;
+}
+
+// Concert booking email parameters
+interface ConcertEmailParams {
+  bookingId: string;
+  name: string;
+  email: string;
+  phone: string;
+  institution: string;
+  ticketType: string;
+  ticketPrice: number;
+  partnerName?: string;
+  partnerPhone?: string;
 }
 
 // Format team members for email
@@ -163,6 +177,45 @@ export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promis
     return true;
   } catch (error) {
     console.error('Failed to send delegate pass email:', error);
+    return false;
+  }
+};
+
+// Send concert booking confirmation email
+export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promise<boolean> => {
+  try {
+    // Concert booking emails go to Finance email
+    const recipientEmail = 'Finance.igmcrisigma@gmail.com';
+    
+    const templateParams = {
+      to_email: recipientEmail,
+      booking_id: params.bookingId,
+      name: params.name,
+      email: params.email,
+      phone: params.phone,
+      institution: params.institution,
+      ticket_type: params.ticketType,
+      ticket_price: `₹${params.ticketPrice}`,
+      partner_name: params.partnerName || 'N/A (Stag Entry)',
+      partner_phone: params.partnerPhone || 'N/A',
+      booking_date: new Date().toLocaleString('en-IN', {
+        dateStyle: 'full',
+        timeStyle: 'short',
+        timeZone: 'Asia/Kolkata'
+      }),
+    };
+
+    const response = await emailjs.send(
+      EMAILJS_CONFIG.SERVICE_ID,
+      EMAILJS_CONFIG.CONCERT_TEMPLATE_ID,
+      templateParams,
+      EMAILJS_CONFIG.PUBLIC_KEY
+    );
+
+    console.log('Concert booking email sent successfully:', response);
+    return true;
+  } catch (error) {
+    console.error('Failed to send concert booking email:', error);
     return false;
   }
 };
