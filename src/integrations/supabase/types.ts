@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      concert_bookings: {
+        Row: {
+          booking_id: string
+          created_at: string
+          email: string
+          id: string
+          institution: string
+          name: string
+          partner_name: string | null
+          partner_phone: string | null
+          payment_screenshot_url: string | null
+          payment_status: string
+          phone: string
+          ticket_price: number
+          ticket_type: string
+          updated_at: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          email: string
+          id?: string
+          institution: string
+          name: string
+          partner_name?: string | null
+          partner_phone?: string | null
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone: string
+          ticket_price: number
+          ticket_type: string
+          updated_at?: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          email?: string
+          id?: string
+          institution?: string
+          name?: string
+          partner_name?: string | null
+          partner_phone?: string | null
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone?: string
+          ticket_price?: number
+          ticket_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       delegates: {
         Row: {
           created_at: string
