@@ -171,9 +171,14 @@ const KrishhConcertPage = () => {
   } | null>(null);
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioInitialized = useRef(false);
 
   // Auto-play background audio on mount
   useEffect(() => {
+    // Prevent double initialization in StrictMode
+    if (audioInitialized.current) return;
+    audioInitialized.current = true;
+    
     const audio = new Audio(krishhBgAudio);
     audio.loop = true;
     audio.volume = 0.4;
