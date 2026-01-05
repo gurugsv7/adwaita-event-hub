@@ -1,81 +1,98 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage -->
   <url>
     <loc>https://igmcrisigma.com/</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- Main Pages -->
   <url>
-    <loc>https://igmcrisigma.com/categories</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/all-events</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/all-events</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/delegate-pass</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/delegate-pass</loc>
-    <lastmod>2025-01-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://igmcrisigma.com/krishh-concert</loc>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
   <url>
     <loc>https://igmcrisigma.com/brochure-links</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Event Categories -->
   <url>
-    <loc>https://igmcrisigma.com/category/culturals</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/culturals</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/sports</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/sports</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/fine-arts</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/finearts</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/technical</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/literature</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/literature</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/academic</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/academic</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/technical</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/photography</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/photography</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://igmcrisigma.com/category/graphix</loc>
-    <lastmod>2025-01-01</lastmod>
+    <loc>https://igmcrisigma.com/events/graphix</loc>
+    <lastmod>2026-01-05</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://igmcrisigma.com/events/socialservice</loc>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://igmcrisigma.com/events/other</loc>
+    <lastmod>2026-01-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>
