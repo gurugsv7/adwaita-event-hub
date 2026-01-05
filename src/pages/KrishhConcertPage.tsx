@@ -58,16 +58,24 @@ const artists = [
   { name: "Malavika Rajesh", role: "Vocalist" },
 ];
 
-// Floating particles component
+// Floating particles component - optimized for mobile
 const FloatingParticles = () => {
-  const particles = Array.from({ length: 30 }, (_, i) => ({
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+  
+  // Reduced particles for mobile performance
+  const particleCount = isMobile ? 8 : 20;
+  
+  const particles = Array.from({ length: particleCount }, (_, i) => ({
     id: i,
-    size: Math.random() * 6 + 2,
+    size: Math.random() * 4 + 2,
     x: Math.random() * 100,
     y: Math.random() * 100,
-    delay: Math.random() * 5,
-    duration: Math.random() * 5 + 5,
-    type: Math.random() > 0.7 ? 'note' : 'sparkle',
+    delay: Math.random() * 3,
+    duration: Math.random() * 4 + 6,
   }));
 
   return (
@@ -75,20 +83,16 @@ const FloatingParticles = () => {
       {particles.map((p) => (
         <div
           key={p.id}
-          className="floating-particle"
+          className="floating-particle-optimized"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
             animationDelay: `${p.delay}s`,
             animationDuration: `${p.duration}s`,
           }}
-        >
-          {p.type === 'note' ? (
-            <Music className="text-concert-pink/30" style={{ width: p.size * 2, height: p.size * 2 }} />
-          ) : (
-            <Star className="text-concert-gold/30" style={{ width: p.size, height: p.size }} />
-          )}
-        </div>
+        />
       ))}
     </div>
   );
@@ -439,15 +443,17 @@ const KrishhConcertPage = () => {
             {/* Animated gradient background */}
             <div className="fixed inset-0 concert-bg-animated -z-10" />
             
-            {/* Tech grid overlay */}
+            {/* Tech grid overlay - hidden on mobile via CSS */}
             <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-50" />
 
             {/* Floating particles */}
             <FloatingParticles />
 
-            {/* Gradient orbs */}
-            <div className="fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
-            <div className="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
+            {/* Gradient orbs - optimized for mobile */}
+            <div className="hidden md:block fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
+            <div className="hidden md:block fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
+            <div className="md:hidden fixed top-[10%] left-[-10%] w-[40vw] h-[40vw] bg-concert-pink/10 rounded-full blur-2xl -z-5" />
+            <div className="md:hidden fixed bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] bg-concert-cyan/10 rounded-full blur-2xl -z-5" />
 
             <div className="container mx-auto px-4 relative z-10 flex items-center justify-center min-h-[80vh]">
               <div className="max-w-xl w-full stagger-fade-in">
@@ -607,15 +613,18 @@ const KrishhConcertPage = () => {
           {/* Animated gradient background */}
           <div className="fixed inset-0 concert-bg-animated -z-10" />
           
-          {/* Tech grid overlay */}
+          {/* Tech grid overlay - hidden on mobile via CSS */}
           <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-50" />
 
           {/* Floating particles */}
           <FloatingParticles />
 
-          {/* Gradient orbs */}
-          <div className="fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
+          {/* Gradient orbs - optimized: smaller blur, no animation on mobile */}
+          <div className="hidden md:block fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="hidden md:block fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
+          {/* Mobile-optimized static orbs */}
+          <div className="md:hidden fixed top-[10%] left-[-10%] w-[40vw] h-[40vw] bg-concert-pink/10 rounded-full blur-2xl -z-5" />
+          <div className="md:hidden fixed bottom-[-10%] right-[-10%] w-[30vw] h-[30vw] bg-concert-cyan/10 rounded-full blur-2xl -z-5" />
 
           <div className="container mx-auto px-4 relative z-10">
             {/* Back button */}

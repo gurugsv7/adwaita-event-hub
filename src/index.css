@@ -266,14 +266,26 @@
 
   .concert-bg-animated {
     background: linear-gradient(
-      270deg,
-      #1A1A2E,
-      #2D1B4E,
-      #3D2862,
-      #2D1B4E
+      135deg,
+      #1A1A2E 0%,
+      #2D1B4E 50%,
+      #3D2862 100%
     );
-    background-size: 600% 600%;
-    animation: gradientShift 15s ease infinite;
+  }
+
+  /* Only animate gradient on desktop */
+  @media (min-width: 768px) {
+    .concert-bg-animated {
+      background: linear-gradient(
+        270deg,
+        #1A1A2E,
+        #2D1B4E,
+        #3D2862,
+        #2D1B4E
+      );
+      background-size: 600% 600%;
+      animation: gradientShift 15s ease infinite;
+    }
   }
 
   @keyframes gradientShift {
@@ -282,12 +294,20 @@
     100% { background-position: 0% 50%; }
   }
 
-  /* Glassmorphism card */
+  /* Glassmorphism card - optimized for mobile */
   .glass-card {
-    background: rgba(45, 27, 78, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(45, 27, 78, 0.6);
     border: 1px solid rgba(255, 27, 159, 0.2);
+    will-change: transform;
+  }
+
+  /* Only apply blur on desktop for performance */
+  @media (min-width: 768px) {
+    .glass-card {
+      background: rgba(45, 27, 78, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
   }
 
   .glass-card-hover:hover {
@@ -339,28 +359,23 @@
     100% { background-position: 200% 50%; }
   }
 
-  /* Floating particles */
-  .floating-particle {
+  /* Floating particles - GPU optimized */
+  .floating-particle-optimized {
     position: absolute;
     pointer-events: none;
-    animation: floatParticle 8s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(255, 27, 159, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    will-change: transform, opacity;
+    animation: floatParticleOptimized 8s ease-in-out infinite;
   }
 
-  @keyframes floatParticle {
+  @keyframes floatParticleOptimized {
     0%, 100% {
-      transform: translateY(0) translateX(0) rotate(0deg);
+      transform: translate3d(0, 0, 0);
       opacity: 0.3;
     }
-    25% {
-      transform: translateY(-30px) translateX(15px) rotate(90deg);
-      opacity: 0.6;
-    }
     50% {
-      transform: translateY(-20px) translateX(-10px) rotate(180deg);
-      opacity: 0.4;
-    }
-    75% {
-      transform: translateY(-40px) translateX(20px) rotate(270deg);
+      transform: translate3d(10px, -20px, 0);
       opacity: 0.5;
     }
   }
@@ -457,20 +472,32 @@
     100% { transform: translate(0); }
   }
 
-  /* Tech lines background pattern */
+  /* Tech lines background pattern - hidden on mobile for performance */
   .tech-lines {
-    background-image: 
-      linear-gradient(rgba(255, 27, 159, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 27, 159, 0.05) 1px, transparent 1px);
-    background-size: 50px 50px;
+    background-image: none;
   }
 
-  /* Neon grid overlay */
+  @media (min-width: 768px) {
+    .tech-lines {
+      background-image: 
+        linear-gradient(rgba(255, 27, 159, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 27, 159, 0.05) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+  }
+
+  /* Neon grid overlay - hidden on mobile for performance */
   .neon-grid {
-    background-image: 
-      linear-gradient(rgba(0, 255, 217, 0.03) 2px, transparent 2px),
-      linear-gradient(90deg, rgba(0, 255, 217, 0.03) 2px, transparent 2px);
-    background-size: 100px 100px;
+    background-image: none;
+  }
+
+  @media (min-width: 768px) {
+    .neon-grid {
+      background-image: 
+        linear-gradient(rgba(0, 255, 217, 0.03) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(0, 255, 217, 0.03) 2px, transparent 2px);
+      background-size: 100px 100px;
+    }
   }
 
   /* Curved divider */
