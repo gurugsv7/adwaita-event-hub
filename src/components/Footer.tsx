@@ -9,10 +9,16 @@ const quickLinks = [
 ];
 
 const competitions = [
-  { name: "Culturals", href: "/category/culturals" },
-  { name: "Sports", href: "/category/sports" },
-  { name: "Technical", href: "/category/technical" },
-  { name: "Fine Arts", href: "/category/finearts" },
+  { name: "Culturals", href: "/events/culturals" },
+  { name: "Sports", href: "/events/sports" },
+  { name: "Fine Arts", href: "/events/fine-arts" },
+  { name: "Literature", href: "/events/literature" },
+  { name: "Academic", href: "/events/academic" },
+  { name: "Technical", href: "/events/technical" },
+  { name: "Photography", href: "/events/photography" },
+  { name: "Design", href: "/events/design" },
+  { name: "Social Service", href: "/events/social-service" },
+  { name: "Other", href: "/events/other" },
 ];
 
 const contacts = [
