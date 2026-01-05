@@ -159,6 +159,15 @@ const KrishhConcertPage = () => {
   });
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [bookingDetails, setBookingDetails] = useState<{
+    bookingId: string;
+    name: string;
+    email: string;
+    ticketType: string;
+    ticketPrice: number;
+    partnerName?: string;
+  } | null>(null);
   const { toast } = useToast();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -292,21 +301,16 @@ const KrishhConcertPage = () => {
         partnerPhone: selectedTicket === "couple" ? formData.partnerPhone.trim() : undefined,
       }).catch(err => console.error('Email send failed:', err));
 
-      toast({
-        title: "Booking successful! 🎉",
-        description: `Your Booking ID: ${bookingId}. Get ready for an unforgettable Valentine's night!`,
+      // Set success state with booking details
+      setBookingDetails({
+        bookingId,
+        name: formData.fullName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        ticketType: selectedTicketInfo?.name || selectedTicket,
+        ticketPrice: selectedTicketInfo?.price || 0,
+        partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
       });
-
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        institution: "",
-        partnerName: "",
-        partnerPhone: "",
-      });
-      setSelectedTicket("");
-      setPaymentScreenshot(null);
+      setIsSuccess(true);
 
     } catch (error: any) {
       console.error('Concert booking error:', error);
@@ -319,6 +323,172 @@ const KrishhConcertPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Success Screen
+  if (isSuccess && bookingDetails) {
+    return (
+      <>
+        <Helmet>
+          <title>Booking Confirmed | Krishh Live Concert | ADWAITA 2026</title>
+          <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        </Helmet>
+
+        <div className="min-h-screen concert-bg-animated">
+          <Navbar />
+
+          <main className="relative pt-20 pb-16 overflow-hidden">
+            {/* Animated gradient background */}
+            <div className="fixed inset-0 concert-bg-animated -z-10" />
+            
+            {/* Tech grid overlay */}
+            <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-50" />
+
+            {/* Floating particles */}
+            <FloatingParticles />
+
+            {/* Gradient orbs */}
+            <div className="fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
+            <div className="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
+
+            <div className="container mx-auto px-4 relative z-10 flex items-center justify-center min-h-[80vh]">
+              <div className="max-w-xl w-full stagger-fade-in">
+                {/* Success Card */}
+                <div className="glass-card rounded-[40px] overflow-hidden" style={{ boxShadow: '0 0 80px rgba(0,255,217,0.2), 0 0 40px rgba(255,27,159,0.15)' }}>
+                  {/* Header with animated gradient */}
+                  <div className="relative p-8 text-center" style={{ background: 'linear-gradient(135deg, rgba(255,27,159,0.3), rgba(0,255,217,0.2))' }}>
+                    {/* Animated success icon */}
+                    <div className="relative w-24 h-24 mx-auto mb-6">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-concert-pink to-concert-cyan animate-spin" style={{ animationDuration: '3s' }} />
+                      <div className="absolute inset-1 rounded-full bg-concert-deep flex items-center justify-center">
+                        <CheckCircle2 className="w-12 h-12 text-concert-cyan" style={{ filter: 'drop-shadow(0 0 10px #00FFD9)' }} />
+                      </div>
+                    </div>
+                    
+                    <h1 className="text-3xl md:text-4xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                      <span className="holographic">Booking Confirmed!</span>
+                    </h1>
+                    <p className="text-gray-300">Get ready for an unforgettable Valentine's night! 🎤</p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8 space-y-6">
+                    {/* Booking ID - Prominent Display */}
+                    <div className="text-center p-6 rounded-2xl neon-border-cyan" style={{ background: 'rgba(0,255,217,0.1)' }}>
+                      <p className="text-sm text-gray-400 uppercase tracking-wider mb-2">Your Booking ID</p>
+                      <p className="text-2xl md:text-3xl font-bold text-concert-cyan font-mono tracking-wider" style={{ textShadow: '0 0 20px #00FFD9' }}>
+                        {bookingDetails.bookingId}
+                      </p>
+                    </div>
+
+                    {/* Ticket Preview */}
+                    <div className="glass-card rounded-2xl p-5 space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #FF1B9F, #00FFD9)' }}>
+                            <Ticket className="w-6 h-6 text-white" />
+                          </div>
+                          <div>
+                            <p className="text-white font-semibold">{bookingDetails.ticketType}</p>
+                            <p className="text-sm text-gray-400">Krishh Live Concert</p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-concert-gold" style={{ textShadow: '0 0 10px #FFD700' }}>
+                            ₹{bookingDetails.ticketPrice}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-dashed border-gray-600 pt-4 space-y-3">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Name</span>
+                          <span className="text-white">{bookingDetails.name}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-400">Email</span>
+                          <span className="text-white">{bookingDetails.email}</span>
+                        </div>
+                        {bookingDetails.partnerName && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Partner</span>
+                            <span className="text-white">{bookingDetails.partnerName}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Event Details */}
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="glass-card rounded-xl p-4 text-center">
+                        <Calendar className="w-5 h-5 text-concert-pink mx-auto mb-2" />
+                        <p className="text-xs text-gray-400">Date</p>
+                        <p className="text-sm text-white font-medium">Feb 14, 2026</p>
+                      </div>
+                      <div className="glass-card rounded-xl p-4 text-center">
+                        <Clock className="w-5 h-5 text-concert-cyan mx-auto mb-2" />
+                        <p className="text-xs text-gray-400">Time</p>
+                        <p className="text-sm text-white font-medium">7:00 PM</p>
+                      </div>
+                      <div className="glass-card rounded-xl p-4 text-center">
+                        <MapPin className="w-5 h-5 text-concert-gold mx-auto mb-2" />
+                        <p className="text-xs text-gray-400">Venue</p>
+                        <p className="text-sm text-white font-medium">IGMC&RI</p>
+                      </div>
+                    </div>
+
+                    {/* Email notification */}
+                    <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'rgba(255,27,159,0.1)', border: '1px solid rgba(255,27,159,0.3)' }}>
+                      <Mail className="w-5 h-5 text-concert-pink flex-shrink-0" />
+                      <p className="text-sm text-gray-300">
+                        Confirmation email sent to <span className="text-concert-pink font-medium">{bookingDetails.email}</span>
+                      </p>
+                    </div>
+
+                    {/* Payment status */}
+                    <div className="flex items-center gap-3 p-4 rounded-xl" style={{ background: 'rgba(255,215,0,0.1)', border: '1px solid rgba(255,215,0,0.3)' }}>
+                      <Sparkles className="w-5 h-5 text-concert-gold flex-shrink-0" />
+                      <p className="text-sm text-gray-300">
+                        Payment verification in progress. You'll receive confirmation shortly.
+                      </p>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                      <Link to="/" className="flex-1">
+                        <Button
+                          variant="outline"
+                          className="w-full h-12 rounded-xl border-2 border-concert-purple-light/50 text-gray-300 hover:border-concert-cyan hover:text-concert-cyan transition-all duration-300"
+                        >
+                          <ArrowLeft className="w-4 h-4 mr-2" />
+                          Back to Home
+                        </Button>
+                      </Link>
+                      <Link to="/events" className="flex-1">
+                        <Button
+                          className="btn-morph w-full h-12 rounded-xl text-white font-semibold border-0"
+                          style={{ background: 'linear-gradient(135deg, #FF1B9F, #00FFD9)' }}
+                        >
+                          <Music className="w-4 h-4 mr-2" />
+                          Explore Events
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Decorative bottom text */}
+                <p className="text-center text-gray-500 text-sm mt-6">
+                  See you at the concert! 🎵✨
+                </p>
+              </div>
+            </div>
+          </main>
+
+          <Footer />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
