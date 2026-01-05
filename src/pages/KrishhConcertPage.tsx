@@ -173,19 +173,14 @@ const KrishhConcertPage = () => {
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Start audio when user enters
-  const handleEnter = () => {
-    setHasEntered(true);
-    
+  // Pre-create audio element on mount for mobile compatibility
+  useEffect(() => {
     const audio = new Audio(krishhBgAudio);
     audio.loop = true;
     audio.volume = 0.4;
+    audio.preload = 'auto';
     audioRef.current = audio;
-    audio.play();
-  };
-
-  // Cleanup audio on unmount
-  useEffect(() => {
+    
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
@@ -194,6 +189,20 @@ const KrishhConcertPage = () => {
       }
     };
   }, []);
+
+  // Start audio when user enters - must be synchronous for mobile
+  const handleEnter = () => {
+    if (audioRef.current) {
+      // Mobile requires play() directly in user gesture handler
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.log('Audio play failed:', error);
+        });
+      }
+    }
+    setHasEntered(true);
+  };
 
   // Entry splash screen
   if (!hasEntered) {
