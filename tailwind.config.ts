@@ -66,6 +66,16 @@ export default {
         purple: {
           deep: "hsl(var(--purple-deep))",
         },
+        // Concert page futuristic colors
+        concert: {
+          deep: "#1A1A2E",
+          purple: "#2D1B4E",
+          "purple-light": "#3D2862",
+          pink: "#FF1B9F",
+          cyan: "#00FFD9",
+          gold: "#FFD700",
+          surface: "#1A1A2E",
+        },
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
