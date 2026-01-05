@@ -37,14 +37,14 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>ADWAITA 2026 | Where Medicine Meets Culture</title>
+        <title>ADWAITA 2026 | National Level Inter-Collegiate Cultural Fest</title>
         <meta
           name="description"
-          content="Join ADWAITA 2026, the grandest inter-college cultural extravaganza with 50+ events, ₹5,50,000 prize pool, and participants from 100+ colleges."
+          content="ADWAITA 2026 - The grandest inter-college cultural extravaganza with 50+ events, ₹5,50,000 prize pool. Join participants from 100+ colleges. Feb 12-14, 2026 at IGMCRI Puducherry."
         />
         <meta
           name="keywords"
-          content="ADWAITA 2026, medical college fest, cultural fest, college events, India"
+          content="ADWAITA 2026, ADWAITA 26, adwaita 2026, adwaita fest, inter-college fest, cultural fest, sports fest, college events India, medical college cultural fest, IGMCRI Puducherry"
         />
       </Helmet>
 
