@@ -161,6 +161,7 @@ const KrishhConcertPage = () => {
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
   const [bookingDetails, setBookingDetails] = useState<{
     bookingId: string;
     name: string;
@@ -172,51 +173,92 @@ const KrishhConcertPage = () => {
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Auto-play background audio on mount
-  useEffect(() => {
-    // Stop any existing audio first
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-    }
+  // Start audio when user enters
+  const handleEnter = () => {
+    setHasEntered(true);
     
     const audio = new Audio(krishhBgAudio);
     audio.loop = true;
     audio.volume = 0.4;
     audioRef.current = audio;
-    
-    let clickHandler: (() => void) | null = null;
-    let touchHandler: (() => void) | null = null;
-    
-    // Attempt to play (may be blocked by browser autoplay policy)
-    audio.play().catch(() => {
-      // If autoplay is blocked, play on first user interaction
-      clickHandler = () => {
-        if (audioRef.current) {
-          audioRef.current.play();
-        }
-        document.removeEventListener('click', clickHandler!);
-        document.removeEventListener('touchstart', touchHandler!);
-      };
-      touchHandler = clickHandler;
-      document.addEventListener('click', clickHandler);
-      document.addEventListener('touchstart', touchHandler);
-    });
-    
+    audio.play();
+  };
+
+  // Cleanup audio on unmount
+  useEffect(() => {
     return () => {
-      // Clean up audio on unmount
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
         audioRef.current = null;
       }
-      // Remove event listeners if they were added
-      if (clickHandler) {
-        document.removeEventListener('click', clickHandler);
-        document.removeEventListener('touchstart', touchHandler!);
-      }
     };
   }, []);
+
+  // Entry splash screen
+  if (!hasEntered) {
+    return (
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center cursor-pointer overflow-hidden"
+        style={{ background: 'linear-gradient(135deg, #0a0015 0%, #1a0a2e 50%, #0f0a1a 100%)' }}
+        onClick={handleEnter}
+      >
+        {/* Animated background particles */}
+        <div className="absolute inset-0 overflow-hidden">
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-concert-magenta rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                opacity: Math.random() * 0.5 + 0.2,
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Glowing orbs */}
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-concert-magenta/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-concert-cyan/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        
+        {/* Content */}
+        <div className="relative z-10 text-center px-6">
+          {/* Music icon with pulse effect */}
+          <div className="relative inline-block mb-8">
+            <div className="absolute inset-0 bg-concert-magenta/30 rounded-full blur-xl animate-pulse" />
+            <div className="relative w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-concert-magenta to-concert-purple flex items-center justify-center">
+              <Music className="w-12 h-12 text-white" />
+            </div>
+            {/* Sound waves */}
+            <div className="absolute inset-0 rounded-full border-2 border-concert-cyan/50 animate-ping" style={{ animationDuration: '1.5s' }} />
+            <div className="absolute inset-0 rounded-full border-2 border-concert-magenta/30 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
+          </div>
+          
+          {/* Title */}
+          <h1 
+            className="text-4xl md:text-6xl font-black mb-4 bg-gradient-to-r from-concert-magenta via-concert-purple to-concert-cyan bg-clip-text text-transparent"
+            style={{ textShadow: '0 0 40px rgba(255, 0, 128, 0.5)' }}
+          >
+            KRISHH LIVE
+          </h1>
+          
+          <p className="text-gray-400 text-lg mb-8">Valentine's Day Special Concert</p>
+          
+          {/* Enter button */}
+          <div className="relative inline-block group">
+            <div className="absolute inset-0 bg-gradient-to-r from-concert-magenta to-concert-cyan rounded-full blur-md opacity-75 group-hover:opacity-100 transition-opacity" />
+            <div className="relative px-10 py-4 bg-gradient-to-r from-concert-magenta to-concert-purple rounded-full text-white font-bold text-lg tracking-wider">
+              TAP TO ENTER
+            </div>
+          </div>
+          
+          <p className="text-gray-500 text-sm mt-6 animate-pulse">🎵 Audio experience enabled</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
