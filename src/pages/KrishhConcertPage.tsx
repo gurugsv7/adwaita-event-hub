@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast";
 import paymentQR from "@/assets/payment-qr.jpg";
 import concertPoster from "@/assets/krishh-concert.jpg";
 import { sendConcertBookingEmail } from "@/lib/emailService";
+import krishhBgAudio from "@/assets/krishh-bg-audio.mp3";
 
 const MAX_FILE_SIZE = 4 * 1024 * 1024; // 4MB
 
@@ -169,6 +170,36 @@ const KrishhConcertPage = () => {
     partnerName?: string;
   } | null>(null);
   const { toast } = useToast();
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Auto-play background audio on mount
+  useEffect(() => {
+    const audio = new Audio(krishhBgAudio);
+    audio.loop = true;
+    audio.volume = 0.4;
+    audioRef.current = audio;
+    
+    // Attempt to play (may be blocked by browser autoplay policy)
+    const playAudio = () => {
+      audio.play().catch(() => {
+        // If autoplay is blocked, play on first user interaction
+        const handleInteraction = () => {
+          audio.play();
+          document.removeEventListener('click', handleInteraction);
+          document.removeEventListener('touchstart', handleInteraction);
+        };
+        document.addEventListener('click', handleInteraction);
+        document.addEventListener('touchstart', handleInteraction);
+      });
+    };
+    
+    playAudio();
+    
+    return () => {
+      audio.pause();
+      audio.src = '';
+    };
+  }, []);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
