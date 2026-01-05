@@ -150,21 +150,21 @@ export function Footer() {
                 </ul>
               </div>
 
-              {/* Competitions */}
-              <div className="space-y-4">
+              {/* Competitions - 2 column grid */}
+              <div className="space-y-4 sm:col-span-2 lg:col-span-1">
                 <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
                   <span className="text-concert-pink">✦</span>
                   Competitions
                 </h3>
-                <ul className="space-y-2">
+                <ul className="grid grid-cols-2 gap-x-4 gap-y-2">
                   {competitions.map((link) => (
                     <li key={link.name}>
                       <Link
                         to={link.href}
-                        className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
+                        className="group flex items-center gap-1.5 text-gray-300 hover:text-white transition-all duration-300 text-sm"
                       >
-                        <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-pink group-hover:shadow-lg group-hover:shadow-concert-pink/50 transition-all" />
-                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                        <span className="w-1 h-1 rounded-full bg-concert-gold/50 group-hover:bg-concert-pink group-hover:shadow-lg group-hover:shadow-concert-pink/50 transition-all flex-shrink-0" />
+                        <span className="group-hover:translate-x-0.5 transition-transform duration-300">
                           {link.name}
                         </span>
                       </Link>
