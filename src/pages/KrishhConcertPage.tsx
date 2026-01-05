@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import {
   ArrowLeft, Heart, Music, Calendar, MapPin, Clock,
   User, Mail, Phone, Building2, Upload, X, CheckCircle2,
-  Sparkles, Users, Ticket
+  Sparkles, Users, Ticket, Star, Mic2, Zap
 } from "lucide-react";
 import { Helmet } from "react-helmet";
 import { Input } from "@/components/ui/input";
@@ -26,12 +26,11 @@ const ticketTypes = [
     price: 699,
     tagline: "Solo Experience",
     icon: User,
-    gradient: "from-pink-500 via-rose-500 to-red-500",
     features: [
       "Full concert access",
       "Live performance by Krishh",
-      "Performances by Ramya Ram C, Soundarya & Malavika Rajesh",
-      "Band performance",
+      "Female vocalists live",
+      "Full band performance",
     ],
   },
   {
@@ -40,17 +39,113 @@ const ticketTypes = [
     price: 1099,
     tagline: "Valentine's Special",
     icon: Heart,
-    gradient: "from-rose-400 via-pink-500 to-purple-500",
     features: [
       "Entry for 2 persons",
       "Full concert access",
-      "Valentine's Day special experience",
-      "Live performance by Krishh & Band",
-      "Performances by Ramya Ram C, Soundarya & Malavika Rajesh",
+      "Valentine's special experience",
+      "Live performances by all artists",
     ],
     badge: "Save ₹299!",
+    originalPrice: 1398,
   },
 ];
+
+const artists = [
+  { name: "Krishh", role: "Lead Vocalist", featured: true },
+  { name: "Ramya Ram C", role: "Vocalist" },
+  { name: "Soundarya", role: "Vocalist" },
+  { name: "Malavika Rajesh", role: "Vocalist" },
+];
+
+// Floating particles component
+const FloatingParticles = () => {
+  const particles = Array.from({ length: 30 }, (_, i) => ({
+    id: i,
+    size: Math.random() * 6 + 2,
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    delay: Math.random() * 5,
+    duration: Math.random() * 5 + 5,
+    type: Math.random() > 0.7 ? 'note' : 'sparkle',
+  }));
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {particles.map((p) => (
+        <div
+          key={p.id}
+          className="floating-particle"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+          }}
+        >
+          {p.type === 'note' ? (
+            <Music className="text-concert-pink/30" style={{ width: p.size * 2, height: p.size * 2 }} />
+          ) : (
+            <Star className="text-concert-gold/30" style={{ width: p.size, height: p.size }} />
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// Sound wave component
+const SoundWave = () => (
+  <div className="sound-wave">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+);
+
+// Countdown timer
+const CountdownTimer = () => {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, mins: 0, secs: 0 });
+
+  useEffect(() => {
+    const targetDate = new Date('2026-02-14T19:00:00').getTime();
+    
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = targetDate - now;
+      
+      if (diff > 0) {
+        setTimeLeft({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          mins: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+          secs: Math.floor((diff % (1000 * 60)) / 1000),
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="flex gap-3 md:gap-4">
+      {[
+        { value: timeLeft.days, label: 'Days' },
+        { value: timeLeft.hours, label: 'Hours' },
+        { value: timeLeft.mins, label: 'Mins' },
+        { value: timeLeft.secs, label: 'Secs' },
+      ].map((item, i) => (
+        <div key={i} className="glass-card rounded-xl p-3 md:p-4 text-center min-w-[60px] md:min-w-[70px]">
+          <span className="block text-2xl md:text-3xl font-bold text-concert-cyan" style={{ textShadow: '0 0 10px #00FFD9' }}>
+            {String(item.value).padStart(2, '0')}
+          </span>
+          <span className="text-xs text-gray-400 uppercase tracking-wider">{item.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const KrishhConcertPage = () => {
   const [selectedTicket, setSelectedTicket] = useState<string>("");
@@ -100,7 +195,6 @@ const KrishhConcertPage = () => {
       return;
     }
 
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
       toast({
@@ -111,7 +205,6 @@ const KrishhConcertPage = () => {
       return;
     }
 
-    // Validate phone
     const phoneRegex = /^[+]?[\d\s-]{10,15}$/;
     if (!phoneRegex.test(formData.phone.replace(/\s/g, ''))) {
       toast({
@@ -122,7 +215,6 @@ const KrishhConcertPage = () => {
       return;
     }
 
-    // For couple ticket, validate partner details
     if (selectedTicket === "couple") {
       if (!formData.partnerName || !formData.partnerPhone) {
         toast({
@@ -134,7 +226,6 @@ const KrishhConcertPage = () => {
       }
     }
 
-    // Validate payment screenshot
     if (!paymentScreenshot) {
       toast({
         title: "Payment screenshot required",
@@ -147,10 +238,8 @@ const KrishhConcertPage = () => {
     setIsSubmitting(true);
 
     try {
-      // Generate a unique booking ID
       const bookingId = `KRISHH-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-      // Upload payment screenshot
       let paymentScreenshotUrl = null;
       const fileExt = paymentScreenshot.name.split('.').pop();
       const fileName = `concert_${bookingId}_${Date.now()}.${fileExt}`;
@@ -170,7 +259,6 @@ const KrishhConcertPage = () => {
 
       paymentScreenshotUrl = urlData.publicUrl;
 
-      // Save to database
       const { error } = await supabase
         .from('concert_bookings')
         .insert({
@@ -192,7 +280,6 @@ const KrishhConcertPage = () => {
         throw error;
       }
 
-      // Send confirmation email
       sendConcertBookingEmail({
         bookingId,
         name: formData.fullName.trim(),
@@ -210,7 +297,6 @@ const KrishhConcertPage = () => {
         description: `Your Booking ID: ${bookingId}. Get ready for an unforgettable Valentine's night!`,
       });
 
-      // Reset form
       setFormData({
         fullName: "",
         email: "",
@@ -242,152 +328,195 @@ const KrishhConcertPage = () => {
           name="description"
           content="Book your tickets for Krishh Live Concert on Valentine's Day, February 14th at IGMC&RI. Stag ₹699, Couple ₹1099."
         />
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
       </Helmet>
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen concert-bg-animated">
         <Navbar />
 
-        <main className="relative pt-24 pb-16 overflow-hidden">
-          {/* Valentine's themed background */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* Floating hearts animation */}
-            <div className="absolute inset-0">
-              {[...Array(20)].map((_, i) => (
-                <div
-                  key={i}
-                  className="absolute text-pink-500/20 animate-pulse"
-                  style={{
-                    left: `${Math.random() * 100}%`,
-                    top: `${Math.random() * 100}%`,
-                    animationDelay: `${Math.random() * 3}s`,
-                    fontSize: `${Math.random() * 20 + 10}px`,
-                  }}
-                >
-                  ♥
-                </div>
-              ))}
-            </div>
+        <main className="relative pt-20 pb-16 overflow-hidden">
+          {/* Animated gradient background */}
+          <div className="fixed inset-0 concert-bg-animated -z-10" />
+          
+          {/* Tech grid overlay */}
+          <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-50" />
 
-            {/* Gradient orbs */}
-            <div className="absolute top-[5%] left-[0%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] bg-gradient-to-br from-pink-500/15 via-rose-500/10 to-transparent rounded-full blur-3xl" />
-            <div className="absolute top-[40%] right-[-10%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-gradient-to-bl from-purple-500/15 via-pink-500/10 to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-[0%] left-[20%] w-[45vw] h-[45vw] max-w-[600px] max-h-[600px] bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-3xl" />
-          </div>
+          {/* Floating particles */}
+          <FloatingParticles />
+
+          {/* Gradient orbs */}
+          <div className="fixed top-[10%] left-[-10%] w-[60vw] h-[60vw] max-w-[800px] max-h-[800px] bg-gradient-to-br from-concert-pink/20 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="fixed bottom-[-20%] right-[-10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-gradient-to-tl from-concert-cyan/15 via-concert-purple/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: '10s' }} />
 
           <div className="container mx-auto px-4 relative z-10">
             {/* Back button */}
             <Link
               to="/"
-              className="inline-flex items-center gap-2 text-silver/70 hover:text-pink-400 transition-colors mb-8 group"
+              className="inline-flex items-center gap-2 text-gray-400 hover:text-concert-cyan transition-all duration-300 mb-8 group glass-card px-4 py-2 rounded-full"
             >
               <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span>Back to Home</span>
+              <span className="font-medium">Back to Home</span>
             </Link>
 
-            {/* Hero Section */}
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 mb-16">
-              {/* Left - Poster */}
-              <div className="relative group">
-                <div className="absolute -inset-2 bg-gradient-to-r from-pink-500/30 via-rose-500/30 to-purple-500/30 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500" />
-                <div className="relative overflow-hidden rounded-2xl border-2 border-pink-500/30 shadow-2xl">
-                  <img
-                    src={concertPoster}
-                    alt="Krishh Concert Poster"
-                    className="w-full h-auto object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
-                  
-                  {/* Event details overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <div className="flex flex-wrap gap-3">
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-pink-500/20 backdrop-blur-sm border border-pink-500/40 rounded-full">
-                        <Calendar className="w-4 h-4 text-pink-400" />
-                        <span className="text-sm font-medium text-pink-200">Feb 14, 2026</span>
+            {/* HERO SECTION */}
+            <section className="stagger-fade-in mb-20">
+              {/* Live badge with sound wave */}
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <div className="glass-card px-5 py-2 rounded-full flex items-center gap-3 neon-border-pink">
+                  <span className="relative flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-concert-pink opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-concert-pink"></span>
+                  </span>
+                  <span className="text-concert-pink font-semibold tracking-wider text-sm uppercase">Live Concert</span>
+                  <SoundWave />
+                </div>
+              </div>
+
+              {/* Main title with holographic effect */}
+              <h1 className="text-center mb-4">
+                <span className="block text-5xl md:text-7xl lg:text-8xl font-extrabold holographic" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  KRISHH
+                </span>
+                <span className="block text-lg md:text-xl text-gray-400 mt-3 tracking-[0.3em] uppercase">
+                  Live in Concert
+                </span>
+              </h1>
+
+              {/* Valentine's special badge */}
+              <div className="flex justify-center mb-8">
+                <div className="relative inline-flex items-center gap-2 px-6 py-3 rounded-full" style={{ background: 'linear-gradient(135deg, rgba(255,27,159,0.2), rgba(255,215,0,0.2))' }}>
+                  <Heart className="w-5 h-5 text-concert-pink animate-pulse" />
+                  <span className="text-white font-semibold tracking-wide">Valentine's Day Special</span>
+                  <Sparkles className="w-5 h-5 text-concert-gold" />
+                </div>
+              </div>
+
+              {/* Countdown timer */}
+              <div className="flex justify-center mb-10">
+                <CountdownTimer />
+              </div>
+
+              {/* Hero content grid */}
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                {/* Left - Poster with glow effect */}
+                <div className="relative group">
+                  <div className="absolute -inset-4 bg-gradient-to-r from-concert-pink/30 via-concert-cyan/20 to-concert-gold/30 rounded-[40px] blur-2xl group-hover:blur-3xl transition-all duration-700 opacity-60" />
+                  <div className="relative overflow-hidden rounded-[30px] border-2 border-concert-pink/30 shadow-2xl" style={{ boxShadow: '0 0 60px rgba(255,27,159,0.2)' }}>
+                    <img
+                      src={concertPoster}
+                      alt="Krishh Concert Poster"
+                      className="w-full h-auto object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-concert-deep/90 via-concert-deep/30 to-transparent" />
+                    
+                    {/* Event details floating cards */}
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      <div className="flex flex-wrap gap-3">
+                        {[
+                          { icon: Calendar, text: 'Feb 14, 2026', color: 'pink' },
+                          { icon: Clock, text: '7:00 PM', color: 'cyan' },
+                          { icon: MapPin, text: 'IGMC&RI', color: 'gold' },
+                        ].map((item, i) => (
+                          <div 
+                            key={i}
+                            className="glass-card glass-card-hover inline-flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 cursor-default"
+                            style={{ borderColor: item.color === 'pink' ? '#FF1B9F40' : item.color === 'cyan' ? '#00FFD940' : '#FFD70040' }}
+                          >
+                            <item.icon className={`w-4 h-4 ${item.color === 'pink' ? 'text-concert-pink' : item.color === 'cyan' ? 'text-concert-cyan' : 'text-concert-gold'}`} />
+                            <span className="text-sm font-medium text-gray-200">{item.text}</span>
+                          </div>
+                        ))}
                       </div>
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-pink-500/20 backdrop-blur-sm border border-pink-500/40 rounded-full">
-                        <Clock className="w-4 h-4 text-pink-400" />
-                        <span className="text-sm font-medium text-pink-200">7:00 PM</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right - Artists showcase */}
+                <div className="flex flex-col justify-center space-y-6">
+                  <div className="glass-card rounded-[30px] p-6 md:p-8" style={{ boxShadow: '0 0 40px rgba(0,255,217,0.1)' }}>
+                    <div className="flex items-center gap-3 mb-6">
+                      <Mic2 className="w-6 h-6 text-concert-cyan" />
+                      <h3 className="text-xl font-semibold text-white">Featured Artists</h3>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {artists.map((artist, i) => (
+                        <div
+                          key={i}
+                          className={`group flex items-center justify-between p-4 rounded-2xl transition-all duration-300 cursor-default ${
+                            artist.featured 
+                              ? 'bg-gradient-to-r from-concert-pink/20 to-concert-cyan/10 neon-border-pink' 
+                              : 'glass-card glass-card-hover'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                              artist.featured ? 'bg-concert-pink' : 'bg-concert-purple-light'
+                            }`}>
+                              <Music className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <span className={`block font-semibold ${artist.featured ? 'holographic text-lg' : 'text-white'}`}>
+                                {artist.name}
+                              </span>
+                              <span className="text-sm text-gray-400">{artist.role}</span>
+                            </div>
+                          </div>
+                          {artist.featured && (
+                            <div className="px-3 py-1 rounded-full bg-concert-gold/20 text-concert-gold text-xs font-bold">
+                              HEADLINER
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Band info */}
+                    <div className="mt-6 flex items-center justify-center gap-3 p-4 rounded-xl bg-gradient-to-r from-concert-cyan/10 to-concert-pink/10 border border-concert-cyan/20">
+                      <Zap className="w-5 h-5 text-concert-cyan" />
+                      <span className="text-gray-300">with Full Live Band Performance</span>
+                    </div>
+                  </div>
+
+                  {/* Quick price preview */}
+                  <div className="flex flex-wrap gap-4 justify-center">
+                    <div className="glass-card rounded-2xl p-4 flex items-center gap-3 glitch-hover">
+                      <User className="w-6 h-6 text-concert-pink" />
+                      <div>
+                        <span className="text-gray-400 text-sm block">Stag Entry</span>
+                        <span className="text-2xl font-bold text-concert-pink neon-pink">₹699</span>
                       </div>
-                      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-pink-500/20 backdrop-blur-sm border border-pink-500/40 rounded-full">
-                        <MapPin className="w-4 h-4 text-pink-400" />
-                        <span className="text-sm font-medium text-pink-200">IGMC&RI</span>
+                    </div>
+                    <div className="glass-card rounded-2xl p-4 flex items-center gap-3 relative overflow-hidden glitch-hover">
+                      <Heart className="w-6 h-6 text-concert-cyan" />
+                      <div>
+                        <span className="text-gray-400 text-sm block">Couple Entry</span>
+                        <span className="text-2xl font-bold text-concert-cyan neon-cyan">₹1099</span>
+                      </div>
+                      <div className="savings-pulse absolute -top-1 -right-1 px-2 py-1 bg-concert-gold text-concert-deep text-xs font-bold rounded-full">
+                        SAVE ₹299
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </section>
 
-              {/* Right - Event Info */}
-              <div className="flex flex-col justify-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/20 to-rose-500/20 border border-pink-500/40 rounded-full mb-6 w-fit">
-                  <Heart className="w-4 h-4 text-pink-400 animate-pulse" />
-                  <span className="text-sm font-medium text-pink-300 tracking-widest uppercase">Valentine's Special</span>
-                </div>
-
-                <h1 className="font-heading text-4xl md:text-5xl xl:text-6xl text-foreground mb-4 leading-[1.1]">
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400">
-                    Krishh
-                  </span>{" "}
-                  <span className="block text-2xl md:text-3xl text-silver/80 mt-2">Live in Concert</span>
-                </h1>
-
-                <p className="text-silver/70 text-lg mb-6 leading-relaxed">
-                  Experience an unforgettable Valentine's night with the mesmerizing voice of <span className="text-pink-400 font-semibold">Krishh</span> and his incredible band.
-                </p>
-
-                {/* Featured Artists */}
-                <div className="bg-card/60 backdrop-blur-sm border border-pink-500/20 rounded-2xl p-5 mb-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Music className="w-5 h-5 text-pink-400" />
-                    <h3 className="font-heading text-lg text-foreground">Featured Artists</h3>
-                  </div>
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 text-silver/80">
-                      <Sparkles className="w-4 h-4 text-pink-400" />
-                      <span>Ramya Ram C</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-silver/80">
-                      <Sparkles className="w-4 h-4 text-rose-400" />
-                      <span>Soundarya</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-silver/80">
-                      <Sparkles className="w-4 h-4 text-purple-400" />
-                      <span>Malavika Rajesh</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-silver/80">
-                      <Music className="w-4 h-4 text-pink-400" />
-                      <span>Full Band</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Pricing Preview */}
-                <div className="flex flex-wrap gap-4">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-pink-500/10 to-transparent border border-pink-500/30 rounded-xl">
-                    <User className="w-5 h-5 text-pink-400" />
-                    <span className="text-silver/80">Stag:</span>
-                    <span className="font-heading text-xl text-pink-400">₹699</span>
-                  </div>
-                  <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-rose-500/10 to-purple-500/10 border border-rose-500/30 rounded-xl">
-                    <Heart className="w-5 h-5 text-rose-400" />
-                    <span className="text-silver/80">Couple:</span>
-                    <span className="font-heading text-xl text-rose-400">₹1099</span>
-                    <span className="text-xs px-2 py-0.5 bg-rose-500/20 text-rose-300 rounded-full">Save ₹299</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Ticket Selection & Form */}
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+            {/* TICKET SELECTION & BOOKING FORM */}
+            <section className="grid lg:grid-cols-2 gap-8 lg:gap-12">
               {/* Left - Ticket Selection */}
-              <div>
-                <h2 className="font-heading text-2xl text-foreground mb-6 flex items-center gap-3">
-                  <Ticket className="w-6 h-6 text-pink-400" />
-                  Select Your Ticket
-                </h2>
+              <div className="stagger-fade-in">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-concert-pink to-concert-cyan flex items-center justify-center">
+                    <Ticket className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">Select Your Pass</h2>
+                    <p className="text-gray-400 text-sm">Choose your concert experience</p>
+                  </div>
+                </div>
 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {ticketTypes.map((ticket) => {
                     const IconComponent = ticket.icon;
                     const isSelected = selectedTicket === ticket.id;
@@ -396,51 +525,60 @@ const KrishhConcertPage = () => {
                       <div
                         key={ticket.id}
                         onClick={() => setSelectedTicket(ticket.id)}
-                        className={`relative cursor-pointer group transition-all duration-300 ${
-                          isSelected ? "scale-[1.02]" : "hover:scale-[1.01]"
-                        }`}
+                        className={`relative cursor-pointer ticket-flip ${isSelected ? 'ticket-flip-selected' : ''}`}
                       >
-                        {/* Glow effect */}
-                        <div
-                          className={`absolute -inset-0.5 bg-gradient-to-r ${ticket.gradient} rounded-2xl blur-lg opacity-0 group-hover:opacity-30 transition-opacity duration-300 ${
-                            isSelected ? "opacity-50" : ""
-                          }`}
-                        />
+                        {/* Savings badge for couple */}
+                        {ticket.badge && (
+                          <div className="savings-pulse absolute -top-3 right-6 z-10 px-4 py-1.5 bg-gradient-to-r from-concert-gold to-yellow-400 text-concert-deep text-sm font-bold rounded-full shadow-lg">
+                            {ticket.badge}
+                          </div>
+                        )}
 
                         <div
-                          className={`relative bg-card/80 backdrop-blur-sm border-2 rounded-2xl p-5 transition-all duration-300 ${
+                          className={`glass-card rounded-[24px] p-6 transition-all duration-500 ${
                             isSelected
-                              ? "border-pink-500 shadow-lg shadow-pink-500/20"
-                              : "border-pink-500/20 hover:border-pink-500/50"
+                              ? 'border-concert-pink'
+                              : 'border-concert-purple-light/50 hover:border-concert-pink/50'
                           }`}
+                          style={{ 
+                            boxShadow: isSelected ? '0 0 40px rgba(255,27,159,0.3)' : 'none',
+                            border: `2px solid ${isSelected ? '#FF1B9F' : 'rgba(61,40,98,0.5)'}`,
+                          }}
                         >
-                          {/* Badge */}
-                          {ticket.badge && (
-                            <div className="absolute -top-3 right-4 px-3 py-1 bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-bold rounded-full shadow-lg">
-                              {ticket.badge}
-                            </div>
-                          )}
-
-                          <div className="flex items-start gap-4">
-                            <div
-                              className={`w-14 h-14 rounded-xl bg-gradient-to-br ${ticket.gradient} flex items-center justify-center flex-shrink-0`}
+                          <div className="flex items-start gap-5">
+                            {/* Icon */}
+                            <div 
+                              className={`w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                                isSelected ? 'neon-border-pink' : ''
+                              }`}
+                              style={{ 
+                                background: ticket.id === 'couple' 
+                                  ? 'linear-gradient(135deg, #FF1B9F, #00FFD9)' 
+                                  : 'linear-gradient(135deg, #FF1B9F, #3D2862)' 
+                              }}
                             >
-                              <IconComponent className="w-7 h-7 text-white" />
+                              <IconComponent className="w-8 h-8 text-white" />
                             </div>
 
+                            {/* Content */}
                             <div className="flex-1">
-                              <div className="flex items-center justify-between mb-1">
-                                <h3 className="font-heading text-xl text-foreground">{ticket.name}</h3>
-                                <span className="font-heading text-2xl text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-400">
-                                  ₹{ticket.price}
-                                </span>
+                              <div className="flex items-center justify-between mb-2">
+                                <h3 className="text-xl font-bold text-white">{ticket.name}</h3>
+                                <div className="text-right">
+                                  {ticket.originalPrice && (
+                                    <span className="text-sm text-gray-500 line-through mr-2">₹{ticket.originalPrice}</span>
+                                  )}
+                                  <span className={`text-2xl font-bold ${ticket.id === 'couple' ? 'text-concert-cyan neon-cyan' : 'text-concert-pink neon-pink'}`}>
+                                    ₹{ticket.price}
+                                  </span>
+                                </div>
                               </div>
-                              <p className="text-sm text-pink-400/80 mb-3">{ticket.tagline}</p>
+                              <p className="text-sm text-concert-gold mb-4">{ticket.tagline}</p>
 
-                              <ul className="space-y-1.5">
+                              <ul className="space-y-2">
                                 {ticket.features.map((feature, idx) => (
-                                  <li key={idx} className="flex items-center gap-2 text-sm text-silver/70">
-                                    <Heart className="w-3 h-3 text-pink-400 flex-shrink-0" />
+                                  <li key={idx} className="flex items-center gap-2 text-sm text-gray-300">
+                                    <CheckCircle2 className={`w-4 h-4 flex-shrink-0 ${ticket.id === 'couple' ? 'text-concert-cyan' : 'text-concert-pink'}`} />
                                     {feature}
                                   </li>
                                 ))}
@@ -449,13 +587,13 @@ const KrishhConcertPage = () => {
 
                             {/* Selection indicator */}
                             <div
-                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
+                              className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-300 ${
                                 isSelected
-                                  ? "border-pink-500 bg-pink-500"
-                                  : "border-silver/30"
+                                  ? 'bg-concert-pink border-2 border-concert-pink'
+                                  : 'border-2 border-gray-600'
                               }`}
                             >
-                              {isSelected && <CheckCircle2 className="w-4 h-4 text-white" />}
+                              {isSelected && <CheckCircle2 className="w-5 h-5 text-white" />}
                             </div>
                           </div>
                         </div>
@@ -464,27 +602,32 @@ const KrishhConcertPage = () => {
                   })}
                 </div>
 
-                {/* Payment QR */}
-                <div className="mt-8 bg-card/60 backdrop-blur-sm border border-pink-500/20 rounded-2xl p-6">
-                  <h3 className="font-heading text-lg text-foreground mb-4 flex items-center gap-2">
-                    <Sparkles className="w-5 h-5 text-pink-400" />
-                    Payment QR Code
-                  </h3>
+                {/* Payment QR Section */}
+                <div className="mt-8 glass-card rounded-[24px] p-6" style={{ boxShadow: '0 0 30px rgba(0,255,217,0.1)' }}>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-concert-cyan to-concert-pink flex items-center justify-center">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-white">Payment QR Code</h3>
+                  </div>
+
                   <div className="flex flex-col md:flex-row items-center gap-6">
-                    <div className="relative">
-                      <div className="absolute -inset-1 bg-gradient-to-r from-pink-500/30 to-rose-500/30 rounded-xl blur" />
+                    {/* QR with animated scan border */}
+                    <div className="relative qr-scan-border p-2 rounded-2xl" style={{ border: '2px solid #00FFD9' }}>
+                      <div className="absolute inset-0 rounded-2xl" style={{ boxShadow: '0 0 30px rgba(0,255,217,0.3)' }} />
                       <img
                         src={paymentQR}
                         alt="Payment QR Code"
-                        className="relative w-40 h-40 rounded-lg border border-pink-500/30"
+                        className="relative w-40 h-40 rounded-xl"
                       />
                     </div>
+
                     <div className="text-center md:text-left">
-                      <p className="text-silver/80 text-sm mb-2">
-                        Scan to pay <span className="text-pink-400 font-semibold">₹{selectedTicketInfo?.price || '---'}</span>
+                      <p className="text-gray-300 text-lg mb-2">
+                        Pay <span className="text-concert-cyan font-bold text-xl neon-cyan">₹{selectedTicketInfo?.price || '---'}</span>
                       </p>
-                      <p className="text-xs text-silver/50">
-                        Upload payment screenshot after completing payment
+                      <p className="text-sm text-gray-500">
+                        Scan to pay • Upload screenshot below
                       </p>
                     </div>
                   </div>
@@ -492,191 +635,201 @@ const KrishhConcertPage = () => {
               </div>
 
               {/* Right - Booking Form */}
-              <div>
-                <div className="relative">
-                  <div className="absolute -inset-1 bg-gradient-to-r from-pink-500/20 via-rose-500/20 to-purple-500/20 rounded-3xl blur-xl opacity-50" />
-                  <div className="relative bg-card/80 backdrop-blur-md border border-pink-500/30 rounded-3xl overflow-hidden">
-                    {/* Form header */}
-                    <div className="bg-gradient-to-r from-pink-500/20 via-rose-500/15 to-purple-500/20 border-b border-pink-500/20 px-6 py-5">
-                      <h2 className="font-heading text-xl text-foreground flex items-center gap-2">
-                        <Heart className="w-5 h-5 text-pink-400" />
-                        Book Your Tickets
-                      </h2>
+              <div className="stagger-fade-in">
+                <div className="glass-card rounded-[30px] overflow-hidden" style={{ boxShadow: '0 0 50px rgba(255,27,159,0.15)' }}>
+                  {/* Form header */}
+                  <div className="relative p-6 md:p-8" style={{ background: 'linear-gradient(135deg, rgba(255,27,159,0.2), rgba(0,255,217,0.1))' }}>
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-concert-pink to-concert-gold flex items-center justify-center">
+                        <Heart className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl font-bold text-white">Book Your Tickets</h2>
+                        <p className="text-sm text-gray-400">Fill in your details below</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-5">
+                    {/* Full Name */}
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName" className="text-sm text-gray-400 flex items-center gap-2">
+                        <User className="w-4 h-4 text-concert-cyan" />
+                        Full Name <span className="text-concert-pink">*</span>
+                      </Label>
+                      <Input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                      />
                     </div>
 
-                    {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-6 space-y-5">
-                      <div className="space-y-2">
-                        <Label htmlFor="fullName" className="text-sm text-silver/80 flex items-center gap-2">
-                          <User className="w-4 h-4" />
-                          Full Name <span className="text-pink-400">*</span>
-                        </Label>
-                        <Input
-                          id="fullName"
-                          name="fullName"
-                          type="text"
-                          placeholder="Enter your full name"
-                          value={formData.fullName}
-                          onChange={handleInputChange}
-                          className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                        />
-                      </div>
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-sm text-gray-400 flex items-center gap-2">
+                        <Mail className="w-4 h-4 text-concert-cyan" />
+                        Email Address <span className="text-concert-pink">*</span>
+                      </Label>
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="your.email@example.com"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                      />
+                    </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="email" className="text-sm text-silver/80 flex items-center gap-2">
-                          <Mail className="w-4 h-4" />
-                          Email Address <span className="text-pink-400">*</span>
-                        </Label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="your.email@example.com"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                        />
-                      </div>
+                    {/* Phone */}
+                    <div className="space-y-2">
+                      <Label htmlFor="phone" className="text-sm text-gray-400 flex items-center gap-2">
+                        <Phone className="w-4 h-4 text-concert-cyan" />
+                        Phone Number <span className="text-concert-pink">*</span>
+                      </Label>
+                      <Input
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="+91 XXXXX XXXXX"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                      />
+                    </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="phone" className="text-sm text-silver/80 flex items-center gap-2">
-                          <Phone className="w-4 h-4" />
-                          Phone Number <span className="text-pink-400">*</span>
-                        </Label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="tel"
-                          placeholder="+91 XXXXX XXXXX"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                        />
-                      </div>
+                    {/* Institution */}
+                    <div className="space-y-2">
+                      <Label htmlFor="institution" className="text-sm text-gray-400 flex items-center gap-2">
+                        <Building2 className="w-4 h-4 text-concert-cyan" />
+                        Institution <span className="text-concert-pink">*</span>
+                      </Label>
+                      <Input
+                        id="institution"
+                        name="institution"
+                        type="text"
+                        placeholder="Your college/institution name"
+                        value={formData.institution}
+                        onChange={handleInputChange}
+                        className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                      />
+                    </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="institution" className="text-sm text-silver/80 flex items-center gap-2">
-                          <Building2 className="w-4 h-4" />
-                          Institution <span className="text-pink-400">*</span>
-                        </Label>
-                        <Input
-                          id="institution"
-                          name="institution"
-                          type="text"
-                          placeholder="Your college/institution name"
-                          value={formData.institution}
-                          onChange={handleInputChange}
-                          className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                        />
-                      </div>
+                    {/* Partner details for couple ticket */}
+                    {selectedTicket === "couple" && (
+                      <div className="space-y-4 p-5 rounded-2xl" style={{ background: 'linear-gradient(135deg, rgba(0,255,217,0.1), rgba(255,27,159,0.1))', border: '1px solid rgba(0,255,217,0.3)' }}>
+                        <div className="flex items-center gap-2 text-concert-cyan">
+                          <Users className="w-5 h-5" />
+                          <span className="font-semibold">Partner Details</span>
+                        </div>
 
-                      {/* Partner details for couple ticket */}
-                      {selectedTicket === "couple" && (
-                        <div className="space-y-4 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
-                          <div className="flex items-center gap-2 text-rose-400">
-                            <Users className="w-4 h-4" />
-                            <span className="text-sm font-medium">Partner Details</span>
+                        <div className="space-y-2">
+                          <Label htmlFor="partnerName" className="text-sm text-gray-400">
+                            Partner's Name <span className="text-concert-pink">*</span>
+                          </Label>
+                          <Input
+                            id="partnerName"
+                            name="partnerName"
+                            type="text"
+                            placeholder="Enter partner's full name"
+                            value={formData.partnerName}
+                            onChange={handleInputChange}
+                            className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="partnerPhone" className="text-sm text-gray-400">
+                            Partner's Phone <span className="text-concert-pink">*</span>
+                          </Label>
+                          <Input
+                            id="partnerPhone"
+                            name="partnerPhone"
+                            type="tel"
+                            placeholder="+91 XXXXX XXXXX"
+                            value={formData.partnerPhone}
+                            onChange={handleInputChange}
+                            className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Payment Screenshot Upload */}
+                    <div className="space-y-2">
+                      <Label className="text-sm text-gray-400 flex items-center gap-2">
+                        <Upload className="w-4 h-4 text-concert-cyan" />
+                        Payment Screenshot <span className="text-concert-pink">*</span>
+                      </Label>
+
+                      {!paymentScreenshot ? (
+                        <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-concert-purple-light/50 rounded-2xl cursor-pointer bg-concert-deep/50 hover:border-concert-cyan hover:bg-concert-cyan/5 transition-all duration-300">
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <Upload className="w-10 h-10 mb-3 text-concert-cyan/60" />
+                            <p className="text-sm text-gray-400">
+                              <span className="font-semibold text-concert-cyan">Click to upload</span> payment screenshot
+                            </p>
+                            <p className="text-xs text-gray-600 mt-1">PNG, JPG up to 4MB</p>
                           </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="partnerName" className="text-sm text-silver/80">
-                              Partner's Name <span className="text-pink-400">*</span>
-                            </Label>
-                            <Input
-                              id="partnerName"
-                              name="partnerName"
-                              type="text"
-                              placeholder="Enter partner's full name"
-                              value={formData.partnerName}
-                              onChange={handleInputChange}
-                              className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                            />
-                          </div>
-
-                          <div className="space-y-2">
-                            <Label htmlFor="partnerPhone" className="text-sm text-silver/80">
-                              Partner's Phone <span className="text-pink-400">*</span>
-                            </Label>
-                            <Input
-                              id="partnerPhone"
-                              name="partnerPhone"
-                              type="tel"
-                              placeholder="+91 XXXXX XXXXX"
-                              value={formData.partnerPhone}
-                              onChange={handleInputChange}
-                              className="bg-background/50 border-pink-500/20 focus:border-pink-500 placeholder:text-silver/40"
-                            />
-                          </div>
+                          <input
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                          />
+                        </label>
+                      ) : (
+                        <div className="relative flex items-center gap-3 p-4 rounded-2xl" style={{ background: 'rgba(0,255,217,0.1)', border: '1px solid rgba(0,255,217,0.3)' }}>
+                          <CheckCircle2 className="w-6 h-6 text-concert-cyan flex-shrink-0" />
+                          <span className="text-sm text-gray-300 truncate flex-1">
+                            {paymentScreenshot.name}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => setPaymentScreenshot(null)}
+                            className="p-2 hover:bg-concert-pink/20 rounded-full transition-colors"
+                          >
+                            <X className="w-4 h-4 text-gray-400 hover:text-concert-pink" />
+                          </button>
                         </div>
                       )}
+                    </div>
 
-                      {/* Payment Screenshot Upload */}
-                      <div className="space-y-2">
-                        <Label className="text-sm text-silver/80 flex items-center gap-2">
-                          <Upload className="w-4 h-4" />
-                          Payment Screenshot <span className="text-pink-400">*</span>
-                        </Label>
+                    {/* Submit Button */}
+                    <Button
+                      type="submit"
+                      disabled={isSubmitting || !selectedTicket}
+                      className="btn-morph w-full h-14 text-lg font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed border-0"
+                      style={{ 
+                        background: 'linear-gradient(135deg, #FF1B9F, #00FFD9)',
+                        boxShadow: '0 10px 40px rgba(255,27,159,0.3)',
+                      }}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-3">
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Processing...
+                        </div>
+                      ) : (
+                        <div className="flex items-center gap-3">
+                          <Ticket className="w-5 h-5" />
+                          Book Now {selectedTicketInfo ? `• ₹${selectedTicketInfo.price}` : ""}
+                        </div>
+                      )}
+                    </Button>
 
-                        {!paymentScreenshot ? (
-                          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-pink-500/30 rounded-xl cursor-pointer bg-background/30 hover:bg-pink-500/5 hover:border-pink-500/50 transition-all">
-                            <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                              <Upload className="w-8 h-8 mb-2 text-pink-400/60" />
-                              <p className="text-sm text-silver/60">
-                                <span className="font-semibold text-pink-400">Click to upload</span> payment screenshot
-                              </p>
-                              <p className="text-xs text-silver/40 mt-1">PNG, JPG up to 4MB</p>
-                            </div>
-                            <input
-                              type="file"
-                              className="hidden"
-                              accept="image/*"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-                        ) : (
-                          <div className="relative flex items-center gap-3 p-3 bg-pink-500/10 border border-pink-500/30 rounded-xl">
-                            <CheckCircle2 className="w-5 h-5 text-pink-400 flex-shrink-0" />
-                            <span className="text-sm text-silver/80 truncate flex-1">
-                              {paymentScreenshot.name}
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setPaymentScreenshot(null)}
-                              className="p-1 hover:bg-pink-500/20 rounded-full transition-colors"
-                            >
-                              <X className="w-4 h-4 text-silver/60" />
-                            </button>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Submit Button */}
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting || !selectedTicket}
-                        className="w-full h-14 bg-gradient-to-r from-pink-500 via-rose-500 to-purple-500 hover:from-pink-600 hover:via-rose-600 hover:to-purple-600 text-white font-semibold text-lg rounded-xl shadow-lg shadow-pink-500/25 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isSubmitting ? (
-                          <div className="flex items-center gap-2">
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            Booking...
-                          </div>
-                        ) : (
-                          <div className="flex items-center gap-2">
-                            <Heart className="w-5 h-5" />
-                            Book Now {selectedTicketInfo ? `• ₹${selectedTicketInfo.price}` : ""}
-                          </div>
-                        )}
-                      </Button>
-
-                      <p className="text-xs text-center text-silver/50">
-                        By booking, you agree to receive confirmation via email
-                      </p>
-                    </form>
-                  </div>
+                    <p className="text-xs text-center text-gray-500">
+                      By booking, you agree to receive confirmation via email
+                    </p>
+                  </form>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
         </main>
 
