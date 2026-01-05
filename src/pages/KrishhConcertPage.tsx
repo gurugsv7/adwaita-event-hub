@@ -181,14 +181,29 @@ const KrishhConcertPage = () => {
     audio.preload = 'auto';
     audioRef.current = audio;
     
+    // Pause audio when page is hidden (user goes to home screen, switches apps, etc.)
+    const handleVisibilityChange = () => {
+      if (!audioRef.current) return;
+      
+      if (document.hidden) {
+        audioRef.current.pause();
+      } else if (hasEntered) {
+        // Resume only if user has entered the experience
+        audioRef.current.play().catch(() => {});
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.src = '';
         audioRef.current = null;
       }
     };
-  }, []);
+  }, [hasEntered]);
 
   // Start audio when user enters - must be synchronous for mobile
   const handleEnter = () => {
