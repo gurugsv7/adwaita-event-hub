@@ -503,9 +503,10 @@ const KrishhConcertPage = () => {
             </section>
 
             {/* TICKET SELECTION & BOOKING FORM */}
-            <section className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-              {/* Left - Ticket Selection */}
-              <div className="stagger-fade-in">
+            <section className="max-w-6xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+                {/* Left - Ticket Selection */}
+                <div className="stagger-fade-in">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-concert-pink to-concert-cyan flex items-center justify-center">
                     <Ticket className="w-6 h-6 text-white" />
@@ -828,6 +829,7 @@ const KrishhConcertPage = () => {
                     </p>
                   </form>
                 </div>
+              </div>
               </div>
             </section>
           </div>
