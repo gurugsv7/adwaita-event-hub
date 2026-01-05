@@ -1,13 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { Mail, MapPin, Phone, Calendar, Trophy, Users, Sparkles, ArrowUp, ExternalLink } from "lucide-react";
-
-const stats = [
-  { icon: Sparkles, value: "50+", label: "Events" },
-  { icon: Trophy, value: "₹5.5L", label: "Prize Pool" },
-  { icon: Users, value: "100+", label: "Colleges" },
-  { icon: Calendar, value: "Oct 8-12", label: "2026" },
-];
+import { Mail, MapPin, Phone, ExternalLink } from "lucide-react";
 
 const quickLinks = [
   { name: "Home", href: "/" },
@@ -26,8 +18,6 @@ const competitions = [
 const contacts = [
   { role: "General Secretary", name: "Dr. Priya Sharma", phone: "+91 98765 43210" },
   { role: "Culturals", name: "Gokulakannan G", phone: "+91 63798 54373" },
-  { role: "Sports", name: "Rahul Verma", phone: "+91 87654 32109" },
-  { role: "Technical", name: "Sneha Patel", phone: "+91 76543 21098" },
 ];
 
 // Animated background orb component
@@ -69,20 +59,6 @@ function NeuralNetwork() {
 }
 
 export function Footer() {
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
   return (
     <footer id="contact" className="relative overflow-hidden">
       {/* Background gradient */}
@@ -97,208 +73,132 @@ export function Footer() {
       <NeuralNetwork />
 
       <div className="relative z-10">
-        {/* ===== HOOK HEADER SECTION ===== */}
-        <div className="container mx-auto px-4 pt-16 pb-10">
-          <div className="text-center space-y-6">
-            {/* Massive gradient title */}
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-concert-gold via-[#F0C850] to-concert-cyan bg-clip-text text-transparent drop-shadow-lg">
-                STRIATUM 3.0
-              </span>
-            </h2>
-            
-            {/* Tagline */}
-            <p className="text-lg md:text-xl text-gray-300 font-light tracking-wide max-w-xl mx-auto">
-              Where Medicine Meets Culture
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-              <Link
-                to="/delegate"
-                className="group relative px-8 py-3 bg-gradient-to-r from-concert-gold to-[#F0C850] rounded-full font-semibold text-[#1A1A2E] shadow-lg shadow-concert-gold/30 hover:shadow-concert-gold/50 transition-all duration-300 hover:scale-105"
-              >
-                <span className="relative z-10">Register Now</span>
-                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-concert-gold to-[#F0C850] blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-              </Link>
-              
-              <Link
-                to="/events"
-                className="group px-8 py-3 rounded-full font-semibold text-white border border-white/20 backdrop-blur-sm bg-white/5 hover:bg-white/10 hover:border-concert-cyan/50 transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-concert-cyan/20"
-              >
-                Explore Events
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* ===== STATS STRIP ===== */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map((stat, index) => (
-              <div
-                key={stat.label}
-                className="group relative p-5 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-concert-cyan/30 transition-all duration-300 hover:bg-white/10"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Glow effect on hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-concert-cyan/0 to-concert-pink/0 group-hover:from-concert-cyan/10 group-hover:to-concert-pink/10 transition-all duration-300" />
-                
-                <div className="relative flex flex-col items-center text-center space-y-2">
-                  <stat.icon className="w-6 h-6 text-concert-gold" />
-                  <span className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                    {stat.value}
-                  </span>
-                  <span className="text-sm text-gray-400 uppercase tracking-wider">
-                    {stat.label}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Gradient separator */}
-        <div className="container mx-auto px-4">
-          <div className="h-px bg-gradient-to-r from-transparent via-concert-gold/50 to-transparent" />
-        </div>
-
         {/* ===== CONTENT GRID ===== */}
         <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
-            {/* Contact Card (Featured) */}
-            <div className="lg:col-span-1 md:col-span-2 lg:row-span-1">
-              <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/10 space-y-4">
-                <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-concert-gold animate-pulse" />
-                  Contact Us
-                </h3>
-                
-                <div className="space-y-3">
-                  <a 
-                    href="mailto:striatum.3.igmcri@gmail.com" 
-                    className="flex items-center gap-3 text-gray-300 hover:text-concert-cyan transition-colors group"
-                  >
-                    <Mail className="w-5 h-5 text-concert-cyan group-hover:scale-110 transition-transform" />
-                    <span className="text-sm break-all">striatum.3.igmcri@gmail.com</span>
-                  </a>
+            {/* Left side - Links and Contact */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
+              {/* Contact Card (Featured) */}
+              <div className="sm:col-span-1">
+                <div className="h-full p-6 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/10 space-y-4">
+                  <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-concert-gold animate-pulse" />
+                    Contact Us
+                  </h3>
                   
-                  <div className="flex items-start gap-3 text-gray-300">
-                    <MapPin className="w-5 h-5 text-concert-pink flex-shrink-0 mt-0.5" />
-                    <span className="text-sm">IGMCRI, Puducherry</span>
+                  <div className="space-y-3">
+                    <a 
+                      href="mailto:striatum.3.igmcri@gmail.com" 
+                      className="flex items-center gap-3 text-gray-300 hover:text-concert-cyan transition-colors group"
+                    >
+                      <Mail className="w-5 h-5 text-concert-cyan group-hover:scale-110 transition-transform" />
+                      <span className="text-sm break-all">striatum.3.igmcri@gmail.com</span>
+                    </a>
+                    
+                    <div className="flex items-start gap-3 text-gray-300">
+                      <MapPin className="w-5 h-5 text-concert-pink flex-shrink-0 mt-0.5" />
+                      <span className="text-sm">IGMCRI, Puducherry</span>
+                    </div>
+                  </div>
+
+                  {/* Contact persons */}
+                  <div className="pt-2 space-y-2">
+                    {contacts.map((contact) => (
+                      <a
+                        key={contact.role}
+                        href={`https://wa.me/${contact.phone.replace(/\s/g, "").replace("+", "")}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-xs text-gray-400 hover:text-concert-cyan transition-colors group"
+                      >
+                        <Phone className="w-3 h-3" />
+                        <span>{contact.name}</span>
+                        <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </a>
+                    ))}
                   </div>
                 </div>
+              </div>
 
-                {/* Contact persons grid */}
-                <div className="pt-2 space-y-2">
-                  {contacts.slice(0, 2).map((contact) => (
-                    <a
-                      key={contact.role}
-                      href={`https://wa.me/${contact.phone.replace(/\s/g, "").replace("+", "")}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-xs text-gray-400 hover:text-concert-cyan transition-colors group"
-                    >
-                      <Phone className="w-3 h-3" />
-                      <span>{contact.name}</span>
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </a>
+              {/* Quick Links */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
+                  <span className="text-concert-cyan">✦</span>
+                  Quick Links
+                </h3>
+                <ul className="space-y-2">
+                  {quickLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        to={link.href}
+                        className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-cyan group-hover:shadow-lg group-hover:shadow-concert-cyan/50 transition-all" />
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                          {link.name}
+                        </span>
+                      </Link>
+                    </li>
                   ))}
-                </div>
+                </ul>
+              </div>
+
+              {/* Competitions */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
+                  <span className="text-concert-pink">✦</span>
+                  Competitions
+                </h3>
+                <ul className="space-y-2">
+                  {competitions.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        to={link.href}
+                        className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-pink group-hover:shadow-lg group-hover:shadow-concert-pink/50 transition-all" />
+                        <span className="group-hover:translate-x-1 transition-transform duration-300">
+                          {link.name}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            {/* Quick Links */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
-                <span className="text-concert-cyan">✦</span>
-                Quick Links
-              </h3>
-              <ul className="space-y-2">
-                {quickLinks.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-cyan group-hover:shadow-lg group-hover:shadow-concert-cyan/50 transition-all" />
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">
-                        {link.name}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Competitions */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
-                <span className="text-concert-pink">✦</span>
-                Competitions
-              </h3>
-              <ul className="space-y-2">
-                {competitions.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-pink group-hover:shadow-lg group-hover:shadow-concert-pink/50 transition-all" />
-                      <span className="group-hover:translate-x-1 transition-transform duration-300">
-                        {link.name}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Legal & Info */}
+            {/* Right side - Map */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-concert-gold flex items-center gap-2">
                 <span className="text-concert-gold">✦</span>
-                Resources
+                Find Us
               </h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    to="/brochure-links"
-                    className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-gold group-hover:shadow-lg group-hover:shadow-concert-gold/50 transition-all" />
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      Registration Links
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <a
-                    href="#events"
-                    className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-gold group-hover:shadow-lg group-hover:shadow-concert-gold/50 transition-all" />
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      Event Brochure
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center gap-2 text-gray-300 hover:text-white transition-all duration-300"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-concert-gold/50 group-hover:bg-concert-gold group-hover:shadow-lg group-hover:shadow-concert-gold/50 transition-all" />
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">
-                      Follow Us
-                    </span>
-                    <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </a>
-                </li>
-              </ul>
+              <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3903.6257!2d79.8296!3d11.9342!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5361ab14cd4b5f%3A0x6a8d0a68dd6c1c6c!2sIndira%20Gandhi%20Medical%20College%20and%20Research%20Institute!5e0!3m2!1sen!2sin!4v1704067200000!5m2!1sen!2sin"
+                  width="100%"
+                  height="250"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="IGMCRI Location"
+                  className="w-full h-48 sm:h-64"
+                />
+                {/* Map overlay gradient for aesthetics */}
+                <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-[#1A1A2E]/20 to-transparent" />
+              </div>
+              <a
+                href="https://maps.google.com/?q=Indira+Gandhi+Medical+College+and+Research+Institute+Puducherry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-concert-cyan transition-colors group"
+              >
+                <MapPin className="w-4 h-4" />
+                <span>Open in Google Maps</span>
+                <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </a>
             </div>
           </div>
         </div>
@@ -319,19 +219,6 @@ export function Footer() {
           </div>
         </div>
       </div>
-
-      {/* Scroll to Top Button */}
-      <button
-        onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-gradient-to-r from-concert-gold to-[#F0C850] text-[#1A1A2E] shadow-lg shadow-concert-gold/30 transition-all duration-300 hover:scale-110 hover:shadow-concert-gold/50 ${
-          showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-        }`}
-        aria-label="Scroll to top"
-      >
-        <ArrowUp className="w-5 h-5" />
-        {/* Pulse ring */}
-        <span className="absolute inset-0 rounded-full bg-concert-gold/30 animate-ping" />
-      </button>
     </footer>
   );
 }
