@@ -171,38 +171,50 @@ const KrishhConcertPage = () => {
   } | null>(null);
   const { toast } = useToast();
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioInitialized = useRef(false);
 
   // Auto-play background audio on mount
   useEffect(() => {
-    // Prevent double initialization in StrictMode
-    if (audioInitialized.current) return;
-    audioInitialized.current = true;
+    // Stop any existing audio first
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.src = '';
+    }
     
     const audio = new Audio(krishhBgAudio);
     audio.loop = true;
     audio.volume = 0.4;
     audioRef.current = audio;
     
-    // Attempt to play (may be blocked by browser autoplay policy)
-    const playAudio = () => {
-      audio.play().catch(() => {
-        // If autoplay is blocked, play on first user interaction
-        const handleInteraction = () => {
-          audio.play();
-          document.removeEventListener('click', handleInteraction);
-          document.removeEventListener('touchstart', handleInteraction);
-        };
-        document.addEventListener('click', handleInteraction);
-        document.addEventListener('touchstart', handleInteraction);
-      });
-    };
+    let clickHandler: (() => void) | null = null;
+    let touchHandler: (() => void) | null = null;
     
-    playAudio();
+    // Attempt to play (may be blocked by browser autoplay policy)
+    audio.play().catch(() => {
+      // If autoplay is blocked, play on first user interaction
+      clickHandler = () => {
+        if (audioRef.current) {
+          audioRef.current.play();
+        }
+        document.removeEventListener('click', clickHandler!);
+        document.removeEventListener('touchstart', touchHandler!);
+      };
+      touchHandler = clickHandler;
+      document.addEventListener('click', clickHandler);
+      document.addEventListener('touchstart', touchHandler);
+    });
     
     return () => {
-      audio.pause();
-      audio.src = '';
+      // Clean up audio on unmount
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.src = '';
+        audioRef.current = null;
+      }
+      // Remove event listeners if they were added
+      if (clickHandler) {
+        document.removeEventListener('click', clickHandler);
+        document.removeEventListener('touchstart', touchHandler!);
+      }
     };
   }, []);
 
