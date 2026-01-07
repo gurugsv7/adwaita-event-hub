@@ -668,7 +668,7 @@ export const categories: Category[] = [
         ],
       },
       {
-        id: "badminton-mens",
+        id: "badminton-men",
         title: "Badminton (Men)",
         description: "League or knockout format. Team event with 2-4 players. Singles, doubles, and reverse singles matches. MAVIS 350 Shuttles used. Bring own racquet and non-marking shoes.",
         category: "Sports",
@@ -1583,8 +1583,8 @@ export const categories: Category[] = [
         ],
       },
       {
-        id: "sing-in-the-rain",
-        title: "Sing in the Rain",
+        id: "sing-in-the-storm",
+        title: "Sing in the Storm",
         description: "Light-hearted musical competition with fun, memory, and melody! 2-3/team, no inter-college teams. Multiple interactive surprise rounds (singing, guessing, musical games). Teams eliminated after each round.",
         category: "Other",
         fee: 300,
