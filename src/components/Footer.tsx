@@ -23,7 +23,7 @@ const competitions = [{
   name: "Fine Arts",
   href: "/events/fine-arts"
 }, {
-  name: "Literature",
+  name: "Literature & Debate",
   href: "/events/literature"
 }, {
   name: "Academic",
@@ -35,7 +35,7 @@ const competitions = [{
   name: "Photography",
   href: "/events/photography"
 }, {
-  name: "Design",
+  name: "Graphic Designing",
   href: "/events/design"
 }, {
   name: "Social Service",
@@ -45,13 +45,13 @@ const competitions = [{
   href: "/events/other"
 }];
 const contacts = [{
-  role: "General Secretary",
-  name: "Dr. Priya Sharma",
-  phone: "+91 98765 43210"
+  role: "Contact",
+  name: "Sanjeev",
+  phone: "+91 9080617754"
 }, {
-  role: "Culturals",
-  name: "Gokulakannan G",
-  phone: "+91 63798 54373"
+  role: "Contact",
+  name: "Srihariharan",
+  phone: "+91 9597080710"
 }];
 
 // Animated background orb component
@@ -155,9 +155,9 @@ export function Footer() {
                   </h3>
                   
                   <div className="space-y-3">
-                    <a href="mailto:striatum.3.igmcri@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-concert-cyan transition-colors group">
+                    <a href="mailto:adwaitaigmcri@gmail.com" className="flex items-center gap-3 text-gray-300 hover:text-concert-cyan transition-colors group">
                       <Mail className="w-5 h-5 text-concert-cyan group-hover:scale-110 transition-transform" />
-                      <span className="text-sm break-all">striatum.3.igmcri@gmail.com</span>
+                      <span className="text-sm break-all">adwaitaigmcri@gmail.com</span>
                     </a>
                     
                     <div className="flex items-start gap-3 text-gray-300">
