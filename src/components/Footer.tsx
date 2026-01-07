@@ -242,7 +242,7 @@ export function Footer() {
           <div className="h-px bg-gradient-to-r from-transparent via-concert-gold/50 to-transparent mb-6" />
           
           <div className="pb-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
-            <p className="text-sm text-gray-400">© ADWAITA | IGMCRI & Helios Academic Society<span className="text-concert-gold">ADWAITA</span> | IGMCRI & Helios Academic Society
+            <p className="text-sm text-gray-400">© ADWAITA 26 | IGMCRI & Helios Academic Society<span className="text-concert-gold">ADWAITA</span> | IGMCRI & Helios Academic Society
             </p>
             
             <p className="text-xs text-gray-500">
