@@ -693,7 +693,7 @@ export const categories: Category[] = [
         ],
       },
       {
-        id: "badminton-womens",
+        id: "badminton-women",
         title: "Badminton (Women)",
         description: "League or knockout format. Team event with 2-4 players. Singles, doubles, and reverse singles matches. MAVIS 350 Shuttles used. Bring own racquet and non-marking shoes.",
         category: "Sports",
