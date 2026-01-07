@@ -245,7 +245,7 @@ export function Footer() {
             <p className="text-sm text-gray-400">© ADWAITA 26 | IGMCRI & Helios Academic Society</p>
             
             <p className="text-xs text-gray-500">
-              Connecting Knowledge, Sparking Innovation
+              The realm beyond waits for the brave
             </p>
           </div>
         </div>
