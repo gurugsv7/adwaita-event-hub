@@ -177,23 +177,23 @@ const RegisterPage = () => {
   };
 
   const uploadPaymentScreenshot = async (file: File, regId: string): Promise<string | null> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${regId}-${Date.now()}.${fileExt}`;
-    
-    const { data, error } = await supabase.storage
-      .from('payment-screenshots')
-      .upload(fileName, file);
-    
-    if (error) {
-      console.error('Error uploading file:', error);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'adwaita_unsigned');
+    formData.append('public_id', `${regId}-${Date.now()}`);
+
+    const response = await fetch('https://api.cloudinary.com/v1_1/dtghlkdk0/image/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    if (data.secure_url) {
+      return data.secure_url;
+    } else {
+      console.error('Cloudinary upload error:', data);
       return null;
     }
-    
-    const { data: urlData } = supabase.storage
-      .from('payment-screenshots')
-      .getPublicUrl(fileName);
-    
-    return urlData.publicUrl;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
