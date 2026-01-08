@@ -339,6 +339,7 @@ const RegisterPage = () => {
         delegateId: delegateId.trim() || undefined,
         couponCode: coupon.trim() || undefined,
         participantCategory: category,
+        paymentScreenshotUrl: paymentUrl || undefined,
       }).catch(err => console.error('Email send failed:', err));
 
       toast({
