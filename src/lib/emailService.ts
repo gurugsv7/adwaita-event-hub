@@ -17,18 +17,17 @@ const CATEGORY_EMAIL_MAP: Record<string, string> = {
   'culturals': 'Adwaitaigmcri@gmail.com',
   'fine-arts': 'Adwaitaigmcri@gmail.com',
   'finearts': 'Adwaitaigmcri@gmail.com',
-  
-  // Sports, Literature and Debate
+
+  // Sports and Literature
   'sports': 'Ignitusigmc@gmail.com',
   'literature': 'Ignitusigmc@gmail.com',
-  'debate': 'Ignitusigmc@gmail.com',
-  
-  // Academic, Designing, Photography and Other
+
+  // Academic, Photography, Social Service, Designing, Other
   'academic': 'Finance.igmcrisigma@gmail.com',
+  'photography': 'Finance.igmcrisigma@gmail.com',
+  'ssc': 'Finance.igmcrisigma@gmail.com',
   'graphix': 'Finance.igmcrisigma@gmail.com',
   'designing': 'Finance.igmcrisigma@gmail.com',
-  'photography': 'Finance.igmcrisigma@gmail.com',
-  'technical': 'Finance.igmcrisigma@gmail.com',
   'other': 'Finance.igmcrisigma@gmail.com',
 };
 
