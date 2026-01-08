@@ -63,7 +63,7 @@ interface EventEmailParams {
   delegateId?: string;
   couponCode?: string;
   participantCategory?: string;
-  paymentScreenshotUrl?: string;
+  payment_screenshot_url?: string;
 }
 
 // Delegate pass email parameters
@@ -128,7 +128,7 @@ export const sendEventRegistrationEmail = async (params: EventEmailParams): Prom
         timeStyle: 'short',
         timeZone: 'Asia/Kolkata'
       }),
-      payment_screenshot_url: params.paymentScreenshotUrl || '',
+      payment_screenshot_url: params.payment_screenshot_url || '',
     };
 
     const response = await emailjs.send(
