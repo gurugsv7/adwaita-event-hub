@@ -11,14 +11,13 @@ const KrishhConcertPopup = () => {
   useEffect(() => {
     // Check if user has already dismissed the popup in this session
     const dismissed = sessionStorage.getItem("krishh-popup-dismissed");
-    if (dismissed) return;
+    if (dismissed) {
+      setIsVisible(false);
+      return;
+    }
 
-    // Show floating button after 1.5 seconds
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 1500);
-
-    return () => clearTimeout(timer);
+    // Show floating button immediately
+    setIsVisible(true);
   }, []);
 
   const handleDismiss = () => {
