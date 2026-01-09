@@ -1,237 +1,195 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { X, Music, Heart, Sparkles, Calendar, MapPin, Mic2 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogOverlay,
-} from "@/components/ui/dialog";
-import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X, Music, Heart, Sparkles, Ticket } from "lucide-react";
+import { cn } from "@/lib/utils";
 import concertPoster from "@/assets/krishh-concert.jpg";
-
-// Sound wave visualizer component
-const SoundWaveVisualizer = () => (
-  <div className="flex items-center justify-center gap-[3px] h-8">
-    {[...Array(12)].map((_, i) => (
-      <div
-        key={i}
-        className="w-[3px] bg-gradient-to-t from-concert-magenta to-concert-cyan rounded-full animate-pulse"
-        style={{
-          height: `${Math.random() * 100}%`,
-          minHeight: "20%",
-          animationDelay: `${i * 0.1}s`,
-          animationDuration: `${0.4 + Math.random() * 0.3}s`,
-        }}
-      />
-    ))}
-  </div>
-);
-
-// Floating music notes
-const FloatingNotes = () => (
-  <div className="absolute inset-0 overflow-hidden pointer-events-none">
-    {["♪", "♫", "♬", "♩", "♪", "♫"].map((note, i) => (
-      <span
-        key={i}
-        className="absolute text-concert-magenta/30 text-2xl animate-bounce"
-        style={{
-          left: `${10 + i * 15}%`,
-          top: `${20 + (i % 3) * 25}%`,
-          animationDelay: `${i * 0.3}s`,
-          animationDuration: `${2 + i * 0.5}s`,
-        }}
-      >
-        {note}
-      </span>
-    ))}
-  </div>
-);
 
 const KrishhConcertPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasBeenDismissed, setHasBeenDismissed] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     // Check if user has already dismissed the popup in this session
     const dismissed = sessionStorage.getItem("krishh-popup-dismissed");
-    if (dismissed) {
-      setHasBeenDismissed(true);
-      return;
-    }
+    if (dismissed) return;
 
-    // Show popup after 2 seconds delay
+    // Show floating button after 1.5 seconds
     const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 2000);
+      setIsVisible(true);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const handleClose = () => {
+  const handleDismiss = () => {
     setIsOpen(false);
-    setHasBeenDismissed(true);
+    setIsVisible(false);
     sessionStorage.setItem("krishh-popup-dismissed", "true");
   };
 
-  if (hasBeenDismissed && !isOpen) return null;
+  if (!isVisible) return null;
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-      <DialogPrimitive.Portal>
-        <DialogOverlay className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm" />
-        <DialogPrimitive.Content
-          className="fixed left-[50%] top-[50%] z-[101] translate-x-[-50%] translate-y-[-50%] w-[95vw] max-w-md focus:outline-none"
-        >
-          {/* Main container with animated border */}
+    <>
+      {/* Floating Button - Left side, above chatbot level */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={cn(
+          "fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50 group",
+          "w-12 h-12 sm:w-14 sm:h-14 rounded-full",
+          "flex items-center justify-center",
+          "transition-all duration-300 hover:scale-110",
+          "shadow-2xl",
+          isOpen ? "rotate-180 scale-90" : "animate-pulse hover:animate-none"
+        )}
+        style={{
+          background: "linear-gradient(135deg, #FF1B9F 0%, #3D2862 50%, #00FFD9 100%)",
+          boxShadow: "0 0 30px rgba(255, 27, 159, 0.5), 0 0 60px rgba(0, 255, 217, 0.3)",
+        }}
+      >
+        {isOpen ? (
+          <X className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+        ) : (
           <div className="relative">
-            {/* Animated glow border */}
-            <div 
-              className="absolute -inset-[2px] rounded-3xl opacity-75"
-              style={{
-                background: "linear-gradient(90deg, #FF1B9F, #00FFD9, #FFD700, #FF1B9F)",
-                backgroundSize: "300% 100%",
-                animation: "gradientBorder 3s linear infinite",
-              }}
+            <Music className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            <Heart 
+              className="w-3 h-3 text-white absolute -top-1 -right-1 animate-bounce" 
+              fill="white"
             />
+          </div>
+        )}
+      </button>
+
+      {/* Expanded Card */}
+      <div
+        className={cn(
+          "fixed bottom-20 left-4 sm:bottom-24 sm:left-6 z-50",
+          "w-[280px] sm:w-[320px] max-w-[calc(100vw-2rem)]",
+          "transition-all duration-500 ease-out",
+          isOpen
+            ? "opacity-100 translate-y-0 scale-100"
+            : "opacity-0 translate-y-8 scale-95 pointer-events-none"
+        )}
+      >
+        <div 
+          className="relative rounded-2xl sm:rounded-3xl overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, #1A1A2E 0%, #2D1B4E 50%, #3D2862 100%)",
+            boxShadow: "0 0 40px rgba(255, 27, 159, 0.3), 0 0 80px rgba(0, 255, 217, 0.2)",
+          }}
+        >
+          {/* Animated border glow */}
+          <div 
+            className="absolute inset-0 rounded-2xl sm:rounded-3xl pointer-events-none"
+            style={{
+              background: "linear-gradient(90deg, #FF1B9F, #00FFD9, #FFD700, #FF1B9F)",
+              backgroundSize: "300% 100%",
+              animation: "gradientBorder 3s linear infinite",
+              padding: "2px",
+              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+              WebkitMaskComposite: "xor",
+              maskComposite: "exclude",
+            }}
+          />
+
+          {/* Close/Dismiss button */}
+          <button
+            onClick={handleDismiss}
+            className="absolute top-3 right-3 z-20 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/20 transition-all"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+
+          {/* Header with poster */}
+          <div className="relative h-28 sm:h-32 overflow-hidden">
+            <img 
+              src={concertPoster} 
+              alt="Krishh Concert" 
+              className="w-full h-full object-cover opacity-70"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1A1A2E]" />
             
-            {/* Content container */}
-            <div 
-              className="relative rounded-3xl overflow-hidden"
-              style={{ 
-                background: "linear-gradient(135deg, #1A1A2E 0%, #2D1B4E 50%, #3D2862 100%)",
-              }}
-            >
-              {/* Floating notes background */}
-              <FloatingNotes />
-              
-              {/* Close button */}
-              <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-white/20 transition-all"
-              >
-                <X className="w-4 h-4" />
-              </button>
+            {/* Valentine badge */}
+            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1 bg-gradient-to-r from-[#FF1B9F]/90 to-[#FF1B9F]/70 backdrop-blur-sm rounded-full">
+              <Heart className="w-3 h-3 text-white" fill="white" />
+              <span className="text-[10px] font-bold text-white tracking-wider">FEB 14</span>
+            </div>
 
-              {/* Header with poster */}
-              <div className="relative h-40 overflow-hidden">
-                <img 
-                  src={concertPoster} 
-                  alt="Krishh Concert" 
-                  className="w-full h-full object-cover opacity-60"
-                />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#1A1A2E]" />
-                
-                {/* Floating badge */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-gradient-to-r from-concert-magenta/80 to-concert-magenta/60 backdrop-blur-sm rounded-full">
-                  <Heart className="w-3.5 h-3.5 text-white animate-pulse" />
-                  <span className="text-xs font-bold text-white tracking-wider">VALENTINE'S SPECIAL</span>
-                </div>
-
-                {/* Artist name overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-concert-magenta to-concert-purple flex items-center justify-center">
-                      <Mic2 className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <h3 
-                        className="text-2xl font-black tracking-tight"
-                        style={{
-                          background: "linear-gradient(90deg, #FF1B9F, #00FFD9, #FFD700)",
-                          WebkitBackgroundClip: "text",
-                          backgroundClip: "text",
-                          color: "transparent",
-                        }}
-                      >
-                        KRISHH LIVE
-                      </h3>
-                      <p className="text-xs text-gray-400">IN CONCERT</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Content */}
-              <div className="relative p-5 space-y-4">
-                {/* Sound wave visualizer */}
-                <div className="flex justify-center">
-                  <SoundWaveVisualizer />
-                </div>
-
-                {/* Event details */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-white/5 border border-concert-magenta/20 rounded-xl p-3 text-center">
-                    <Calendar className="w-5 h-5 text-concert-cyan mx-auto mb-1" />
-                    <p className="text-sm font-semibold text-white">Feb 14, 2026</p>
-                    <p className="text-xs text-gray-400">7:00 PM Onwards</p>
-                  </div>
-                  <div className="bg-white/5 border border-concert-cyan/20 rounded-xl p-3 text-center">
-                    <MapPin className="w-5 h-5 text-concert-magenta mx-auto mb-1" />
-                    <p className="text-sm font-semibold text-white">IGMCRI</p>
-                    <p className="text-xs text-gray-400">Puducherry</p>
-                  </div>
-                </div>
-
-                {/* Tagline */}
-                <p className="text-center text-sm text-gray-300 leading-relaxed">
-                  Experience the magic of love with <span className="text-concert-cyan font-semibold">Krishh</span> and 
-                  special performers this Valentine's Day!
-                </p>
-
-                {/* Ticket prices */}
-                <div className="flex items-center justify-center gap-4 py-2">
-                  <div className="text-center">
-                    <p className="text-lg font-bold text-concert-magenta">₹699</p>
-                    <p className="text-xs text-gray-400">Stag Entry</p>
-                  </div>
-                  <div className="w-px h-8 bg-gradient-to-b from-transparent via-gray-500 to-transparent" />
-                  <div className="text-center">
-                    <p className="text-lg font-bold text-concert-cyan">₹1099</p>
-                    <p className="text-xs text-gray-400">Couple Entry</p>
-                  </div>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="space-y-3">
-                  <Link
-                    to="/krishh"
-                    onClick={handleClose}
-                    className="block w-full py-3.5 text-center font-bold text-white rounded-xl relative overflow-hidden group"
-                    style={{
-                      background: "linear-gradient(135deg, #FF1B9F 0%, #3D2862 50%, #00FFD9 100%)",
-                      backgroundSize: "200% 200%",
-                      animation: "gradientBorder 3s ease infinite",
-                    }}
-                  >
-                    <span className="relative z-10 flex items-center justify-center gap-2">
-                      <Music className="w-4 h-4" />
-                      Book Your Tickets
-                      <Sparkles className="w-4 h-4" />
-                    </span>
-                    <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </Link>
-                  
-                  <button
-                    onClick={handleClose}
-                    className="w-full py-2.5 text-center text-sm text-gray-400 hover:text-white transition-colors"
-                  >
-                    Maybe Later
-                  </button>
-                </div>
-              </div>
-
-              {/* Bottom decorative line */}
-              <div 
-                className="h-1"
+            {/* Artist overlay */}
+            <div className="absolute bottom-2 left-3">
+              <h3 
+                className="text-xl sm:text-2xl font-black tracking-tight"
                 style={{
-                  background: "linear-gradient(90deg, #FF1B9F, #00FFD9, #FFD700)",
+                  background: "linear-gradient(90deg, #FF1B9F, #00FFD9)",
+                  WebkitBackgroundClip: "text",
+                  backgroundClip: "text",
+                  color: "transparent",
+                  textShadow: "0 0 30px rgba(255, 27, 159, 0.5)",
                 }}
-              />
+              >
+                KRISHH LIVE
+              </h3>
             </div>
           </div>
-        </DialogPrimitive.Content>
-      </DialogPrimitive.Portal>
-    </Dialog>
+
+          {/* Content */}
+          <div className="p-4 space-y-3">
+            {/* Sound wave decoration */}
+            <div className="flex items-center justify-center gap-[2px] h-4">
+              {[...Array(16)].map((_, i) => (
+                <div
+                  key={i}
+                  className="w-[2px] rounded-full animate-pulse"
+                  style={{
+                    height: `${30 + Math.random() * 70}%`,
+                    background: `linear-gradient(to top, #FF1B9F, #00FFD9)`,
+                    animationDelay: `${i * 0.08}s`,
+                    animationDuration: `${0.5 + Math.random() * 0.3}s`,
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* Tagline */}
+            <p className="text-center text-xs sm:text-sm text-gray-300">
+              Valentine's Day Special Concert
+            </p>
+
+            {/* Prices */}
+            <div className="flex items-center justify-center gap-4">
+              <div className="text-center">
+                <p className="text-base sm:text-lg font-bold" style={{ color: "#FF1B9F" }}>₹699</p>
+                <p className="text-[10px] text-gray-400">Stag</p>
+              </div>
+              <div className="w-px h-6 bg-gray-600" />
+              <div className="text-center">
+                <p className="text-base sm:text-lg font-bold" style={{ color: "#00FFD9" }}>₹1099</p>
+                <p className="text-[10px] text-gray-400">Couple</p>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <Link
+              to="/krishh"
+              onClick={() => setIsOpen(false)}
+              className="block w-full py-2.5 sm:py-3 text-center font-bold text-white text-sm rounded-xl relative overflow-hidden group"
+              style={{
+                background: "linear-gradient(135deg, #FF1B9F 0%, #3D2862 50%, #00FFD9 100%)",
+                backgroundSize: "200% 200%",
+                animation: "gradientBorder 3s ease infinite",
+              }}
+            >
+              <span className="relative z-10 flex items-center justify-center gap-2">
+                <Ticket className="w-4 h-4" />
+                Book Now
+                <Sparkles className="w-4 h-4" />
+              </span>
+              <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </Link>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
