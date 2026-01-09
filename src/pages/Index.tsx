@@ -63,8 +63,10 @@ const Index = () => {
         <FAQAccordion />
         <Footer />
         <EventChatbot />
-        <KrishhConcertPopup />
       </div>
+      
+      {/* Krishh popup outside loading div so it's always visible */}
+      {!isLoading && <KrishhConcertPopup />}
     </>
   );
 };
