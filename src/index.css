@@ -557,4 +557,62 @@
     0%, 100% { transform: scaleY(0.5); }
     50% { transform: scaleY(1); }
   }
+
+  /* Animated gradient border for popup */
+  @keyframes gradientBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Concert color utility classes */
+  .text-concert-magenta {
+    color: #FF1B9F;
+  }
+  
+  .text-concert-cyan {
+    color: #00FFD9;
+  }
+  
+  .text-concert-purple {
+    color: #3D2862;
+  }
+  
+  .bg-concert-magenta {
+    background-color: #FF1B9F;
+  }
+  
+  .bg-concert-cyan {
+    background-color: #00FFD9;
+  }
+  
+  .bg-concert-purple {
+    background-color: #3D2862;
+  }
+  
+  .bg-concert-deep {
+    background-color: #1A1A2E;
+  }
+  
+  .border-concert-magenta {
+    border-color: #FF1B9F;
+  }
+  
+  .border-concert-cyan {
+    border-color: #00FFD9;
+  }
+  
+  .from-concert-magenta {
+    --tw-gradient-from: #FF1B9F var(--tw-gradient-from-position);
+    --tw-gradient-to: rgb(255 27 159 / 0) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+  }
+  
+  .to-concert-cyan {
+    --tw-gradient-to: #00FFD9 var(--tw-gradient-to-position);
+  }
+  
+  .to-concert-purple {
+    --tw-gradient-to: #3D2862 var(--tw-gradient-to-position);
+  }
 }
