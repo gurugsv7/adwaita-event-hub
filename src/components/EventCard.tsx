@@ -193,7 +193,20 @@ export function EventCard({ event, borderColor = "border-gold", categoryId }: Ev
                   Total Category Prize Pool (prizes funded from this pool)
                 </p>
               </div>
+            ) : event.prizes.second === 0 && event.prizes.third === 0 ? (
+              // Only 1st prize exists - show as total prize pool
+              <div className="text-center">
+                <p className="text-gold font-bold">₹{event.prizes.first.toLocaleString()}</p>
+                <p className="text-xs text-silver/50">Total Prize Pool</p>
+              </div>
+            ) : event.prizes.third === 0 ? (
+              // Only 1st and 2nd prizes exist
+              <div className="flex justify-center gap-6 text-silver text-sm">
+                <span>🥇 ₹{event.prizes.first.toLocaleString()}</span>
+                <span>🥈 ₹{event.prizes.second.toLocaleString()}</span>
+              </div>
             ) : (
+              // All three prizes exist
               <div className="flex justify-between text-silver text-sm">
                 <span>🥇 ₹{event.prizes.first.toLocaleString()}</span>
                 <span>🥈 ₹{event.prizes.second.toLocaleString()}</span>

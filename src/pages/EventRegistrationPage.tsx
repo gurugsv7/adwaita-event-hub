@@ -455,7 +455,28 @@ const EventRegistrationPage = () => {
                               Individual event prizes funded from this pool
                             </p>
                           </div>
+                        ) : eventInfo.prizes.second === 0 && eventInfo.prizes.third === 0 ? (
+                          // Only 1st prize exists - show as total prize pool
+                          <div className="text-center">
+                            <p className="text-gold font-bold text-lg">
+                              ₹{eventInfo.prizes.first.toLocaleString()}
+                            </p>
+                            <p className="text-xs text-silver/70">Total Prize Pool</p>
+                          </div>
+                        ) : eventInfo.prizes.third === 0 ? (
+                          // Only 1st and 2nd prizes exist
+                          <div className="grid grid-cols-2 gap-4 text-center text-sm">
+                            <div>
+                              <p className="text-gold font-bold">₹{eventInfo.prizes.first.toLocaleString()}</p>
+                              <p className="text-xs text-silver/50">1st</p>
+                            </div>
+                            <div>
+                              <p className="text-silver font-bold">₹{eventInfo.prizes.second.toLocaleString()}</p>
+                              <p className="text-xs text-silver/50">2nd</p>
+                            </div>
+                          </div>
                         ) : (
+                          // All three prizes exist
                           <div className="grid grid-cols-3 gap-2 text-center text-sm">
                             <div>
                               <p className="text-gold font-bold">₹{eventInfo.prizes.first.toLocaleString()}</p>
