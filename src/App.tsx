@@ -12,6 +12,7 @@ import EventRegistrationPage from "./pages/EventRegistrationPage";
 import BrochureLinksPage from "./pages/BrochureLinksPage";
 import DelegatePassPage from "./pages/DelegatePassPage";
 import KrishhConcertPage from "./pages/KrishhConcertPage";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/delegate-pass" element={<DelegatePassPage />} />
           <Route path="/krishh" element={<KrishhConcertPage />} />
           <Route path="/brochure-links" element={<BrochureLinksPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           {/* Clean URLs for event registration: /:categoryId/:eventId */}
           <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
