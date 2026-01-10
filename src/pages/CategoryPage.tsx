@@ -85,6 +85,28 @@ export default function CategoryPage() {
                   {category.secretary.phone}
                 </a>
               </div>
+              
+              {/* Category Prize Pool Banner for Culturals and Sports */}
+              {category.categoryPrizePool && (
+                <div className="mt-4 inline-flex items-center gap-2 bg-gradient-to-r from-gold/20 to-primary/10 backdrop-blur-sm px-6 py-3 rounded-xl border border-gold/30">
+                  <span className="text-2xl">🏆</span>
+                  <div className="text-left">
+                    <p className="text-gold font-bold text-lg">
+                      ₹{category.categoryPrizePool.total.toLocaleString('en-IN')}/-
+                    </p>
+                    <p className="text-xs text-silver/70">
+                      Total Category Prize Pool
+                    </p>
+                  </div>
+                </div>
+              )}
+              
+              {category.categoryPrizePool && (
+                <p className="text-silver/60 text-xs mt-2 max-w-md mx-auto">
+                  Individual event prizes are funded from this total pool
+                </p>
+              )}
+              
               <p className="text-silver/50 text-sm mt-4">
                 {category.events.length} events available
               </p>

@@ -21,7 +21,7 @@ const allCategories = [
     description:
       "From soul-stirring melodies to electrifying dance battles—experience the heartbeat of artistic expression.",
     eventCount: 14,
-    prizePool: "₹1L+",
+    prizePool: "₹1,00,000",
     accentColor: "gold" as const,
     image: culturalsImg,
     featured: true,
@@ -32,7 +32,7 @@ const allCategories = [
     description:
       "Compete in high-intensity sporting events. From cricket to football, prove your athletic prowess.",
     eventCount: 14,
-    prizePool: "₹1L+",
+    prizePool: "₹2,00,000",
     accentColor: "orange" as const,
     image: sportsImg,
   },
@@ -42,7 +42,7 @@ const allCategories = [
     description:
       "Debate, write, recite—where words become weapons and eloquence wins the day.",
     eventCount: 10,
-    prizePool: "₹30K+",
+    prizePool: "₹20,600",
     accentColor: "teal" as const,
     image: literatureImg,
   },
@@ -52,7 +52,7 @@ const allCategories = [
     description:
       "Unleash your creativity through painting, mehendi, mandala, and more visual artistry.",
     eventCount: 8,
-    prizePool: "₹25K+",
+    prizePool: "₹12,000",
     accentColor: "gold" as const,
     image: fineArtsImg,
   },
@@ -62,7 +62,7 @@ const allCategories = [
     description:
       "Capture moments that tell stories. From still shots to reels and short films.",
     eventCount: 5,
-    prizePool: "₹30K+",
+    prizePool: "₹6,000",
     accentColor: "teal" as const,
     image: photographyImg,
   },
@@ -72,7 +72,7 @@ const allCategories = [
     description:
       "Graphic designing events - poster challenges, meme creation, and digital art contests.",
     eventCount: 3,
-    prizePool: "₹4K+",
+    prizePool: "₹4,200",
     accentColor: "gold" as const,
     image: graphixImg,
     featured: true,
@@ -81,19 +81,19 @@ const allCategories = [
     id: "ssc",
     title: "SSC - Social Service",
     description:
-      "Green campus drive, upcycling art, fundraiser expo, and charity events for noble causes.",
-    eventCount: 4,
+      "Fundraiser expo, awareness events, and charity activities for noble causes.",
+    eventCount: 2,
     prizePool: "Charity",
     accentColor: "teal" as const,
     image: otherImg,
   },
   {
-    id: "technical",
-    title: "Technical",
+    id: "online-games",
+    title: "Online Games",
     description:
       "Gaming events - COD, BGMI, Brawl Stars. Compete and dominate.",
     eventCount: 3,
-    prizePool: "₹25K+",
+    prizePool: "₹6,000",
     accentColor: "orange" as const,
     image: technicalImg,
     featured: true,
@@ -102,9 +102,9 @@ const allCategories = [
     id: "other",
     title: "Special Events",
     description:
-      "Movie trivia, IPL auction, sing in the storm, and more fun events.",
+      "Movie trivia, IPL auction, sing in the storm, cricket quiz, and more fun events.",
     eventCount: 4,
-    prizePool: "₹20K+",
+    prizePool: "₹11,000",
     accentColor: "teal" as const,
     image: otherImg,
   },
@@ -114,7 +114,7 @@ const allCategories = [
     description:
       "Showcase your medical knowledge through quizzes and themed challenges.",
     eventCount: 1,
-    prizePool: "₹10K+",
+    prizePool: "₹20,000",
     accentColor: "gold" as const,
     image: academicImg,
   },

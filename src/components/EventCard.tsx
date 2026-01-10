@@ -117,8 +117,17 @@ export function EventCard({ event, borderColor = "border-gold", categoryId }: Ev
           </div>
           <div className="text-center p-2 bg-background/30 rounded-lg">
             <Trophy size={16} className="text-secondary mx-auto mb-1" />
-            <span className="text-silver text-sm font-semibold block">₹{(event.prizes.first / 1000).toFixed(0)}K</span>
-            <span className="text-silver/50 text-xs">1st Prize</span>
+            {(categoryId === 'culturals' || categoryId === 'sports') ? (
+              <>
+                <span className="text-silver text-sm font-semibold block">Pool</span>
+                <span className="text-silver/50 text-xs">From Category</span>
+              </>
+            ) : (
+              <>
+                <span className="text-silver text-sm font-semibold block">₹{(event.prizes.first / 1000).toFixed(0)}K</span>
+                <span className="text-silver/50 text-xs">1st Prize</span>
+              </>
+            )}
           </div>
         </div>
 
@@ -175,11 +184,22 @@ export function EventCard({ event, borderColor = "border-gold", categoryId }: Ev
           {/* Prizes */}
           <div className="bg-primary/10 p-3 rounded">
             <p className="text-xs text-silver/70 mb-2">Prize Money</p>
-            <div className="flex justify-between text-silver text-sm">
-              <span>🥇 ₹{event.prizes.first.toLocaleString()}</span>
-              <span>🥈 ₹{event.prizes.second.toLocaleString()}</span>
-              <span>🥉 ₹{event.prizes.third.toLocaleString()}</span>
-            </div>
+            {(categoryId === 'culturals' || categoryId === 'sports') ? (
+              <div className="text-center">
+                <p className="text-gold font-bold">
+                  ₹{categoryId === 'culturals' ? '1,00,000' : '2,00,000'}
+                </p>
+                <p className="text-xs text-silver/50 mt-1">
+                  Total Category Prize Pool (prizes funded from this pool)
+                </p>
+              </div>
+            ) : (
+              <div className="flex justify-between text-silver text-sm">
+                <span>🥇 ₹{event.prizes.first.toLocaleString()}</span>
+                <span>🥈 ₹{event.prizes.second.toLocaleString()}</span>
+                <span>🥉 ₹{event.prizes.third.toLocaleString()}</span>
+              </div>
+            )}
           </div>
 
           {/* Rules */}
