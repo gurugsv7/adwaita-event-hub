@@ -60,6 +60,51 @@ serve(async (req) => {
       );
     }
 
+    // If action is 'concert_count', return total concert bookings count
+    if (action === 'concert_count') {
+      console.log('Fetching concert bookings count');
+      const { count, error: countError } = await supabase
+        .from('concert_bookings')
+        .select('*', { count: 'exact', head: true });
+      
+      if (countError) {
+        console.error('Error fetching concert count:', countError);
+        return new Response(
+          JSON.stringify({ error: countError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Concert bookings count:', count);
+      return new Response(
+        JSON.stringify({ count: count || 0 }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // If action is 'concert_bookings', return all concert bookings
+    if (action === 'concert_bookings') {
+      console.log('Fetching all concert bookings');
+      const { data: concertData, error: concertError } = await supabase
+        .from('concert_bookings')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (concertError) {
+        console.error('Error fetching concert bookings:', concertError);
+        return new Response(
+          JSON.stringify({ error: concertError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Successfully fetched', concertData?.length || 0, 'concert bookings');
+      return new Response(
+        JSON.stringify({ bookings: concertData }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     let data;
     let error;
 
