@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink } from "lucide-react";
+import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Registration {
@@ -43,6 +43,7 @@ const AdminPage = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingRegistrations, setLoadingRegistrations] = useState(false);
   const [eventCounts, setEventCounts] = useState<Record<string, number>>({});
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
 
   // Fetch registration counts when authenticated
@@ -76,6 +77,15 @@ const AdminPage = () => {
       categoryId: category.id,
     }))
   );
+
+  // Filter events based on search query
+  const filteredCategories = categories.map(category => ({
+    ...category,
+    events: category.events.filter(event =>
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      category.title.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })).filter(category => category.events.length > 0);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -213,8 +223,20 @@ const AdminPage = () => {
             <p className="text-muted-foreground mt-2">Select an event to view registrations</p>
           </div>
 
+          {/* Search Bar */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search events by name or category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 text-base"
+            />
+          </div>
+
           <div className="space-y-6">
-            {categories.map((category) => (
+            {filteredCategories.map((category) => (
               <div key={category.id} className="space-y-3">
                 <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
                   <span>{category.emoji}</span>
