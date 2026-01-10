@@ -230,8 +230,9 @@ const EventRegistrationPage = () => {
       return false;
     }
 
-    // Delegate ID validation for events requiring it
-    if (eventInfo.fee > 0 && !delegateId.trim()) {
+    // Delegate ID validation - only required for Sports and Culturals
+    const requiresDelegatePass = category?.id === 'sports' || category?.id === 'culturals';
+    if (requiresDelegatePass && eventInfo.fee > 0 && !delegateId.trim()) {
       toast({
         title: "Delegate ID required",
         description: "Please enter your delegate ID. Get one from the Delegate Pass page.",
@@ -668,22 +669,30 @@ const EventRegistrationPage = () => {
                           </SelectContent>
                         </Select>
                       </div>
-                      {eventInfo.fee > 0 && (
-                        <div className="space-y-2">
-                          <Label className="text-silver/70">
-                            Delegate ID <span className="text-accent">*</span>
-                          </Label>
-                          <Input
-                            value={delegateId}
-                            onChange={(e) => setDelegateId(e.target.value)}
-                            placeholder="DEL-XXXXXX"
-                            className="bg-background/50 border-gold/20"
-                          />
-                          <p className="text-xs text-silver/50">
-                            Don't have one? <Link to="/delegate-pass" className="text-teal hover:underline">Get Delegate Pass</Link>
-                          </p>
-                        </div>
-                      )}
+                      {/* Delegate ID - only required for Sports and Culturals */}
+                      {(() => {
+                        const requiresDelegatePass = category?.id === 'sports' || category?.id === 'culturals';
+                        return (
+                          <div className="space-y-2">
+                            <Label className="text-silver/70">
+                              Delegate ID {requiresDelegatePass && <span className="text-accent">*</span>}
+                            </Label>
+                            <Input
+                              value={delegateId}
+                              onChange={(e) => setDelegateId(e.target.value)}
+                              placeholder="DEL-XXXXXX"
+                              className="bg-background/50 border-gold/20"
+                            />
+                            <p className="text-xs text-silver/50">
+                              {requiresDelegatePass ? (
+                                <>Don't have one? <Link to="/delegate-pass" className="text-teal hover:underline">Get Delegate Pass</Link></>
+                              ) : (
+                                "Optional - Enter if you have a delegate pass"
+                              )}
+                            </p>
+                          </div>
+                        );
+                      })()}
                     </div>
                   </div>
 
