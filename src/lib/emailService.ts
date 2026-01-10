@@ -1,44 +1,4 @@
-import emailjs from '@emailjs/browser';
-
-// EmailJS Configuration - User needs to set these up at https://www.emailjs.com/
-// Service ID: Create an email service in EmailJS dashboard
-// Template IDs: Create templates for event registration, delegate pass, and concert booking
-export const EMAILJS_CONFIG = {
-  SERVICE_ID: 'service_wtt60xf',
-  EVENT_TEMPLATE_ID: 'template_0uzpwjc',
-  DELEGATE_TEMPLATE_ID: 'template_kh3a565',
-  CONCERT_TEMPLATE_ID: 'template_concert', // Create this template in EmailJS
-  PUBLIC_KEY: 'acbz69d146b3J-jEm',
-};
-
-// Category to email mapping
-const CATEGORY_EMAIL_MAP: Record<string, string> = {
-  // Culturals and Fine Arts
-  'culturals': 'Adwaitaigmcri@gmail.com',
-  'fine-arts': 'Adwaitaigmcri@gmail.com',
-  'finearts': 'Adwaitaigmcri@gmail.com',
-
-  // Sports and Literature
-  'sports': 'Ignitusigmc@gmail.com',
-  'literature': 'Ignitusigmc@gmail.com',
-
-  // Academic, Photography, Social Service, Designing, Other
-  'academic': 'Finance.igmcrisigma@gmail.com',
-  'photography': 'Finance.igmcrisigma@gmail.com',
-  'ssc': 'Finance.igmcrisigma@gmail.com',
-  'graphix': 'Finance.igmcrisigma@gmail.com',
-  'designing': 'Finance.igmcrisigma@gmail.com',
-  'other': 'Finance.igmcrisigma@gmail.com',
-};
-
-// Default email for categories not in the map
-const DEFAULT_EMAIL = 'Finance.igmcrisigma@gmail.com';
-
-// Get recipient email based on category
-export const getRecipientEmail = (categoryName: string): string => {
-  const normalizedCategory = categoryName.toLowerCase().replace(/\s+/g, '-');
-  return CATEGORY_EMAIL_MAP[normalizedCategory] || DEFAULT_EMAIL;
-};
+import { supabase } from "@/integrations/supabase/client";
 
 // Team member interface
 interface TeamMember {
@@ -89,55 +49,22 @@ interface ConcertEmailParams {
   partnerPhone?: string;
 }
 
-// Format team members for email
-const formatTeamMembers = (members: TeamMember[]): string => {
-  if (members.length <= 1) return 'Individual participation';
-  
-  return members.map((member, index) => {
-    if (index === 0) {
-      return `Captain: ${member.name} (${member.phone || 'N/A'}) - ${member.year || 'N/A'}`;
-    }
-    return `Member ${index + 1}: ${member.name}${member.phone ? ` (${member.phone})` : ''}${member.year ? ` - ${member.year}` : ''}`;
-  }).join('\n');
-};
-
-// Send event registration confirmation email
+// Send event registration confirmation email via edge function
 export const sendEventRegistrationEmail = async (params: EventEmailParams): Promise<boolean> => {
   try {
-    const recipientEmail = getRecipientEmail(params.categoryName);
-    
-    const templateParams = {
-      to_email: recipientEmail,
-      registration_id: params.registrationId,
-      event_name: params.eventName,
-      category_name: params.categoryName,
-      captain_name: params.captainName,
-      captain_phone: params.captainPhone,
-      captain_year: params.captainYear || 'Not specified',
-      participant_email: params.email,
-      institution: params.institution,
-      team_members: formatTeamMembers(params.teamMembers),
-      team_size: params.teamMembers.length,
-      fee_amount: `₹${params.feeAmount}`,
-      delegate_id: params.delegateId || 'Not provided',
-      coupon_code: params.couponCode || 'Not used',
-      participant_category: params.participantCategory || 'Not specified',
-      registration_date: new Date().toLocaleString('en-IN', {
-        dateStyle: 'full',
-        timeStyle: 'short',
-        timeZone: 'Asia/Kolkata'
-      }),
-      payment_screenshot_url: params.payment_screenshot_url || '',
-    };
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: {
+        type: 'event',
+        ...params,
+      },
+    });
 
-    const response = await emailjs.send(
-      EMAILJS_CONFIG.SERVICE_ID,
-      EMAILJS_CONFIG.EVENT_TEMPLATE_ID,
-      templateParams,
-      EMAILJS_CONFIG.PUBLIC_KEY
-    );
+    if (error) {
+      console.error('Failed to send event registration email:', error);
+      return false;
+    }
 
-    console.log('Event registration email sent successfully:', response);
+    console.log('Event registration email sent successfully:', data);
     return true;
   } catch (error) {
     console.error('Failed to send event registration email:', error);
@@ -145,36 +72,22 @@ export const sendEventRegistrationEmail = async (params: EventEmailParams): Prom
   }
 };
 
-// Send delegate pass confirmation email
+// Send delegate pass confirmation email via edge function
 export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promise<boolean> => {
   try {
-    // Delegate pass emails go to Finance email
-    const recipientEmail = 'Finance.igmcrisigma@gmail.com';
-    
-    const templateParams = {
-      to_email: recipientEmail,
-      delegate_id: params.delegateId,
-      delegate_name: params.name,
-      delegate_email: params.email,
-      delegate_phone: params.phone,
-      institution: params.institution,
-      tier_name: params.tierName,
-      tier_price: `₹${params.tierPrice}`,
-      registration_date: new Date().toLocaleString('en-IN', {
-        dateStyle: 'full',
-        timeStyle: 'short',
-        timeZone: 'Asia/Kolkata'
-      }),
-    };
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: {
+        type: 'delegate',
+        ...params,
+      },
+    });
 
-    const response = await emailjs.send(
-      EMAILJS_CONFIG.SERVICE_ID,
-      EMAILJS_CONFIG.DELEGATE_TEMPLATE_ID,
-      templateParams,
-      EMAILJS_CONFIG.PUBLIC_KEY
-    );
+    if (error) {
+      console.error('Failed to send delegate pass email:', error);
+      return false;
+    }
 
-    console.log('Delegate pass email sent successfully:', response);
+    console.log('Delegate pass email sent successfully:', data);
     return true;
   } catch (error) {
     console.error('Failed to send delegate pass email:', error);
@@ -182,38 +95,22 @@ export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promis
   }
 };
 
-// Send concert booking confirmation email
+// Send concert booking confirmation email via edge function
 export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promise<boolean> => {
   try {
-    // Concert booking emails go to Finance email
-    const recipientEmail = 'Finance.igmcrisigma@gmail.com';
-    
-    const templateParams = {
-      to_email: recipientEmail,
-      booking_id: params.bookingId,
-      name: params.name,
-      email: params.email,
-      phone: params.phone,
-      institution: params.institution,
-      ticket_type: params.ticketType,
-      ticket_price: `₹${params.ticketPrice}`,
-      partner_name: params.partnerName || 'N/A (Stag Entry)',
-      partner_phone: params.partnerPhone || 'N/A',
-      booking_date: new Date().toLocaleString('en-IN', {
-        dateStyle: 'full',
-        timeStyle: 'short',
-        timeZone: 'Asia/Kolkata'
-      }),
-    };
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: {
+        type: 'concert',
+        ...params,
+      },
+    });
 
-    const response = await emailjs.send(
-      EMAILJS_CONFIG.SERVICE_ID,
-      EMAILJS_CONFIG.CONCERT_TEMPLATE_ID,
-      templateParams,
-      EMAILJS_CONFIG.PUBLIC_KEY
-    );
+    if (error) {
+      console.error('Failed to send concert booking email:', error);
+      return false;
+    }
 
-    console.log('Concert booking email sent successfully:', response);
+    console.log('Concert booking email sent successfully:', data);
     return true;
   } catch (error) {
     console.error('Failed to send concert booking email:', error);
