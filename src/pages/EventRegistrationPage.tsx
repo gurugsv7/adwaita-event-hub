@@ -462,13 +462,37 @@ const EventRegistrationPage = () => {
                       </div>
 
                       {/* Contact */}
-                      <div className="flex items-center gap-3 p-3 bg-background/50 rounded-xl">
-                        <Phone className="w-4 h-4 text-teal" />
-                        <div>
-                          <p className="text-sm font-medium text-foreground">{eventInfo.incharge.name}</p>
-                          <a href={`tel:${eventInfo.incharge.phone}`} className="text-xs text-teal hover:underline">
-                            {eventInfo.incharge.phone}
-                          </a>
+                      <div className="bg-background/50 rounded-xl p-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Phone className="w-4 h-4 text-teal" />
+                          <span className="text-xs text-silver/70 uppercase tracking-wide">Event Incharges</span>
+                        </div>
+                        <div className="space-y-2">
+                          {Array.isArray(eventInfo.incharge) ? (
+                            eventInfo.incharge.map((person, idx) => (
+                              <div key={idx} className="flex items-center justify-between bg-background/70 rounded-lg px-3 py-2">
+                                <span className="text-sm font-medium text-foreground">{person.name}</span>
+                                <a 
+                                  href={`tel:${person.phone}`} 
+                                  className="text-sm text-teal hover:underline flex items-center gap-1"
+                                >
+                                  <Phone className="w-3 h-3" />
+                                  {person.phone}
+                                </a>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="flex items-center justify-between bg-background/70 rounded-lg px-3 py-2">
+                              <span className="text-sm font-medium text-foreground">{eventInfo.incharge.name}</span>
+                              <a 
+                                href={`tel:${eventInfo.incharge.phone}`} 
+                                className="text-sm text-teal hover:underline flex items-center gap-1"
+                              >
+                                <Phone className="w-3 h-3" />
+                                {eventInfo.incharge.phone}
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { categories } from "@/data/events";
+import { categories, InchargeInfo } from "@/data/events";
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 import paymentQR from "@/assets/payment-qr.jpg";
@@ -28,7 +28,7 @@ interface EventInfo {
   day: string;
   duration: string;
   description: string;
-  incharge: { name: string; phone: string };
+  incharge: InchargeInfo | InchargeInfo[];
 }
 
 const parseTeamSize = (teamType: string): { min: number; max: number; isVariable: boolean } => {
@@ -759,20 +759,41 @@ const RegisterPage = () => {
             {/* Event Incharge */}
             <div className="bg-muted/20 border border-primary/20 rounded-xl p-6">
               <h2 className="text-xl font-serif text-primary mb-4">Need Help?</h2>
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center">
-                  <Phone size={20} className="text-secondary" />
-                </div>
-                <div>
-                  <p className="text-silver font-medium">{eventInfo.incharge.name}</p>
-                  <p className="text-silver/50 text-sm">Event Incharge</p>
-                  <a
-                    href={`tel:${eventInfo.incharge.phone}`}
-                    className="text-secondary hover:underline text-sm"
-                  >
-                    {eventInfo.incharge.phone}
-                  </a>
-                </div>
+              <div className="space-y-3">
+                {Array.isArray(eventInfo.incharge) ? (
+                  eventInfo.incharge.map((person, idx) => (
+                    <div key={idx} className="flex items-center gap-4 bg-background/50 rounded-lg p-3">
+                      <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+                        <Phone size={16} className="text-secondary" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-silver font-medium">{person.name}</p>
+                        <a
+                          href={`tel:${person.phone}`}
+                          className="text-secondary hover:underline text-sm"
+                        >
+                          {person.phone}
+                        </a>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-secondary/20 rounded-full flex items-center justify-center">
+                      <Phone size={20} className="text-secondary" />
+                    </div>
+                    <div>
+                      <p className="text-silver font-medium">{eventInfo.incharge.name}</p>
+                      <p className="text-silver/50 text-sm">Event Incharge</p>
+                      <a
+                        href={`tel:${eventInfo.incharge.phone}`}
+                        className="text-secondary hover:underline text-sm"
+                      >
+                        {eventInfo.incharge.phone}
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -1,3 +1,8 @@
+export interface InchargeInfo {
+  name: string;
+  phone: string;
+}
+
 export interface EventData {
   id: string;
   title: string;
@@ -9,7 +14,7 @@ export interface EventData {
   status: string;
   deadline: string;
   duration: string;
-  incharge: { name: string; phone: string };
+  incharge: InchargeInfo | InchargeInfo[];
   prizes: { first: number; second: number; third: number };
   rules: string[];
 }
@@ -48,7 +53,10 @@ export const categories: Category[] = [
         duration: "3-4 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Logadharvshni, Rohit", phone: "" },
+        incharge: [
+          { name: "Logadharrshni", phone: "9361373471" },
+          { name: "Rohit", phone: "8428152026" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 3-4 minutes",
@@ -70,7 +78,10 @@ export const categories: Category[] = [
         duration: "3-4 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Ruthra, Mugesh", phone: "" },
+        incharge: [
+          { name: "Ruthra", phone: "6383368195" },
+          { name: "Mugesh", phone: "6381280244" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 3-4 minutes",
@@ -92,7 +103,10 @@ export const categories: Category[] = [
         duration: "4-5 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Jaganathan, Rathish", phone: "" },
+        incharge: [
+          { name: "Jaganathan", phone: "7200777363" },
+          { name: "Rathish", phone: "9629592347" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 4-5 minutes",
@@ -114,7 +128,10 @@ export const categories: Category[] = [
         duration: "4 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Cindhujaa, Sindhuja", phone: "" },
+        incharge: [
+          { name: "Cindhujaa", phone: "8072519052" },
+          { name: "Sindhuja", phone: "6381159259" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 4 minutes",
@@ -136,7 +153,10 @@ export const categories: Category[] = [
         duration: "15 min (+4 min sound check)",
         status: "Open",
         deadline: "Feb 3, 2026",
-        incharge: { name: "Nishanth, Nedeunchezhiyan", phone: "" },
+        incharge: [
+          { name: "Nishanth", phone: "8610574623" },
+          { name: "Neduenchezhiyan", phone: "9345285122" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "4-15 members per team, max 9 on stage per song",
@@ -159,7 +179,10 @@ export const categories: Category[] = [
         duration: "4 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Swadhi, Rajakumar", phone: "" },
+        incharge: [
+          { name: "Swadhi", phone: "7418937453" },
+          { name: "Raja Kumar", phone: "8925200429" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 4 minutes",
@@ -181,7 +204,10 @@ export const categories: Category[] = [
         duration: "4 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Ayisha, Valentina", phone: "" },
+        incharge: [
+          { name: "Ayisha", phone: "6383282426" },
+          { name: "Valentina", phone: "9150885613" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 4 minutes",
@@ -202,7 +228,10 @@ export const categories: Category[] = [
         duration: "5 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Paul, Sameera", phone: "" },
+        incharge: [
+          { name: "Paul", phone: "8179249182" },
+          { name: "Sameera", phone: "7397763597" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 5 minutes",
@@ -224,7 +253,10 @@ export const categories: Category[] = [
         duration: "7-9 min (incl. intro)",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Sudharsahan, Lewis, Benifer, Sudiksha", phone: "" },
+        incharge: [
+          { name: "Sudharshan", phone: "9498018510" },
+          { name: "Lewis", phone: "7904084818" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 7-9 minutes (incl. intro)",
@@ -246,7 +278,10 @@ export const categories: Category[] = [
         duration: "6-9 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Sudharsahan, Lewis, Benifer, Sudiksha", phone: "" },
+        incharge: [
+          { name: "Benifer", phone: "7418230504" },
+          { name: "Sudikksha", phone: "9042705767" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 6-9 Minutes",
@@ -268,7 +303,10 @@ export const categories: Category[] = [
         duration: "2 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Hema Preethi, Lavanya", phone: "" },
+        incharge: [
+          { name: "Hema Preethi", phone: "9487781262" },
+          { name: "Lavanya", phone: "7603979821" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 2 minutes",
@@ -290,7 +328,10 @@ export const categories: Category[] = [
         duration: "3 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Dharanie, Kaviya", phone: "" },
+        incharge: [
+          { name: "Dharaanie", phone: "9361576831" },
+          { name: "Kaviya", phone: "6380592296" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 3 mins",
@@ -313,7 +354,10 @@ export const categories: Category[] = [
         duration: "3 min/battle",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Kamalivathani, Siva Shankar", phone: "" },
+        incharge: [
+          { name: "Kamalivathani", phone: "6380964050" },
+          { name: "Siva Shankar", phone: "9025844902" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 3 min per face-off battle",
@@ -335,7 +379,10 @@ export const categories: Category[] = [
         duration: "12 min",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Jhansi, Karen", phone: "" },
+        incharge: [
+          { name: "Jhansi", phone: "9182200932" },
+          { name: "Karen", phone: "9742610828" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Time Limit: 12 minutes (incl. intro)",
