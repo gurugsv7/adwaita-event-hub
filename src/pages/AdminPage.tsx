@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart } from "lucide-react";
+import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Registration {
@@ -51,7 +51,21 @@ interface ConcertBooking {
   created_at: string;
 }
 
-type ViewMode = 'events' | 'concert' | 'event_details' | 'concert_details';
+interface Delegate {
+  id: string;
+  delegate_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  institution: string;
+  tier: string;
+  tier_price: number;
+  payment_screenshot_url: string | null;
+  payment_status: string;
+  created_at: string;
+}
+
+type ViewMode = 'events' | 'concert' | 'delegates' | 'event_details' | 'concert_details' | 'delegates_details';
 
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -60,10 +74,13 @@ const AdminPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [concertBookings, setConcertBookings] = useState<ConcertBooking[]>([]);
+  const [delegates, setDelegates] = useState<Delegate[]>([]);
   const [loadingRegistrations, setLoadingRegistrations] = useState(false);
   const [loadingConcert, setLoadingConcert] = useState(false);
+  const [loadingDelegates, setLoadingDelegates] = useState(false);
   const [eventCounts, setEventCounts] = useState<Record<string, number>>({});
   const [concertCount, setConcertCount] = useState(0);
+  const [delegateCount, setDelegateCount] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>('events');
   const { toast } = useToast();
@@ -73,6 +90,7 @@ const AdminPage = () => {
     if (isAuthenticated && viewMode === 'events') {
       fetchEventCounts();
       fetchConcertCount();
+      fetchDelegateCount();
     }
   }, [isAuthenticated, viewMode]);
 
@@ -105,6 +123,22 @@ const AdminPage = () => {
       }
     } catch (error: any) {
       console.error('Failed to fetch concert count:', error);
+    }
+  };
+
+  const fetchDelegateCount = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-registrations', {
+        body: { password, action: 'delegate_count' }
+      });
+
+      if (error) throw error;
+
+      if (data.count !== undefined) {
+        setDelegateCount(data.count);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch delegate count:', error);
     }
   };
 
@@ -212,6 +246,31 @@ const AdminPage = () => {
     }
   };
 
+  const fetchDelegates = async () => {
+    setLoadingDelegates(true);
+    setViewMode('delegates_details');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-registrations', {
+        body: { password, action: 'delegates' }
+      });
+
+      if (error) throw error;
+
+      if (data.delegates) {
+        setDelegates(data.delegates);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to fetch delegates",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingDelegates(false);
+    }
+  };
+
   const getSelectedEventDetails = () => {
     return allEvents.find(e => e.id === selectedEvent);
   };
@@ -241,6 +300,7 @@ const AdminPage = () => {
     setSelectedEvent(null);
     setRegistrations([]);
     setConcertBookings([]);
+    setDelegates([]);
     setViewMode('events');
     setSearchQuery("");
   };
@@ -251,6 +311,15 @@ const AdminPage = () => {
     booking.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
     booking.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
     booking.booking_id.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Filter delegates based on search query
+  const filteredDelegates = delegates.filter(delegate =>
+    delegate.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    delegate.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    delegate.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    delegate.delegate_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    delegate.tier.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   // Password protection screen
@@ -304,31 +373,59 @@ const AdminPage = () => {
             <p className="text-muted-foreground mt-2">Select an event or view concert bookings</p>
           </div>
 
-          {/* Concert Bookings Card */}
-          <Card
-            className="cursor-pointer hover:border-primary transition-colors mb-6 bg-gradient-to-r from-pink-500/10 to-purple-500/10 border-pink-500/30"
-            onClick={fetchConcertBookings}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <Music className="w-6 h-6 text-white" />
+          {/* Special Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {/* Concert Bookings Card */}
+            <Card
+              className="cursor-pointer hover:border-primary transition-colors bg-gradient-to-r from-pink-500/10 to-purple-500/10 border-pink-500/30"
+              onClick={fetchConcertBookings}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center">
+                      <Music className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                        Krishh Concert
+                        <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
+                      </h3>
+                      <p className="text-muted-foreground text-sm">Valentine's Day Special</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
-                      Krishh Concert Bookings
-                      <Heart className="w-5 h-5 text-pink-500 fill-pink-500" />
-                    </h3>
-                    <p className="text-muted-foreground text-sm">Valentine's Day Special - Feb 14, 2026</p>
-                  </div>
+                  <span className="bg-pink-500/20 text-pink-500 text-lg font-bold px-4 py-2 rounded-full">
+                    {concertCount}
+                  </span>
                 </div>
-                <span className="bg-pink-500/20 text-pink-500 text-lg font-bold px-4 py-2 rounded-full">
-                  {concertCount}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+
+            {/* Delegate Passes Card */}
+            <Card
+              className="cursor-pointer hover:border-primary transition-colors bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border-emerald-500/30"
+              onClick={fetchDelegates}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                      <BadgeCheck className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                        Delegate Passes
+                      </h3>
+                      <p className="text-muted-foreground text-sm">All delegate registrations</p>
+                    </div>
+                  </div>
+                  <span className="bg-emerald-500/20 text-emerald-500 text-lg font-bold px-4 py-2 rounded-full">
+                    {delegateCount}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           {/* Search Bar */}
           <div className="relative mb-6">
@@ -505,6 +602,137 @@ const AdminPage = () => {
                         </TableCell>
                         <TableCell className="text-sm">
                           {formatDate(booking.created_at)}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Delegates table view
+  if (viewMode === 'delegates_details') {
+    return (
+      <div className="min-h-screen bg-background p-4 md:p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <Button
+              variant="ghost"
+              onClick={handleBackToEvents}
+              className="mb-4"
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Events
+            </Button>
+            
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                  <BadgeCheck className="w-6 h-6 text-emerald-500" />
+                  Delegate Passes
+                </h1>
+                <p className="text-muted-foreground">
+                  {delegates.length} Delegate Registration(s)
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Search Bar for Delegates */}
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input
+              type="text"
+              placeholder="Search by name, email, institution, delegate ID, or tier..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-12 text-base"
+            />
+          </div>
+
+          {loadingDelegates ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : filteredDelegates.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <BadgeCheck className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">
+                  {searchQuery ? "No delegates match your search" : "No delegate registrations found"}
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="p-0 overflow-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Delegate ID</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Institution</TableHead>
+                      <TableHead>Tier</TableHead>
+                      <TableHead>Price (₹)</TableHead>
+                      <TableHead>Payment</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Registered At</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredDelegates.map((delegate) => (
+                      <TableRow key={delegate.id}>
+                        <TableCell className="font-mono text-xs">
+                          {delegate.delegate_id}
+                        </TableCell>
+                        <TableCell className="font-medium">{delegate.name}</TableCell>
+                        <TableCell>{delegate.email}</TableCell>
+                        <TableCell>{delegate.phone}</TableCell>
+                        <TableCell>{delegate.institution}</TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            delegate.tier === 'Gold' 
+                              ? 'bg-yellow-500/20 text-yellow-600' 
+                              : delegate.tier === 'Silver'
+                              ? 'bg-gray-400/20 text-gray-500'
+                              : 'bg-amber-700/20 text-amber-700'
+                          }`}>
+                            {delegate.tier}
+                          </span>
+                        </TableCell>
+                        <TableCell>₹{delegate.tier_price}</TableCell>
+                        <TableCell>
+                          {delegate.payment_screenshot_url ? (
+                            <a 
+                              href={delegate.payment_screenshot_url} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
+                            >
+                              View <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : (
+                            <span className="text-amber-600 text-sm">Pending</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            delegate.payment_status === 'confirmed' 
+                              ? 'bg-green-500/20 text-green-500' 
+                              : 'bg-amber-500/20 text-amber-500'
+                          }`}>
+                            {delegate.payment_status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {formatDate(delegate.created_at)}
                         </TableCell>
                       </TableRow>
                     ))}

@@ -105,6 +105,51 @@ serve(async (req) => {
       );
     }
 
+    // If action is 'delegate_count', return total delegates count
+    if (action === 'delegate_count') {
+      console.log('Fetching delegates count');
+      const { count, error: countError } = await supabase
+        .from('delegates')
+        .select('*', { count: 'exact', head: true });
+      
+      if (countError) {
+        console.error('Error fetching delegates count:', countError);
+        return new Response(
+          JSON.stringify({ error: countError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Delegates count:', count);
+      return new Response(
+        JSON.stringify({ count: count || 0 }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // If action is 'delegates', return all delegate registrations
+    if (action === 'delegates') {
+      console.log('Fetching all delegate registrations');
+      const { data: delegatesData, error: delegatesError } = await supabase
+        .from('delegates')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (delegatesError) {
+        console.error('Error fetching delegates:', delegatesError);
+        return new Response(
+          JSON.stringify({ error: delegatesError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Successfully fetched', delegatesData?.length || 0, 'delegate registrations');
+      return new Response(
+        JSON.stringify({ delegates: delegatesData }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     let data;
     let error;
 
