@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { categories } from "@/data/events";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowLeft, Loader2, Users, Calendar } from "lucide-react";
+import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface Registration {
@@ -42,7 +42,31 @@ const AdminPage = () => {
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loadingRegistrations, setLoadingRegistrations] = useState(false);
+  const [eventCounts, setEventCounts] = useState<Record<string, number>>({});
   const { toast } = useToast();
+
+  // Fetch registration counts when authenticated
+  useEffect(() => {
+    if (isAuthenticated && !selectedEvent) {
+      fetchEventCounts();
+    }
+  }, [isAuthenticated, selectedEvent]);
+
+  const fetchEventCounts = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-registrations', {
+        body: { password, action: 'counts' }
+      });
+
+      if (error) throw error;
+
+      if (data.counts) {
+        setEventCounts(data.counts);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch counts:', error);
+    }
+  };
 
   // Flatten all events from all categories
   const allEvents = categories.flatMap(category =>
@@ -204,7 +228,12 @@ const AdminPage = () => {
                       onClick={() => fetchRegistrations(event.id)}
                     >
                       <CardContent className="p-4">
-                        <h3 className="font-medium text-foreground">{event.title}</h3>
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium text-foreground">{event.title}</h3>
+                          <span className="bg-primary/10 text-primary text-sm font-semibold px-2 py-1 rounded-full">
+                            {eventCounts[event.id] || 0}
+                          </span>
+                        </div>
                         <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Users className="w-4 h-4" />
@@ -310,7 +339,14 @@ const AdminPage = () => {
                       <TableCell>{reg.coupon_code || '-'}</TableCell>
                       <TableCell>
                         {reg.payment_screenshot_url ? (
-                          <span className="text-green-600 text-sm">Uploaded</span>
+                          <a 
+                            href={reg.payment_screenshot_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
+                          >
+                            View <ExternalLink className="w-3 h-3" />
+                          </a>
                         ) : (
                           <span className="text-amber-600 text-sm">Pending</span>
                         )}

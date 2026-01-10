@@ -13,9 +13,9 @@ serve(async (req) => {
   }
 
   try {
-    const { password, eventId } = await req.json();
+    const { password, eventId, action } = await req.json();
     
-    console.log('Admin registrations request received for eventId:', eventId);
+    console.log('Admin registrations request received - action:', action, 'eventId:', eventId);
 
     // Verify admin password
     const adminPassword = Deno.env.get('ADMIN_PASSWORD');
@@ -31,6 +31,34 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // If action is 'counts', return registration counts per event
+    if (action === 'counts') {
+      console.log('Fetching registration counts per event');
+      const { data: allRegistrations, error: countError } = await supabase
+        .from('registrations')
+        .select('event_id');
+      
+      if (countError) {
+        console.error('Error fetching counts:', countError);
+        return new Response(
+          JSON.stringify({ error: countError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Count registrations per event
+      const counts: Record<string, number> = {};
+      allRegistrations?.forEach((reg) => {
+        counts[reg.event_id] = (counts[reg.event_id] || 0) + 1;
+      });
+
+      console.log('Successfully fetched counts for', Object.keys(counts).length, 'events');
+      return new Response(
+        JSON.stringify({ counts }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
 
     let data;
     let error;
