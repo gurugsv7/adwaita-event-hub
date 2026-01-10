@@ -34,7 +34,7 @@ export const categories: Category[] = [
     title: "Culturals",
     displayTitle: "YAAZH - CULTURALS",
     borderColor: "border-gold",
-    secretary: { name: "Gokulakannan E", phone: "" },
+    secretary: { name: "Gokulakannan G", phone: "6379854373" },
     events: [
       // MUSIC EVENTS
       {
@@ -354,7 +354,7 @@ export const categories: Category[] = [
     title: "Sports",
     displayTitle: "IGNITIUS - SPORTS",
     borderColor: "border-blue-500",
-    secretary: { name: "Manibalan", phone: "" },
+    secretary: { name: "Manibalan D", phone: "8525053285" },
     events: [
       {
         id: "cricket",
@@ -665,7 +665,7 @@ export const categories: Category[] = [
     title: "Fine Arts",
     displayTitle: "NIRANG - FINE ARTS",
     borderColor: "border-gold",
-    secretary: { name: "Vishwesh", phone: "" },
+    secretary: { name: "Vishwesh R", phone: "8778980736" },
     events: [
       {
         id: "mehendi",
@@ -851,7 +851,7 @@ export const categories: Category[] = [
     title: "Literature & Debate",
     displayTitle: "MERAKI - LITERATURE & DEBATE",
     borderColor: "border-teal",
-    secretary: { name: "Dhanvarshini", phone: "" },
+    secretary: { name: "Dhanvarshini R", phone: "6384099666" },
     events: [
       // OFFLINE L&D EVENTS
       {
@@ -1081,7 +1081,7 @@ export const categories: Category[] = [
     title: "Academic",
     displayTitle: "HELIOS - ACADEMIC",
     borderColor: "border-gold",
-    secretary: { name: "Vengataramanan Tirou", phone: "" },
+    secretary: { name: "Vengataramanan Tirou", phone: "9952260625" },
     events: [
       {
         id: "cupids-cortex",
@@ -1114,7 +1114,7 @@ export const categories: Category[] = [
     title: "Photography",
     displayTitle: "SHUTTERS - PHOTOGRAPHY",
     borderColor: "border-teal",
-    secretary: { name: "Vijayashantini", phone: "" },
+    secretary: { name: "Vijayashanthini S", phone: "7418283497" },
     events: [
       {
         id: "non-themed-photo",
@@ -1234,7 +1234,7 @@ export const categories: Category[] = [
     title: "Online Games",
     displayTitle: "SYNAPSE - ONLINE GAMES",
     borderColor: "border-purple-500",
-    secretary: { name: "Thamizhamudhan", phone: "" },
+    secretary: { name: "Thamizhamudan S", phone: "8838810278" },
     events: [
       {
         id: "codm",
@@ -1408,7 +1408,7 @@ export const categories: Category[] = [
     title: "Graphix",
     displayTitle: "GRAPHIX - Graphic Designing",
     borderColor: "border-purple-500",
-    secretary: { name: "Kamalivathani", phone: "" },
+    secretary: { name: "Kamalivathani", phone: "6380964050" },
     events: [
       {
         id: "love-and-loss",
