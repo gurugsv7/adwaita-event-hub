@@ -10,7 +10,11 @@ const EMAILJS_SERVICE_ID = Deno.env.get('EMAILJS_SERVICE_ID') || 'service_wtt60x
 const EMAILJS_PUBLIC_KEY = Deno.env.get('EMAILJS_PUBLIC_KEY') || 'acbz69d146b3J-jEm';
 const EMAILJS_EVENT_TEMPLATE_ID = Deno.env.get('EMAILJS_EVENT_TEMPLATE_ID') || 'template_0uzpwjc';
 const EMAILJS_DELEGATE_TEMPLATE_ID = Deno.env.get('EMAILJS_DELEGATE_TEMPLATE_ID') || 'template_kh3a565';
-const EMAILJS_CONCERT_TEMPLATE_ID = Deno.env.get('EMAILJS_CONCERT_TEMPLATE_ID') || 'template_concert';
+
+// Krishh Concert uses separate EmailJS account
+const EMAILJS_CONCERT_SERVICE_ID = 'service_kh999ms';
+const EMAILJS_CONCERT_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';
+const EMAILJS_CONCERT_TEMPLATE_ID = 'template_a8l2tnc';
 
 // Category to email mapping
 const CATEGORY_EMAIL_MAP: Record<string, string> = {
@@ -95,16 +99,21 @@ const formatTeamMembers = (members: TeamMember[]): string => {
   }).join('\n');
 };
 
-const sendEmailJS = async (templateId: string, templateParams: Record<string, string>): Promise<boolean> => {
+const sendEmailJS = async (
+  templateId: string, 
+  templateParams: Record<string, string>,
+  serviceId: string = EMAILJS_SERVICE_ID,
+  publicKey: string = EMAILJS_PUBLIC_KEY
+): Promise<boolean> => {
   const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      service_id: EMAILJS_SERVICE_ID,
+      service_id: serviceId,
       template_id: templateId,
-      user_id: EMAILJS_PUBLIC_KEY,
+      user_id: publicKey,
       template_params: templateParams,
     }),
   });
@@ -192,7 +201,13 @@ const handleConcertEmail = async (data: ConcertEmailRequest): Promise<boolean> =
     booking_date: bookingDate,
   };
 
-  return sendEmailJS(EMAILJS_CONCERT_TEMPLATE_ID, templateParams);
+  // Use separate EmailJS account for Krishh Concert
+  return sendEmailJS(
+    EMAILJS_CONCERT_TEMPLATE_ID, 
+    templateParams,
+    EMAILJS_CONCERT_SERVICE_ID,
+    EMAILJS_CONCERT_PUBLIC_KEY
+  );
 };
 
 serve(async (req: Request): Promise<Response> => {
