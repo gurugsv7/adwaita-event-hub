@@ -88,7 +88,7 @@ const allCategories = [
     image: otherImg,
   },
   {
-    id: "online-games",
+    id: "technical",
     title: "Technical",
     description:
       "Gaming events - COD, BGMI, Brawl Stars. Compete and dominate.",
