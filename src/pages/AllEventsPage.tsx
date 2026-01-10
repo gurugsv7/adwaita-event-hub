@@ -81,15 +81,15 @@ const allCategories = [
     id: "ssc",
     title: "SSC - Social Service",
     description:
-      "Fundraiser expo, awareness events, and charity activities for noble causes.",
-    eventCount: 2,
+      "Green campus drive, upcycling art, fundraiser expo, and charity events for noble causes.",
+    eventCount: 4,
     prizePool: "Charity",
     accentColor: "teal" as const,
     image: otherImg,
   },
   {
     id: "online-games",
-    title: "Online Games",
+    title: "Technical",
     description:
       "Gaming events - COD, BGMI, Brawl Stars. Compete and dominate.",
     eventCount: 3,
