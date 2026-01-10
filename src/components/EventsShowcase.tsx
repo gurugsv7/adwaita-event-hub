@@ -11,8 +11,8 @@ const featuredCategories = [
     title: "Culturals",
     description:
       "From soul-stirring melodies to electrifying dance battles—experience the heartbeat of artistic expression across solo and group performances.",
-    eventCount: 6,
-    prizePool: "₹50K+",
+    eventCount: 14,
+    prizePool: "₹1,00,000",
     accentColor: "gold" as const,
     image: culturalsImg,
     featured: true,
@@ -22,8 +22,8 @@ const featuredCategories = [
     title: "Sports",
     description:
       "Compete in high-intensity sporting events. From cricket to chess, prove your athletic prowess.",
-    eventCount: 6,
-    prizePool: "₹75K+",
+    eventCount: 14,
+    prizePool: "₹2,00,000",
     accentColor: "orange" as const,
     image: sportsImg,
     featured: true,

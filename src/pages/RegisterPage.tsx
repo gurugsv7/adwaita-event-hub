@@ -460,8 +460,17 @@ const RegisterPage = () => {
               </div>
               <div className="bg-muted/30 border border-primary/20 rounded-lg px-4 py-2 text-center min-w-[100px]">
                 <Trophy size={16} className="text-secondary mx-auto mb-1" />
-                <p className="text-primary font-bold">₹{(eventInfo.prize / 1000).toFixed(0)}K</p>
-                <p className="text-silver/50 text-xs">1st Prize</p>
+                {(eventInfo.categoryId === 'culturals' || eventInfo.categoryId === 'sports') ? (
+                  <>
+                    <p className="text-primary font-bold text-sm">Pool</p>
+                    <p className="text-silver/50 text-xs">From Category</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-primary font-bold">₹{(eventInfo.prize / 1000).toFixed(0)}K</p>
+                    <p className="text-silver/50 text-xs">1st Prize</p>
+                  </>
+                )}
               </div>
             </div>
           </div>

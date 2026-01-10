@@ -30,6 +30,11 @@ export interface Category {
     phone: string;
   };
   events: EventData[];
+  // For categories where individual event prizes come from a total pool
+  categoryPrizePool?: {
+    total: number;
+    displayText: string;
+  };
 }
 
 export const categories: Category[] = [
@@ -40,6 +45,10 @@ export const categories: Category[] = [
     displayTitle: "YAAZH - CULTURALS",
     borderColor: "border-gold",
     secretary: { name: "Gokulakannan G", phone: "6379854373" },
+    categoryPrizePool: {
+      total: 100000,
+      displayText: "Total Category Prize Pool: ₹1,00,000/- (Individual event prizes are funded from this pool)"
+    },
     events: [
       // MUSIC EVENTS
       {
@@ -402,6 +411,10 @@ export const categories: Category[] = [
     displayTitle: "IGNITIUS - SPORTS",
     borderColor: "border-blue-500",
     secretary: { name: "Manibalan D", phone: "8525053285" },
+    categoryPrizePool: {
+      total: 200000,
+      displayText: "Total Category Prize Pool: ₹2,00,000/- (Individual event prizes are funded from this pool)"
+    },
     events: [
       {
         id: "cricket",

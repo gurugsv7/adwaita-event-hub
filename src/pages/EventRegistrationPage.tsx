@@ -442,20 +442,35 @@ const EventRegistrationPage = () => {
                           <Trophy className="w-5 h-5 text-gold" />
                           <span className="font-heading text-foreground">Prize Pool</span>
                         </div>
-                        <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                          <div>
-                            <p className="text-gold font-bold">₹{eventInfo.prizes.first.toLocaleString()}</p>
-                            <p className="text-xs text-silver/50">1st</p>
+                        {/* Check if this is a category with shared prize pool (Culturals or Sports) */}
+                        {(category?.id === 'culturals' || category?.id === 'sports') ? (
+                          <div className="text-center">
+                            <p className="text-gold font-bold text-lg mb-1">
+                              ₹{category?.id === 'culturals' ? '1,00,000' : '2,00,000'}
+                            </p>
+                            <p className="text-xs text-silver/70">
+                              Total Category Prize Pool
+                            </p>
+                            <p className="text-[10px] text-silver/50 mt-1">
+                              Individual event prizes funded from this pool
+                            </p>
                           </div>
-                          <div>
-                            <p className="text-silver font-bold">₹{eventInfo.prizes.second.toLocaleString()}</p>
-                            <p className="text-xs text-silver/50">2nd</p>
+                        ) : (
+                          <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                            <div>
+                              <p className="text-gold font-bold">₹{eventInfo.prizes.first.toLocaleString()}</p>
+                              <p className="text-xs text-silver/50">1st</p>
+                            </div>
+                            <div>
+                              <p className="text-silver font-bold">₹{eventInfo.prizes.second.toLocaleString()}</p>
+                              <p className="text-xs text-silver/50">2nd</p>
+                            </div>
+                            <div>
+                              <p className="text-amber-700 font-bold">₹{eventInfo.prizes.third.toLocaleString()}</p>
+                              <p className="text-xs text-silver/50">3rd</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-amber-700 font-bold">₹{eventInfo.prizes.third.toLocaleString()}</p>
-                            <p className="text-xs text-silver/50">3rd</p>
-                          </div>
-                        </div>
+                        )}
                       </div>
 
                       {/* Contact */}
