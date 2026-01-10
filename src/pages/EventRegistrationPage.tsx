@@ -269,11 +269,8 @@ const EventRegistrationPage = () => {
           throw new Error('Failed to upload payment screenshot');
         }
 
-        const { data: urlData } = supabase.storage
-          .from('payment-screenshots')
-          .getPublicUrl(fileName);
-
-        paymentScreenshotUrl = urlData.publicUrl;
+        // Store file path (bucket is private, admins access via signed URLs)
+        paymentScreenshotUrl = fileName;
       }
 
       // Save registration to database

@@ -177,7 +177,6 @@ const DelegatePassPage = () => {
       const delegateId = `DEL-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
       // Upload payment screenshot
-      let paymentScreenshotUrl = null;
       const fileExt = paymentScreenshot.name.split('.').pop();
       const fileName = `delegate_${delegateId}_${Date.now()}.${fileExt}`;
       
@@ -190,11 +189,8 @@ const DelegatePassPage = () => {
         throw new Error('Failed to upload payment screenshot');
       }
 
-      const { data: urlData } = supabase.storage
-        .from('payment-screenshots')
-        .getPublicUrl(fileName);
-      
-      paymentScreenshotUrl = urlData.publicUrl;
+      // Store file path (bucket is private, admins access via signed URLs)
+      const paymentScreenshotUrl = fileName;
 
       // Save to database
       const { error } = await supabase

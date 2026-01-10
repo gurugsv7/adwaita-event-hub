@@ -352,7 +352,6 @@ const KrishhConcertPage = () => {
     try {
       const bookingId = `KRISHH-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
 
-      let paymentScreenshotUrl = null;
       const fileExt = paymentScreenshot.name.split('.').pop();
       const fileName = `concert_${bookingId}_${Date.now()}.${fileExt}`;
 
@@ -365,11 +364,8 @@ const KrishhConcertPage = () => {
         throw new Error('Failed to upload payment screenshot');
       }
 
-      const { data: urlData } = supabase.storage
-        .from('payment-screenshots')
-        .getPublicUrl(fileName);
-
-      paymentScreenshotUrl = urlData.publicUrl;
+      // Store file path (bucket is private, admins access via signed URLs)
+      const paymentScreenshotUrl = fileName;
 
       const { error } = await supabase
         .from('concert_bookings')
