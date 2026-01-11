@@ -23,7 +23,10 @@ const CATEGORY_EMAIL_MAP: Record<string, string> = {
   'finearts': 'Adwaitaigmcri@gmail.com',
   'sports': 'Ignitusigmc@gmail.com',
   'literature': 'Ignitusigmc@gmail.com',
+  'literature-&-debate': 'Ignitusigmc@gmail.com',
+  'literature-debate': 'Ignitusigmc@gmail.com',
   'academic': 'Finance.igmcrisigma@gmail.com',
+  'technical': 'Finance.igmcrisigma@gmail.com',
   'photography': 'Finance.igmcrisigma@gmail.com',
   'ssc': 'Finance.igmcrisigma@gmail.com',
   'graphix': 'Finance.igmcrisigma@gmail.com',
@@ -129,6 +132,8 @@ const sendEmailJS = async (
 
 const handleEventEmail = async (data: EventEmailRequest): Promise<boolean> => {
   const recipientEmail = getRecipientEmail(data.categoryName);
+  console.log(`Sending event email for category: ${data.categoryName}, recipient: ${recipientEmail}`);
+  
   const registrationDate = new Date().toLocaleString('en-IN', {
     dateStyle: 'full',
     timeStyle: 'short',
@@ -155,6 +160,7 @@ const handleEventEmail = async (data: EventEmailRequest): Promise<boolean> => {
     payment_screenshot_url: data.payment_screenshot_url || '',
   };
 
+  console.log('Using service:', EMAILJS_SERVICE_ID, 'template:', EMAILJS_EVENT_TEMPLATE_ID);
   return sendEmailJS(EMAILJS_EVENT_TEMPLATE_ID, templateParams);
 };
 
