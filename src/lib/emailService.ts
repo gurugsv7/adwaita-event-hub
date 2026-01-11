@@ -106,16 +106,15 @@ export const sendEventRegistrationEmail = async (params: EventEmailParams): Prom
     }).join('\n');
 
     const templateParams = {
-      to_email: params.email,
-      to_name: params.captainName,
-      cc_email: recipientEmail,
+      to_email: recipientEmail, // Send to college incharge only
+      to_name: 'Event Incharge',
       registration_id: params.registrationId,
       event_name: params.eventName,
       category_name: params.categoryName,
       captain_name: params.captainName,
       captain_phone: params.captainPhone,
       captain_year: params.captainYear || 'Not specified',
-      email: params.email,
+      email: params.email, // Registrant's email for reference
       institution: params.institution,
       team_members: teamMembersList,
       fee_amount: `₹${params.feeAmount}`,
@@ -152,12 +151,11 @@ export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promis
     });
 
     const templateParams = {
-      to_email: params.email,
-      to_name: params.name,
-      cc_email: 'Finance.igmcrisigma@gmail.com',
+      to_email: 'Finance.igmcrisigma@gmail.com', // Send to finance team only
+      to_name: 'Delegate Pass Incharge',
       delegate_id: params.delegateId,
       name: params.name,
-      email: params.email,
+      email: params.email, // Registrant's email for reference
       phone: params.phone,
       institution: params.institution,
       tier_name: params.tierName,
