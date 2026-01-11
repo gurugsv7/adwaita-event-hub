@@ -410,6 +410,7 @@ const KrishhConcertPage = () => {
         partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
       });
       setIsSuccess(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
     } catch (error: any) {
       console.error('Concert booking error:', error);
