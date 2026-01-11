@@ -85,6 +85,20 @@ const getRecipientEmail = (categoryName: string): string => {
   return CATEGORY_EMAIL_MAP[normalizedCategory] || 'Finance.igmcrisigma@gmail.com';
 };
 
+// Helper function to get the proper screenshot URL
+const getScreenshotUrl = (url: string | undefined): string => {
+  if (!url) return '';
+  
+  // If it's already a full URL, return as-is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // Otherwise, construct the public URL from the filename
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  return `${supabaseUrl}/storage/v1/object/public/payment-screenshots/${url}`;
+};
+
 // Send event registration confirmation email directly via EmailJS
 export const sendEventRegistrationEmail = async (params: EventEmailParams): Promise<boolean> => {
   try {
@@ -122,7 +136,7 @@ export const sendEventRegistrationEmail = async (params: EventEmailParams): Prom
       coupon_code: params.couponCode || 'Not applied',
       participant_category: params.participantCategory || 'student',
       registration_date: registrationDate,
-      payment_screenshot_url: params.payment_screenshot_url || '',
+      payment_screenshot_url: getScreenshotUrl(params.payment_screenshot_url),
     };
 
     console.log('Using service:', EMAILJS_SERVICE_ID, 'template:', EMAILJS_EVENT_TEMPLATE_ID);

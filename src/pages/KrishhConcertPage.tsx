@@ -364,8 +364,9 @@ const KrishhConcertPage = () => {
         throw new Error('Failed to upload payment screenshot');
       }
 
-      // Store file path (bucket is private, admins access via signed URLs)
-      const paymentScreenshotUrl = fileName;
+      // Store full public URL
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const paymentScreenshotUrl = `${supabaseUrl}/storage/v1/object/public/payment-screenshots/${fileName}`;
 
       const { error } = await supabase
         .from('concert_bookings')
