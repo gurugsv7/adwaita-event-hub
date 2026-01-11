@@ -8,7 +8,7 @@ const quickLinks = [{
   href: "/events"
 }, {
   name: "Delegate Pass",
-  href: "/delegate"
+  href: "/delegate-pass"
 }, {
   name: "Krishh Concert",
   href: "/krishh"
@@ -36,10 +36,10 @@ const competitions = [{
   href: "/events/photography"
 }, {
   name: "Graphic Designing",
-  href: "/events/design"
+  href: "/events/graphix"
 }, {
   name: "Social Service",
-  href: "/events/social-service"
+  href: "/events/ssc"
 }, {
   name: "Other",
   href: "/events/other"
