@@ -37,7 +37,7 @@ const Index = () => {
   return (
     <>
       <Helmet>
-        <title>ADWAITA 2026 | National Level Inter-Collegiate Cultural Fest</title>
+        <title>ADWAITA 2026 | National Level Cultural Fest | Feb 12-14</title>
         <meta
           name="description"
           content="ADWAITA 2026 - The grandest inter-college cultural extravaganza with 50+ events, ₹5,50,000 prize pool. Join participants from 100+ colleges. Feb 12-14, 2026 at IGMCRI Puducherry."
