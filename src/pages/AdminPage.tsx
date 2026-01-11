@@ -15,6 +15,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+// Helper function to get the proper screenshot URL
+const getScreenshotUrl = (url: string | null): string | null => {
+  if (!url) return null;
+  
+  // If it's already a full URL, return as-is
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  
+  // Otherwise, construct the public URL from the filename
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+  return `${supabaseUrl}/storage/v1/object/public/payment-screenshots/${url}`;
+};
+
 interface Registration {
   id: string;
   registration_id: string;
@@ -580,7 +594,7 @@ const AdminPage = () => {
                         <TableCell>
                           {booking.payment_screenshot_url ? (
                             <a 
-                              href={booking.payment_screenshot_url} 
+                              href={getScreenshotUrl(booking.payment_screenshot_url) || '#'} 
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
@@ -711,7 +725,7 @@ const AdminPage = () => {
                         <TableCell>
                           {delegate.payment_screenshot_url ? (
                             <a 
-                              href={delegate.payment_screenshot_url} 
+                              href={getScreenshotUrl(delegate.payment_screenshot_url) || '#'} 
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1 text-primary hover:underline text-sm"
@@ -827,7 +841,7 @@ const AdminPage = () => {
                       <TableCell>
                         {reg.payment_screenshot_url ? (
                           <a 
-                            href={reg.payment_screenshot_url} 
+                            href={getScreenshotUrl(reg.payment_screenshot_url) || '#'} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 text-primary hover:underline text-sm"

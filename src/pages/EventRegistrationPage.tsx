@@ -270,8 +270,9 @@ const EventRegistrationPage = () => {
           throw new Error('Failed to upload payment screenshot');
         }
 
-        // Store file path (bucket is private, admins access via signed URLs)
-        paymentScreenshotUrl = fileName;
+        // Store full public URL
+        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+        paymentScreenshotUrl = `${supabaseUrl}/storage/v1/object/public/payment-screenshots/${fileName}`;
       }
 
       // Save registration to database
