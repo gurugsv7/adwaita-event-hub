@@ -1,14 +1,15 @@
 import emailjs from '@emailjs/browser';
 
 // EmailJS Configuration - Event/Delegate Registrations (Adwaita service)
-const EMAILJS_PUBLIC_KEY = 'mw9M-R2Mvq5LzTBsG';
-const EMAILJS_SERVICE_ID = 'service_t9xdm2r'; // Adwaita service
-const EMAILJS_EVENT_TEMPLATE_ID = 'template_0hk3wmo';
-const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_0hk3wmo';
+const EMAILJS_PUBLIC_KEY = 'acbz69d146b3J-jEm';
+const EMAILJS_SERVICE_ID = 'service_wtt60xf';
+const EMAILJS_EVENT_TEMPLATE_ID = 'template_0uzpwjc';
+const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_kh3a565';
 
-// EmailJS Configuration - Krishh Concert (Gmail service)
-const EMAILJS_CONCERT_SERVICE_ID = 'service_8s3w4ew'; // Gmail service for Krishh
-const EMAILJS_CONCERT_TEMPLATE_ID = 'template_dxzrdld';
+// EmailJS Configuration - Krishh Concert (separate service)
+const EMAILJS_CONCERT_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';
+const EMAILJS_CONCERT_SERVICE_ID = 'service_kh999ms';
+const EMAILJS_CONCERT_TEMPLATE_ID = 'template_a8l2tnc';
 
 // Category-based email mapping for CC/incharge notifications
 const CATEGORY_EMAIL_MAP: Record<string, string> = {
@@ -206,11 +207,17 @@ export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promi
 
     console.log('Sending concert email with service:', EMAILJS_CONCERT_SERVICE_ID, 'template:', EMAILJS_CONCERT_TEMPLATE_ID);
     
+    // Initialize with concert-specific public key for this call
+    emailjs.init(EMAILJS_CONCERT_PUBLIC_KEY);
+    
     const response = await emailjs.send(
       EMAILJS_CONCERT_SERVICE_ID,
       EMAILJS_CONCERT_TEMPLATE_ID,
       templateParams
     );
+    
+    // Re-initialize with main public key
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 
     console.log('Concert booking email sent successfully:', response);
     return response.status === 200;
