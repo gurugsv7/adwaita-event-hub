@@ -227,6 +227,8 @@ const DelegatePassPage = () => {
         title: "Registration successful!",
         description: `Your Delegate ID: ${delegateId}. Your ${selectedPass?.name} pass will be verified shortly.`,
       });
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
 
       // Reset form
       setFormData({

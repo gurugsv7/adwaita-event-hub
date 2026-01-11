@@ -300,6 +300,7 @@ const EventRegistrationPage = () => {
 
       setRegistrationId(regId);
       setIsSuccess(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       
       // Send confirmation email to college
       sendEventRegistrationEmail({
