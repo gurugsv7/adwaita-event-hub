@@ -168,9 +168,9 @@ export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promis
       to_email: 'Finance.igmcrisigma@gmail.com', // Send to finance team only
       to_name: 'Delegate Pass Incharge',
       delegate_id: params.delegateId,
-      name: params.name,
-      email: params.email, // Registrant's email for reference
-      phone: params.phone,
+      delegate_name: params.name,
+      delegate_email: params.email,
+      delegate_phone: params.phone,
       institution: params.institution,
       tier_name: params.tierName,
       tier_price: `₹${params.tierPrice}`,
