@@ -717,6 +717,31 @@ export const categories: Category[] = [
           "Check brochure for detailed rules"
         ],
       },
+      {
+        id: "throwball-mens",
+        title: "Throwball (Men)",
+        description: "Knockout/league format based on registrations. Maximum 10 members per team. 3 sets with 25 points each. Rally and service points considered. TFI rules apply. Check brochure for rules.",
+        category: "Sports",
+        fee: 500,
+        teamType: "Team (10)",
+        day: "9-14 Feb 2026",
+        duration: "3 sets (25 pts each)",
+        status: "Open",
+        deadline: "Feb 5, 2026",
+        incharge: { name: "ManiBalan", phone: "8525053285" },
+        prizes: { first: 0, second: 0, third: 0 },
+        rules: [
+          "Format: Knockout/league based on number of registrations",
+          "Medical undergraduates and CRMI are allowed. Postgraduates are not allowed",
+          "A maximum of 10 members are allowed in the boys team",
+          "There will be 3 sets with 25 points each. Rally and service points will be considered",
+          "Referee's decision will be final",
+          "All standard TFI rules apply",
+          "Teams who do not report on time will be disqualified",
+          "There may be changes to the schedule timings due to weather conditions",
+          "Check brochure for detailed rules"
+        ],
+      },
     ],
   },
   {
