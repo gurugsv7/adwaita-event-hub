@@ -141,7 +141,10 @@ export default function CategoryPage() {
                 {filteredEvents.map((event, index) => (
                   <ModernEventCard
                     key={event.id}
-                    event={event}
+                    event={{
+                      ...event,
+                      incharge: event.incharge
+                    }}
                     categoryId={category.id}
                     index={index}
                     borderColor={category.borderColor}

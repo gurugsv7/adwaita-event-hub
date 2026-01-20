@@ -7,7 +7,8 @@ import {
   Users, 
   Music, 
   Mic2,
-  Sparkles
+  Sparkles,
+  Phone
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ interface ModernEventCardProps {
     teamType: string;
     day: string;
     status: string;
+    incharge?: { name: string; phone: string } | { name: string; phone: string }[];
   };
   categoryId: string;
   index: number;
@@ -93,6 +95,15 @@ const getStatusConfig = (status: string) => {
         border: "border-red-500/40",
         glow: "shadow-red-500/30",
         dot: "bg-red-400",
+        pulse: false
+      };
+    case "Unavailable":
+      return {
+        bg: "bg-slate-500/20",
+        text: "text-slate-400",
+        border: "border-slate-500/40",
+        glow: "shadow-slate-500/30",
+        dot: "bg-slate-400",
         pulse: false
       };
     default:
@@ -311,36 +322,59 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
           </div>
 
           {/* CTA Button - Compact on mobile */}
-          <Link
-            to={`/${categoryId}/${event.id}`}
-            className={cn(
-              "relative flex items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
-              "bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10",
-              "hover:from-primary hover:via-primary hover:to-primary",
-              "text-primary hover:text-primary-foreground",
-              "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
-              "border border-primary/30 hover:border-primary",
-              "transition-all duration-500 ease-out",
-              "group/btn overflow-hidden",
-              isHovered && "scale-[1.02] shadow-lg shadow-primary/20"
-            )}
-          >
-            {/* Button Glow Effect */}
+          {event.status === "Unavailable" ? (
             <div className={cn(
-              "absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary",
-              "opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500",
-              "blur-xl -z-10"
-            )} />
-            
-            <span className="relative z-10">View Details & Register</span>
-            <ArrowRight 
-              size={16} 
+              "relative flex flex-col items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
+              "bg-slate-500/10",
+              "text-slate-400",
+              "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
+              "border border-slate-500/30"
+            )}>
+              <span>Currently Unavailable</span>
+              {event.incharge && (
+                <a
+                  href={`tel:${Array.isArray(event.incharge) ? event.incharge[0].phone : event.incharge.phone}`}
+                  className="flex items-center gap-2 text-secondary hover:text-secondary/80 transition-colors text-xs md:text-sm"
+                >
+                  <Phone size={14} />
+                  <span>
+                    Contact: {Array.isArray(event.incharge) ? event.incharge[0].name : event.incharge.name} - {Array.isArray(event.incharge) ? event.incharge[0].phone : event.incharge.phone}
+                  </span>
+                </a>
+              )}
+            </div>
+          ) : (
+            <Link
+              to={`/${categoryId}/${event.id}`}
               className={cn(
-                "relative z-10 transition-transform duration-300",
-                "group-hover/btn:translate-x-2"
-              )} 
-            />
-          </Link>
+                "relative flex items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
+                "bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10",
+                "hover:from-primary hover:via-primary hover:to-primary",
+                "text-primary hover:text-primary-foreground",
+                "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
+                "border border-primary/30 hover:border-primary",
+                "transition-all duration-500 ease-out",
+                "group/btn overflow-hidden",
+                isHovered && "scale-[1.02] shadow-lg shadow-primary/20"
+              )}
+            >
+              {/* Button Glow Effect */}
+              <div className={cn(
+                "absolute inset-0 bg-gradient-to-r from-primary via-secondary to-primary",
+                "opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500",
+                "blur-xl -z-10"
+              )} />
+              
+              <span className="relative z-10">View Details & Register</span>
+              <ArrowRight 
+                size={16} 
+                className={cn(
+                  "relative z-10 transition-transform duration-300",
+                  "group-hover/btn:translate-x-2"
+                )} 
+              />
+            </Link>
+          )}
         </div>
       </div>
     </div>
