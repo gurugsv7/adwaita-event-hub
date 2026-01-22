@@ -427,7 +427,10 @@ export const categories: Category[] = [
         duration: "15/20 overs",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Sanjeev R, Adhikesavan, Tholkkappiyan, Aswin EE", phone: "" },
+        incharge: [
+          { name: "Sanjeev", phone: "9150292809" },
+          { name: "Adhikesavan", phone: "6379519665" }
+        ],
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Format: 15 overs knockout (20 for semis/finals)",
@@ -449,7 +452,7 @@ export const categories: Category[] = [
         duration: "3 sets/match",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Thirumurugan, Naraian", phone: "" },
+        incharge: { name: "Thirumurugan", phone: "9952764586" },
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Min 8 players (6+2) per team",
@@ -491,7 +494,7 @@ export const categories: Category[] = [
         duration: "1 set (30 pts)",
         status: "Open",
         deadline: "Feb 5, 2026",
-        incharge: { name: "Thirumurugan, Naraian", phone: "" },
+        incharge: { name: "Thirumurugan", phone: "9952764586" },
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
           "Min 4 players (3+1) per team",
