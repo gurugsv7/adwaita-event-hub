@@ -756,7 +756,7 @@ export const categories: Category[] = [
         teamType: "Team (10)",
         day: "9-14 Feb 2026",
         duration: "3 sets (25 pts each)",
-        status: "Unavailable",
+        status: "Open",
         deadline: "Feb 5, 2026",
         incharge: { name: "ManiBalan", phone: "8525053285" },
         prizes: { first: 0, second: 0, third: 0 },
