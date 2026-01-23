@@ -1,8 +1,12 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /brochure-links
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin
+Disallow: /brochure-links
 
 User-agent: Twitterbot
 Allow: /
@@ -12,7 +16,7 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /brochure-links
 
 Sitemap: https://igmcrisigma.com/sitemap.xml
-
-Crawl-delay: 1
