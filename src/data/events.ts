@@ -1504,7 +1504,7 @@ export const categories: Category[] = [
         title: "Cricket Quiz",
         description: "Cricket knowledge quiz (IPL, Indian, International). 2-3/team, no inter-college. Prelims: all teams; top 15 advance. DELEGATE PASS NOT REQUIRED. Check brochure for rules.",
         category: "Other",
-        fee: 1150,
+        fee: 150,
         teamType: "Team (2-3)",
         day: "Feb 14, 2026",
         duration: "Multiple rounds",
