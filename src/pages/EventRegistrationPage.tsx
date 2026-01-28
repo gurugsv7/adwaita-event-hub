@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, Upload, Users, IndianRupee, Trophy, Clock, Phone, X, CheckCircle2, Loader2, QrCode, Calendar, MapPin, Tag } from "lucide-react";
+import { ArrowLeft, Upload, Users, IndianRupee, Trophy, Clock, Phone, X, CheckCircle2, Loader2, QrCode, Calendar, MapPin, Tag, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { categories } from "@/data/events";
 import { supabase } from "@/integrations/supabase/client";
@@ -111,6 +112,61 @@ const EventRegistrationPage = () => {
           </Button>
         </div>
       </div>
+    );
+  }
+
+  // Handle closed registration
+  if (eventInfo.status === "Closed") {
+    return (
+      <>
+        <Helmet>
+          <title>Registration Closed | {eventInfo.title} | ADWAITA 2026</title>
+        </Helmet>
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <Dialog open={true} onOpenChange={() => navigate("/events")}>
+            <DialogContent className="sm:max-w-md bg-card border-red-500/30">
+              <DialogHeader className="text-center sm:text-center">
+                <div className="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <XCircle className="w-8 h-8 text-red-400" />
+                </div>
+                <DialogTitle className="text-2xl font-heading text-foreground">
+                  Registration Closed
+                </DialogTitle>
+                <DialogDescription className="text-silver/80 text-base mt-2">
+                  Registration for <span className="text-primary font-semibold">{eventInfo.title}</span> is now closed.
+                </DialogDescription>
+              </DialogHeader>
+              <div className="bg-background/50 border border-border/40 rounded-xl p-4 my-4">
+                <p className="text-sm text-silver/70 text-center">
+                  Thank you for your interest! The registration deadline has passed. Please check out our other events.
+                </p>
+              </div>
+              {eventInfo.incharge && (
+                <div className="text-center text-sm text-silver/60">
+                  <p>For queries, contact:</p>
+                  <a
+                    href={`tel:${Array.isArray(eventInfo.incharge) ? eventInfo.incharge[0].phone : eventInfo.incharge.phone}`}
+                    className="text-secondary hover:text-secondary/80 transition-colors"
+                  >
+                    {Array.isArray(eventInfo.incharge) ? eventInfo.incharge[0].name : eventInfo.incharge.name} - {Array.isArray(eventInfo.incharge) ? eventInfo.incharge[0].phone : eventInfo.incharge.phone}
+                  </a>
+                </div>
+              )}
+              <DialogFooter className="sm:justify-center mt-4">
+                <Button 
+                  onClick={() => navigate("/events")} 
+                  className="bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-90 w-full sm:w-auto"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to Events
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+          <Footer />
+        </div>
+      </>
     );
   }
 

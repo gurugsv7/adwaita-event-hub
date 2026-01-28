@@ -322,7 +322,28 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
           </div>
 
           {/* CTA Button - Compact on mobile */}
-          {event.status === "Unavailable" ? (
+          {event.status === "Closed" ? (
+            <div className={cn(
+              "relative flex flex-col items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
+              "bg-red-500/10",
+              "text-red-400",
+              "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
+              "border border-red-500/30"
+            )}>
+              <span>Registration Closed</span>
+              {event.incharge && (
+                <a
+                  href={`tel:${Array.isArray(event.incharge) ? event.incharge[0].phone : event.incharge.phone}`}
+                  className="flex items-center gap-2 text-silver/70 hover:text-silver transition-colors text-xs md:text-sm"
+                >
+                  <Phone size={14} />
+                  <span>
+                    Contact: {Array.isArray(event.incharge) ? event.incharge[0].name : event.incharge.name} - {Array.isArray(event.incharge) ? event.incharge[0].phone : event.incharge.phone}
+                  </span>
+                </a>
+              )}
+            </div>
+          ) : event.status === "Unavailable" ? (
             <div className={cn(
               "relative flex flex-col items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
               "bg-slate-500/10",
