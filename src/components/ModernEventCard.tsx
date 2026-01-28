@@ -325,16 +325,17 @@ export function ModernEventCard({ event, categoryId, index, borderColor }: Moder
           {event.status === "Closed" ? (
             <div className={cn(
               "relative flex flex-col items-center justify-center gap-2 w-full py-2.5 md:py-3 px-4",
-              "bg-red-500/10",
-              "text-red-400",
+              "bg-gray-500/10",
+              "text-gray-400",
               "font-semibold text-sm md:text-base rounded-lg md:rounded-xl",
-              "border border-red-500/30"
+              "border border-gray-500/30",
+              "opacity-70"
             )}>
               <span>Registration Closed</span>
               {event.incharge && (
                 <a
                   href={`tel:${Array.isArray(event.incharge) ? event.incharge[0].phone : event.incharge.phone}`}
-                  className="flex items-center gap-2 text-silver/70 hover:text-silver transition-colors text-xs md:text-sm"
+                  className="flex items-center gap-2 text-silver/60 hover:text-silver transition-colors text-xs md:text-sm"
                 >
                   <Phone size={14} />
                   <span>
