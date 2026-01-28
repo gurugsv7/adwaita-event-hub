@@ -425,7 +425,7 @@ export const categories: Category[] = [
         teamType: "Team (11-15)",
         day: "9-14 Feb 2026",
         duration: "15/20 overs",
-        status: "Open",
+        status: "Closed",
         deadline: "Feb 5, 2026",
         incharge: [
           { name: "Sanjeev", phone: "9150292809" },
