@@ -183,25 +183,44 @@ const AdminPage = () => {
         body: { password, eventId: null }
       });
 
-      if (error) throw error;
-
-      if (data.error) {
+      // Handle edge function errors (including 401 for invalid password)
+      if (error) {
+        // Check if it's an authentication error (401)
+        const isAuthError = error.message?.includes('non-2xx') || 
+                           error.message?.includes('401') ||
+                           error.message?.includes('Unauthorized');
+        
         toast({
           title: "Access Denied",
-          description: "Invalid password. Please try again.",
+          description: isAuthError 
+            ? "Invalid password. Please check and try again." 
+            : "Unable to connect. Please try again later.",
           variant: "destructive",
         });
-      } else {
-        setIsAuthenticated(true);
-        toast({
-          title: "Welcome Admin",
-          description: "You now have access to registration data.",
-        });
+        return;
       }
-    } catch (error: any) {
+
+      // Handle error in response data
+      if (data?.error) {
+        toast({
+          title: "Access Denied",
+          description: "Invalid password. Please check and try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Success
+      setIsAuthenticated(true);
       toast({
-        title: "Error",
-        description: error.message || "Failed to authenticate",
+        title: "Welcome Admin",
+        description: "You now have access to registration data.",
+      });
+    } catch (error: any) {
+      // Catch-all for unexpected errors - still show user-friendly message
+      toast({
+        title: "Access Denied",
+        description: "Invalid password or connection issue. Please try again.",
         variant: "destructive",
       });
     } finally {
