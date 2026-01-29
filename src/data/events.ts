@@ -1423,6 +1423,33 @@ export const categories: Category[] = [
           "Check brochure for detailed rules"
         ],
       },
+      {
+        id: "clash-royale",
+        title: "Clash Royale",
+        description: "1v1 mobile tournament via Friendly Battles. Tournament Standard levels (Level 11 cap). Best of 3 series or single game. Mobile only, no emulators. DELEGATE PASS NOT REQUIRED.",
+        category: "Technical",
+        fee: 75,
+        teamType: "Individual",
+        day: "Online Event",
+        duration: "Tournament",
+        status: "Open",
+        deadline: "Feb 3, 2026",
+        incharge: [
+          { name: "Mukhesh", phone: "6385642206" },
+          { name: "Sudarshan", phone: "9487834797" }
+        ],
+        prizes: { first: 1000, second: 0, third: 0 },
+        rules: [
+          "1v1 Friendly Battles, Tournament Standard (Level 11 cap)",
+          "Add organizer to Friends List or join Tournament Clan",
+          "Be ready within 5 min of scheduled time or face disqualification",
+          "Deck changes allowed between rounds (not during a game)",
+          "Mobile only, no emulators or third-party software",
+          "Screenshot Victory/Defeat screen for disputes",
+          "Toxic behavior, BM, or cheating = disqualification",
+          "DELEGATE PASS NOT REQUIRED"
+        ],
+      },
     ],
   },
   {
