@@ -570,7 +570,7 @@ export const categories: Category[] = [
       },
       {
         id: "futsal",
-        title: "Futsal",
+        title: "Futsal (Men)",
         description: "Knockout format. 2 halves (10 min each). 5 players on field, 3 subs. Multiple teams per college allowed. One PG allowed. Check brochure for rules.",
         category: "Sports",
         fee: 2000,
@@ -707,12 +707,12 @@ export const categories: Category[] = [
         ],
       },
       {
-        id: "carrom",
-        title: "Carom",
-        description: "Match between 2 or 4 players. First to 21 points qualifies. All rounds knockout. International rules. Check brochure for rules.",
+        id: "carrom-singles",
+        title: "Carrom (Singles)",
+        description: "Singles match. First to 21 points qualifies. All rounds knockout. International rules. Check brochure for rules.",
         category: "Sports",
         fee: 200,
-        teamType: "Individual/Team (2/4)",
+        teamType: "Individual",
         day: "Feb 14, 2026",
         duration: "Knockout",
         status: "Open",
@@ -720,7 +720,29 @@ export const categories: Category[] = [
         incharge: { name: "Ajay Ramkumar, Kavimugilan", phone: "" },
         prizes: { first: 0, second: 0, third: 0 },
         rules: [
-          "Match between 2 or 4 players",
+          "Singles match (1v1)",
+          "First to 21 points qualifies",
+          "All rounds knockout",
+          "International rules apply",
+          "Thumbing and scissoring NOT allowed",
+          "Check brochure for detailed rules"
+        ],
+      },
+      {
+        id: "carrom-doubles",
+        title: "Carrom (Doubles)",
+        description: "Doubles match (2v2). First to 21 points qualifies. All rounds knockout. International rules. Check brochure for rules.",
+        category: "Sports",
+        fee: 400,
+        teamType: "Team (2)",
+        day: "Feb 14, 2026",
+        duration: "Knockout",
+        status: "Open",
+        deadline: "Feb 5, 2026",
+        incharge: { name: "Ajay Ramkumar, Kavimugilan", phone: "" },
+        prizes: { first: 0, second: 0, third: 0 },
+        rules: [
+          "Doubles match (2v2)",
           "First to 21 points qualifies",
           "All rounds knockout",
           "International rules apply",
@@ -1434,10 +1456,7 @@ export const categories: Category[] = [
         duration: "Tournament",
         status: "Open",
         deadline: "Feb 3, 2026",
-        incharge: [
-          { name: "Mukhesh", phone: "6385642206" },
-          { name: "Sudarshan", phone: "9487834797" }
-        ],
+        incharge: { name: "Tamizhamudan", phone: "+91 88388 10278" },
         prizes: { first: 1000, second: 0, third: 0 },
         rules: [
           "1v1 Friendly Battles, Tournament Standard (Level 11 cap)",
