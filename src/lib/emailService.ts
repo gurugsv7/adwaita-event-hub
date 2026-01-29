@@ -1,10 +1,10 @@
 import emailjs from '@emailjs/browser';
 
 // EmailJS Configuration - Event/Delegate Registrations (Adwaita service)
-const EMAILJS_PUBLIC_KEY = 'acbz69d146b3J-jEm';
-const EMAILJS_SERVICE_ID = 'service_wtt60xf';
-const EMAILJS_EVENT_TEMPLATE_ID = 'template_0uzpwjc';
-const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_kh3a565';
+const EMAILJS_PUBLIC_KEY = 'f-VdqHUtV-R0sEPtP';
+const EMAILJS_SERVICE_ID = 'service_6r70a0t';
+const EMAILJS_EVENT_TEMPLATE_ID = 'template_p0soq8j';
+const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_gulqv0a';
 
 // EmailJS Configuration - Krishh Concert (separate service)
 const EMAILJS_CONCERT_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';

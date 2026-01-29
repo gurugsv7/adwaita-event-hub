@@ -6,10 +6,10 @@ const corsHeaders = {
 };
 
 // EmailJS configuration from environment variables
-const EMAILJS_SERVICE_ID = Deno.env.get('EMAILJS_SERVICE_ID') || 'service_wtt60xf';
-const EMAILJS_PUBLIC_KEY = Deno.env.get('EMAILJS_PUBLIC_KEY') || 'acbz69d146b3J-jEm';
-const EMAILJS_EVENT_TEMPLATE_ID = Deno.env.get('EMAILJS_EVENT_TEMPLATE_ID') || 'template_0uzpwjc';
-const EMAILJS_DELEGATE_TEMPLATE_ID = Deno.env.get('EMAILJS_DELEGATE_TEMPLATE_ID') || 'template_kh3a565';
+const EMAILJS_SERVICE_ID = Deno.env.get('EMAILJS_SERVICE_ID') || 'service_6r70a0t';
+const EMAILJS_PUBLIC_KEY = Deno.env.get('EMAILJS_PUBLIC_KEY') || 'f-VdqHUtV-R0sEPtP';
+const EMAILJS_EVENT_TEMPLATE_ID = Deno.env.get('EMAILJS_EVENT_TEMPLATE_ID') || 'template_p0soq8j';
+const EMAILJS_DELEGATE_TEMPLATE_ID = Deno.env.get('EMAILJS_DELEGATE_TEMPLATE_ID') || 'template_gulqv0a';
 
 // Krishh Concert uses separate EmailJS account
 const EMAILJS_CONCERT_SERVICE_ID = 'service_kh999ms';
