@@ -101,6 +101,14 @@ const DelegatePassPage = () => {
   });
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [registrationDetails, setRegistrationDetails] = useState<{
+    delegateId: string;
+    name: string;
+    email: string;
+    tierName: string;
+    tierPrice: number;
+  } | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -224,22 +232,21 @@ const DelegatePassPage = () => {
         tierPrice: selectedPass?.price || 0,
       }).catch(err => console.error('Email send failed:', err));
 
-      toast({
-        title: "Registration successful!",
-        description: `Your Delegate ID: ${delegateId}. Your ${selectedPass?.name} pass will be verified shortly.`,
+      // Set success state with registration details
+      setRegistrationDetails({
+        delegateId,
+        name: formData.fullName.trim(),
+        email: formData.email.trim().toLowerCase(),
+        tierName: selectedPass?.name || selectedTier,
+        tierPrice: selectedPass?.price || 0,
       });
-      
+      setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Reset form
-      setFormData({
-        fullName: "",
-        email: "",
-        phone: "",
-        institution: "",
+      toast({
+        title: "Registration successful!",
+        description: `Your Delegate ID: ${delegateId}`,
       });
-      setSelectedTier("");
-      setPaymentScreenshot(null);
       
     } catch (error: any) {
       console.error('Delegate registration error:', error);
@@ -252,6 +259,72 @@ const DelegatePassPage = () => {
       setIsSubmitting(false);
     }
   };
+
+  // Success Screen
+  if (isSuccess && registrationDetails) {
+    return (
+      <>
+        <Helmet>
+          <title>Registration Successful | Delegate Pass | ADWAITA 2026</title>
+        </Helmet>
+        <div className="min-h-screen bg-background">
+          <Navbar />
+          <main className="pt-24 pb-16">
+            <div className="container mx-auto px-4 max-w-2xl">
+              <div className="bg-card border border-gold/30 rounded-3xl p-8 text-center">
+                <div className="w-20 h-20 bg-gradient-to-br from-gold to-primary rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CheckCircle2 className="w-10 h-10 text-charcoal" />
+                </div>
+                <h1 className="font-heading text-3xl text-foreground mb-4">Registration Successful!</h1>
+                <p className="text-silver mb-6">
+                  Your <span className="text-gold font-semibold">{registrationDetails.tierName}</span> delegate pass has been registered.
+                </p>
+                
+                <div className="bg-background/50 border border-gold/20 rounded-xl p-4 mb-6">
+                  <p className="text-sm text-silver/70 mb-1">Your Delegate ID</p>
+                  <p className="text-2xl font-heading text-gold">{registrationDetails.delegateId}</p>
+                </div>
+
+                <div className="bg-background/50 border border-gold/10 rounded-xl p-4 mb-6 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-silver/70">Name:</span>
+                    <span className="text-foreground">{registrationDetails.name}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-silver/70">Email:</span>
+                    <span className="text-foreground">{registrationDetails.email}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-silver/70">Pass:</span>
+                    <span className="text-gold">{registrationDetails.tierName}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-silver/70">Amount Paid:</span>
+                    <span className="text-teal">₹{registrationDetails.tierPrice}</span>
+                  </div>
+                </div>
+
+                <p className="text-sm text-silver/60 mb-8">
+                  Please save this ID for future reference. A confirmation email will be sent to <span className="text-teal">{registrationDetails.email}</span>. 
+                  Your pass will be verified within 24-48 hours.
+                </p>
+
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <Button onClick={() => navigate("/")} variant="outline">
+                    Back to Home
+                  </Button>
+                  <Button onClick={() => navigate("/events")} className="bg-gradient-to-r from-gold to-primary text-charcoal">
+                    Register for Events
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
