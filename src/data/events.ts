@@ -1469,6 +1469,36 @@ export const categories: Category[] = [
           "DELEGATE PASS NOT REQUIRED"
         ],
       },
+      {
+        id: "free-fire",
+        title: "Free Fire",
+        description: "Battle Royale or Clash Squad tournament (based on entries). 4 players per team. Mobile only, no emulators. DELEGATE PASS NOT REQUIRED. Check brochure for rules.",
+        category: "Technical",
+        fee: 200,
+        teamType: "Team (4)",
+        day: "Online Event",
+        duration: "Tournament",
+        status: "Open",
+        deadline: "Feb 10, 2026",
+        incharge: [
+          { name: "Aakash", phone: "+91 93632 09327" },
+          { name: "Ryan", phone: "+91 90927 27819" }
+        ],
+        prizes: { first: 2000, second: 0, third: 0 },
+        rules: [
+          "4 players per team (no substitutions mid-match)",
+          "One designated captain per team",
+          "Submit Team Name, IGN, and UID during registration",
+          "Mobile only - no emulators or PCs allowed",
+          "No VPN, hacks, or third-party tools - instant disqualification",
+          "Join custom lobby within 5 min of receiving ID/Password",
+          "Map Pool: Bermuda, Kalahari, Purgatory (random)",
+          "Character Skills and Gun Properties OFF",
+          "Screen recording required (mobile/external software only)",
+          "Abusive language or misconduct = disqualification",
+          "DELEGATE PASS NOT REQUIRED"
+        ],
+      },
     ],
   },
   {

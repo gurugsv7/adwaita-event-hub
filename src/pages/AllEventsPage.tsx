@@ -91,9 +91,9 @@ const allCategories = [
     id: "technical",
     title: "Technical",
     description:
-      "Gaming events - COD, BGMI, Brawl Stars, Clash Royale. Compete and dominate.",
-    eventCount: 4,
-    prizePool: "₹7,000",
+      "Gaming events - COD, BGMI, Free Fire, Brawl Stars, Clash Royale. Compete and dominate.",
+    eventCount: 5,
+    prizePool: "₹9,000",
     accentColor: "orange" as const,
     image: technicalImg,
     featured: true,
