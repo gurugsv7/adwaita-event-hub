@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck } from "lucide-react";
+import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck, ClipboardList } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Helper function to get the proper screenshot URL
@@ -405,6 +405,26 @@ const AdminPage = () => {
             <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
             <p className="text-muted-foreground mt-2">Select an event or view concert bookings</p>
           </div>
+
+          {/* Total Event Registrations Card */}
+          <Card className="mb-6 bg-gradient-to-r from-amber-500/10 to-orange-500/10 border-amber-500/30">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-r from-amber-500 to-orange-500 rounded-full flex items-center justify-center">
+                    <ClipboardList className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">Total Event Registrations</h3>
+                    <p className="text-muted-foreground text-sm">Combined registrations across all events</p>
+                  </div>
+                </div>
+                <span className="bg-amber-500/20 text-amber-500 text-2xl font-bold px-5 py-3 rounded-full">
+                  {Object.values(eventCounts).reduce((sum, count) => sum + count, 0)}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Special Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
