@@ -5,8 +5,15 @@ import { Footer } from "@/components/Footer";
 import {
   ArrowLeft, Heart, Music, Calendar, MapPin, Clock,
   User, Mail, Phone, Upload, X, CheckCircle2,
-  Sparkles, Users, Ticket, Star, Mic2, Zap
+  Sparkles, Users, Ticket, Star, Mic2, Zap, ChevronDown
 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Helmet } from "react-helmet";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -161,6 +168,7 @@ const KrishhConcertPage = () => {
     partnerName: "",
     partnerPhone: "",
   });
+  const [ticketQuantity, setTicketQuantity] = useState<number>(1);
   const [paymentScreenshot, setPaymentScreenshot] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -171,6 +179,7 @@ const KrishhConcertPage = () => {
     email: string;
     ticketType: string;
     ticketPrice: number;
+    ticketQuantity: number;
     partnerName?: string;
   } | null>(null);
   const { toast } = useToast();
@@ -293,6 +302,8 @@ const KrishhConcertPage = () => {
   };
 
   const selectedTicketInfo = ticketTypes.find((t) => t.id === selectedTicket);
+  const totalPrice = (selectedTicketInfo?.price || 0) * ticketQuantity;
+  const totalPersons = selectedTicket === "couple" ? ticketQuantity * 2 : ticketQuantity;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -374,9 +385,9 @@ const KrishhConcertPage = () => {
           name: formData.fullName.trim(),
           email: formData.email.trim().toLowerCase(),
           phone: formData.phone.trim(),
-          institution: 'Open Public',
+          institution: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket} (${totalPersons} persons)`,
           ticket_type: selectedTicket,
-          ticket_price: selectedTicketInfo?.price || 0,
+          ticket_price: totalPrice,
           partner_name: selectedTicket === "couple" ? formData.partnerName.trim() : null,
           partner_phone: selectedTicket === "couple" ? formData.partnerPhone.trim() : null,
           payment_status: 'pending',
@@ -393,9 +404,9 @@ const KrishhConcertPage = () => {
         name: formData.fullName.trim(),
         email: formData.email.trim().toLowerCase(),
         phone: formData.phone.trim(),
-        institution: 'Open Public',
-        ticketType: selectedTicketInfo?.name || selectedTicket,
-        ticketPrice: selectedTicketInfo?.price || 0,
+        institution: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket} (${totalPersons} persons)`,
+        ticketType: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket}`,
+        ticketPrice: totalPrice,
         partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
         partnerPhone: selectedTicket === "couple" ? formData.partnerPhone.trim() : undefined,
       }).catch(err => console.error('Email send failed:', err));
@@ -405,8 +416,9 @@ const KrishhConcertPage = () => {
         bookingId,
         name: formData.fullName.trim(),
         email: formData.email.trim().toLowerCase(),
-        ticketType: selectedTicketInfo?.name || selectedTicket,
-        ticketPrice: selectedTicketInfo?.price || 0,
+        ticketType: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket}`,
+        ticketPrice: totalPrice,
+        ticketQuantity,
         partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
       });
       setIsSuccess(true);
@@ -899,10 +911,18 @@ const KrishhConcertPage = () => {
                     </div>
 
                     <div className="text-center md:text-left">
-                      <p className="text-gray-300 text-lg mb-2">
-                        Pay <span className="text-concert-cyan font-bold text-xl neon-cyan">₹{selectedTicketInfo?.price || '---'}</span>
+                      <p className="text-gray-300 text-lg mb-1">
+                        Pay <span className="text-concert-cyan font-bold text-2xl neon-cyan">₹{totalPrice || '---'}</span>
                       </p>
-                      <p className="text-sm text-gray-500">
+                      {ticketQuantity > 1 && selectedTicketInfo && (
+                        <p className="text-sm text-gray-400 mb-1">
+                          {ticketQuantity} × ₹{selectedTicketInfo.price} = ₹{totalPrice}
+                        </p>
+                      )}
+                      <p className="text-sm text-gray-400">
+                        {totalPersons > 0 ? `${totalPersons} person${totalPersons > 1 ? 's' : ''} entry` : 'Select ticket type'}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
                         Scan to pay • Upload screenshot below
                       </p>
                     </div>
@@ -979,6 +999,53 @@ const KrishhConcertPage = () => {
                       />
                     </div>
 
+                    {/* Number of Tickets */}
+                    {selectedTicket && (
+                      <div className="space-y-2">
+                        <Label className="text-sm text-gray-400 flex items-center gap-2">
+                          <Ticket className="w-4 h-4 text-concert-cyan" />
+                          Number of Tickets <span className="text-concert-pink">*</span>
+                        </Label>
+                        <Select
+                          value={String(ticketQuantity)}
+                          onValueChange={(value) => setTicketQuantity(parseInt(value))}
+                        >
+                          <SelectTrigger className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white focus:border-concert-cyan transition-all duration-300">
+                            <SelectValue placeholder="Select quantity" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-concert-deep border-2 border-concert-purple-light/50 rounded-xl z-50">
+                            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                              <SelectItem
+                                key={num}
+                                value={String(num)}
+                                className="text-white hover:bg-concert-purple-light/30 focus:bg-concert-purple-light/30 cursor-pointer"
+                              >
+                                {num} {num === 1 ? 'Ticket' : 'Tickets'} - ₹{(selectedTicketInfo?.price || 0) * num}
+                                {selectedTicket === 'couple' && ` (${num * 2} persons)`}
+                                {selectedTicket === 'stag' && num > 1 && ` (${num} persons)`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        
+                        {/* Price Summary */}
+                        <div className="mt-3 p-4 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(0,255,217,0.1), rgba(255,27,159,0.1))', border: '1px solid rgba(0,255,217,0.3)' }}>
+                          <div className="flex justify-between items-center">
+                            <span className="text-gray-400">
+                              {ticketQuantity} × {selectedTicketInfo?.name}
+                            </span>
+                            <span className="text-white">₹{(selectedTicketInfo?.price || 0) * ticketQuantity}</span>
+                          </div>
+                          <div className="flex justify-between items-center mt-2 pt-2 border-t border-concert-purple-light/30">
+                            <span className="text-gray-300 font-semibold">Total Amount</span>
+                            <span className="text-concert-cyan font-bold text-xl neon-cyan">₹{totalPrice}</span>
+                          </div>
+                          <div className="text-xs text-gray-500 mt-2">
+                            Entry for {totalPersons} person{totalPersons > 1 ? 's' : ''}
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Partner details for couple ticket */}
                     {selectedTicket === "couple" && (
