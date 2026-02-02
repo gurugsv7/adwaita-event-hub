@@ -5,11 +5,15 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// EmailJS configuration from environment variables
+// EmailJS configuration - Event Registrations
 const EMAILJS_SERVICE_ID = Deno.env.get('EMAILJS_SERVICE_ID') || 'service_6r70a0t';
 const EMAILJS_PUBLIC_KEY = Deno.env.get('EMAILJS_PUBLIC_KEY') || 'f-VdqHUtV-R0sEPtP';
 const EMAILJS_EVENT_TEMPLATE_ID = Deno.env.get('EMAILJS_EVENT_TEMPLATE_ID') || 'template_p0soq8j';
-const EMAILJS_DELEGATE_TEMPLATE_ID = Deno.env.get('EMAILJS_DELEGATE_TEMPLATE_ID') || 'template_gulqv0a';
+
+// Delegate Pass uses separate EmailJS account
+const EMAILJS_DELEGATE_SERVICE_ID = 'service_kh999ms';
+const EMAILJS_DELEGATE_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';
+const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_pf3w0ha';
 
 // Krishh Concert uses separate EmailJS account
 const EMAILJS_CONCERT_SERVICE_ID = 'service_kh999ms';
@@ -183,7 +187,13 @@ const handleDelegateEmail = async (data: DelegateEmailRequest): Promise<boolean>
     registration_date: registrationDate,
   };
 
-  return sendEmailJS(EMAILJS_DELEGATE_TEMPLATE_ID, templateParams);
+  // Use separate EmailJS account for Delegate Pass
+  return sendEmailJS(
+    EMAILJS_DELEGATE_TEMPLATE_ID, 
+    templateParams,
+    EMAILJS_DELEGATE_SERVICE_ID,
+    EMAILJS_DELEGATE_PUBLIC_KEY
+  );
 };
 
 const handleConcertEmail = async (data: ConcertEmailRequest): Promise<boolean> => {
