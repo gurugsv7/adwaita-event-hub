@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import {
   ArrowLeft, Heart, Music, Calendar, MapPin, Clock,
-  User, Mail, Phone, Building2, Upload, X, CheckCircle2,
+  User, Mail, Phone, Upload, X, CheckCircle2,
   Sparkles, Users, Ticket, Star, Mic2, Zap
 } from "lucide-react";
 import { Helmet } from "react-helmet";
@@ -158,7 +158,6 @@ const KrishhConcertPage = () => {
     fullName: "",
     email: "",
     phone: "",
-    institution: "",
     partnerName: "",
     partnerPhone: "",
   });
@@ -298,7 +297,7 @@ const KrishhConcertPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.institution || !selectedTicket) {
+    if (!formData.fullName || !formData.email || !formData.phone || !selectedTicket) {
       toast({
         title: "Missing fields",
         description: "Please fill in all required fields",
@@ -375,7 +374,7 @@ const KrishhConcertPage = () => {
           name: formData.fullName.trim(),
           email: formData.email.trim().toLowerCase(),
           phone: formData.phone.trim(),
-          institution: formData.institution.trim(),
+          institution: 'Open Public',
           ticket_type: selectedTicket,
           ticket_price: selectedTicketInfo?.price || 0,
           partner_name: selectedTicket === "couple" ? formData.partnerName.trim() : null,
@@ -394,7 +393,7 @@ const KrishhConcertPage = () => {
         name: formData.fullName.trim(),
         email: formData.email.trim().toLowerCase(),
         phone: formData.phone.trim(),
-        institution: formData.institution.trim(),
+        institution: 'Open Public',
         ticketType: selectedTicketInfo?.name || selectedTicket,
         ticketPrice: selectedTicketInfo?.price || 0,
         partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
@@ -980,22 +979,6 @@ const KrishhConcertPage = () => {
                       />
                     </div>
 
-                    {/* Institution */}
-                    <div className="space-y-2">
-                      <Label htmlFor="institution" className="text-sm text-gray-400 flex items-center gap-2">
-                        <Building2 className="w-4 h-4 text-concert-cyan" />
-                        Institution <span className="text-concert-pink">*</span>
-                      </Label>
-                      <Input
-                        id="institution"
-                        name="institution"
-                        type="text"
-                        placeholder="Your college/institution name"
-                        value={formData.institution}
-                        onChange={handleInputChange}
-                        className="h-12 bg-concert-deep/80 border-2 border-concert-purple-light/50 rounded-xl text-white placeholder:text-gray-500 focus:border-concert-cyan input-glow transition-all duration-300"
-                      />
-                    </div>
 
                     {/* Partner details for couple ticket */}
                     {selectedTicket === "couple" && (
