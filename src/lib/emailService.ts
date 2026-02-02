@@ -1,10 +1,14 @@
 import emailjs from '@emailjs/browser';
 
-// EmailJS Configuration - Event/Delegate Registrations (Adwaita service)
+// EmailJS Configuration - Event Registrations (Adwaita service)
 const EMAILJS_PUBLIC_KEY = 'f-VdqHUtV-R0sEPtP';
 const EMAILJS_SERVICE_ID = 'service_6r70a0t';
 const EMAILJS_EVENT_TEMPLATE_ID = 'template_p0soq8j';
-const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_gulqv0a';
+
+// EmailJS Configuration - Delegate Pass (separate service)
+const EMAILJS_DELEGATE_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';
+const EMAILJS_DELEGATE_SERVICE_ID = 'service_kh999ms';
+const EMAILJS_DELEGATE_TEMPLATE_ID = 'template_pf3w0ha';
 
 // EmailJS Configuration - Krishh Concert (separate service)
 const EMAILJS_CONCERT_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';
@@ -155,7 +159,7 @@ export const sendEventRegistrationEmail = async (params: EventEmailParams): Prom
   }
 };
 
-// Send delegate pass confirmation email directly via EmailJS
+// Send delegate pass confirmation email directly via EmailJS (uses separate delegate service)
 export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promise<boolean> => {
   try {
     const registrationDate = new Date().toLocaleString('en-IN', {
@@ -177,18 +181,26 @@ export const sendDelegatePassEmail = async (params: DelegateEmailParams): Promis
       registration_date: registrationDate,
     };
 
-    console.log('Sending delegate email with service:', EMAILJS_SERVICE_ID, 'template:', EMAILJS_DELEGATE_TEMPLATE_ID);
+    console.log('Sending delegate email with service:', EMAILJS_DELEGATE_SERVICE_ID, 'template:', EMAILJS_DELEGATE_TEMPLATE_ID);
+    
+    // Initialize with delegate-specific public key for this call
+    emailjs.init(EMAILJS_DELEGATE_PUBLIC_KEY);
     
     const response = await emailjs.send(
-      EMAILJS_SERVICE_ID,
+      EMAILJS_DELEGATE_SERVICE_ID,
       EMAILJS_DELEGATE_TEMPLATE_ID,
       templateParams
     );
+    
+    // Re-initialize with main public key
+    emailjs.init(EMAILJS_PUBLIC_KEY);
 
     console.log('Delegate pass email sent successfully:', response);
     return response.status === 200;
   } catch (error) {
     console.error('Failed to send delegate pass email:', error);
+    // Re-initialize with main public key on error
+    emailjs.init(EMAILJS_PUBLIC_KEY);
     return false;
   }
 };
