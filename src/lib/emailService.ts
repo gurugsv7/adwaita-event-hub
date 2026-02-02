@@ -1,9 +1,9 @@
 import emailjs from '@emailjs/browser';
 
 // EmailJS Configuration - Event Registrations (Adwaita service)
-const EMAILJS_PUBLIC_KEY = 'f-VdqHUtV-R0sEPtP';
-const EMAILJS_SERVICE_ID = 'service_6r70a0t';
-const EMAILJS_EVENT_TEMPLATE_ID = 'template_p0soq8j';
+const EMAILJS_PUBLIC_KEY = 'mpWaG6BCMTapk477o';
+const EMAILJS_SERVICE_ID = 'service_51ld944';
+const EMAILJS_EVENT_TEMPLATE_ID = 'template_ujrecn4';
 
 // EmailJS Configuration - Delegate Pass (separate service)
 const EMAILJS_DELEGATE_PUBLIC_KEY = 'aW6oUkDunUsVZD8s8';

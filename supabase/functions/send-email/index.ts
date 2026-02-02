@@ -6,9 +6,9 @@ const corsHeaders = {
 };
 
 // EmailJS configuration - Event Registrations
-const EMAILJS_SERVICE_ID = Deno.env.get('EMAILJS_SERVICE_ID') || 'service_6r70a0t';
-const EMAILJS_PUBLIC_KEY = Deno.env.get('EMAILJS_PUBLIC_KEY') || 'f-VdqHUtV-R0sEPtP';
-const EMAILJS_EVENT_TEMPLATE_ID = Deno.env.get('EMAILJS_EVENT_TEMPLATE_ID') || 'template_p0soq8j';
+const EMAILJS_SERVICE_ID = 'service_51ld944';
+const EMAILJS_PUBLIC_KEY = 'mpWaG6BCMTapk477o';
+const EMAILJS_EVENT_TEMPLATE_ID = 'template_ujrecn4';
 
 // Delegate Pass uses separate EmailJS account
 const EMAILJS_DELEGATE_SERVICE_ID = 'service_kh999ms';
