@@ -81,6 +81,7 @@ interface ConcertEmailParams {
   ticketPrice: number;
   partnerName?: string;
   partnerPhone?: string;
+  payment_screenshot_url?: string;
 }
 
 // Helper function to get recipient email based on category
@@ -227,6 +228,7 @@ export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promi
       partner_name: params.partnerName || 'N/A',
       partner_phone: params.partnerPhone || 'N/A',
       booking_date: bookingDate,
+      payment_screenshot_url: getScreenshotUrl(params.payment_screenshot_url),
     };
 
     console.log('Sending concert email with service:', EMAILJS_CONCERT_SERVICE_ID, 'template:', EMAILJS_CONCERT_TEMPLATE_ID);
