@@ -409,6 +409,7 @@ const KrishhConcertPage = () => {
         ticketPrice: totalPrice,
         partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
         partnerPhone: selectedTicket === "couple" ? formData.partnerPhone.trim() : undefined,
+        payment_screenshot_url: paymentScreenshotUrl,
       }).catch(err => console.error('Email send failed:', err));
 
       // Set success state with booking details
