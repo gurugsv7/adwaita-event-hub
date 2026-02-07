@@ -34,6 +34,7 @@ const App = () => (
           <Route path="/brochure-links" element={<BrochureLinksPage />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* Clean URLs for event registration: /:categoryId/:eventId */}
+          <Route path="/events/:categoryId/:eventId" element={<EventRegistrationPage />} />
           <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
