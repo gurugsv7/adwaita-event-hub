@@ -399,18 +399,21 @@ const KrishhConcertPage = () => {
         throw error;
       }
 
-      sendConcertBookingEmail({
-        bookingId,
-        name: formData.fullName.trim(),
-        email: formData.email.trim().toLowerCase(),
-        phone: formData.phone.trim(),
-        institution: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket} (${totalPersons} persons)`,
-        ticketType: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket}`,
-        ticketPrice: totalPrice,
-        partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
-        partnerPhone: selectedTicket === "couple" ? formData.partnerPhone.trim() : undefined,
-        payment_screenshot_url: paymentScreenshotUrl,
-      }).catch(err => console.error('Email send failed:', err));
+      // Send confirmation email (non-blocking, never fails booking)
+      try {
+        sendConcertBookingEmail({
+          bookingId,
+          name: formData.fullName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          phone: formData.phone.trim(),
+          institution: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket} (${totalPersons} persons)`,
+          ticketType: `${ticketQuantity} x ${selectedTicketInfo?.name || selectedTicket}`,
+          ticketPrice: totalPrice,
+          partnerName: selectedTicket === "couple" ? formData.partnerName.trim() : undefined,
+          partnerPhone: selectedTicket === "couple" ? formData.partnerPhone.trim() : undefined,
+          payment_screenshot_url: paymentScreenshotUrl,
+        }).catch(() => {});
+      } catch (e) { /* email down - ignore */ }
 
       // Set success state with booking details
       setBookingDetails({
