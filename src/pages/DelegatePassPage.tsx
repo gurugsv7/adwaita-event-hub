@@ -221,16 +221,18 @@ const DelegatePassPage = () => {
         throw error;
       }
 
-      // Send confirmation email to college
-      sendDelegatePassEmail({
-        delegateId,
-        name: formData.fullName.trim(),
-        email: formData.email.trim().toLowerCase(),
-        phone: formData.phone.trim(),
-        institution: formData.institution.trim(),
-        tierName: selectedPass?.name || selectedTier,
-        tierPrice: selectedPass?.price || 0,
-      }).catch(err => console.error('Email send failed:', err));
+      // Send confirmation email (non-blocking, never fails registration)
+      try {
+        sendDelegatePassEmail({
+          delegateId,
+          name: formData.fullName.trim(),
+          email: formData.email.trim().toLowerCase(),
+          phone: formData.phone.trim(),
+          institution: formData.institution.trim(),
+          tierName: selectedPass?.name || selectedTier,
+          tierPrice: selectedPass?.price || 0,
+        }).catch(() => {});
+      } catch (e) { /* email down - ignore */ }
 
       // Set success state with registration details
       setRegistrationDetails({

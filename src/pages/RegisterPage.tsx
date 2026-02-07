@@ -325,23 +325,25 @@ const RegisterPage = () => {
       setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Send confirmation email to college
-      sendEventRegistrationEmail({
-        registrationId: regId,
-        eventName: eventInfo.name,
-        categoryName: eventInfo.category,
-        captainName: members[0].name.trim(),
-        captainPhone: members[0].phone.trim(),
-        captainYear: members[0].year,
-        email: email.trim().toLowerCase(),
-        institution: institution.trim(),
-        teamMembers: members,
-        feeAmount: eventInfo.price,
-        delegateId: delegateId.trim() || undefined,
-        couponCode: coupon.trim() || undefined,
-        participantCategory: category,
-        payment_screenshot_url: paymentUrl || undefined,
-      }).catch(err => console.error('Email send failed:', err));
+      // Send confirmation email to college (non-blocking, never fails registration)
+      try {
+        sendEventRegistrationEmail({
+          registrationId: regId,
+          eventName: eventInfo.name,
+          categoryName: eventInfo.category,
+          captainName: members[0].name.trim(),
+          captainPhone: members[0].phone.trim(),
+          captainYear: members[0].year,
+          email: email.trim().toLowerCase(),
+          institution: institution.trim(),
+          teamMembers: members,
+          feeAmount: eventInfo.price,
+          delegateId: delegateId.trim() || undefined,
+          couponCode: coupon.trim() || undefined,
+          participantCategory: category,
+          payment_screenshot_url: paymentUrl || undefined,
+        }).catch(() => {});
+      } catch (e) { /* email down - ignore */ }
 
       toast({
         title: "Registration Successful!",
