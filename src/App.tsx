@@ -12,6 +12,7 @@ import EventRegistrationPage from "./pages/EventRegistrationPage";
 import BrochureLinksPage from "./pages/BrochureLinksPage";
 import DelegatePassPage from "./pages/DelegatePassPage";
 import KrishhConcertPage from "./pages/KrishhConcertPage";
+import FunkieConcertPage from "./pages/FunkieConcertPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/delegate-pass" element={<DelegatePassPage />} />
           <Route path="/krishh" element={<KrishhConcertPage />} />
+          <Route path="/funkie" element={<FunkieConcertPage />} />
           <Route path="/brochure-links" element={<BrochureLinksPage />} />
           <Route path="/admin" element={<AdminPage />} />
           {/* Clean URLs for event registration: /:categoryId/:eventId */}

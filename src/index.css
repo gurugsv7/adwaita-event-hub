@@ -616,3 +616,39 @@
     --tw-gradient-to: #3D2862 var(--tw-gradient-to-position);
   }
 }
+
+/* ========== FUNKIE CONCERT PAGE STYLES ========== */
+@layer components {
+  .funkie-bg {
+    background: linear-gradient(135deg, #0A0A1B 0%, #111136 50%, #0A1628 100%);
+  }
+
+  .funkie-glass {
+    background: rgba(17, 17, 54, 0.6);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+  }
+
+  @media (min-width: 768px) {
+    .funkie-glass {
+      background: rgba(17, 17, 54, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+  }
+
+  @keyframes eqBounce {
+    0% { transform: scaleY(0.3); }
+    100% { transform: scaleY(1); }
+  }
+
+  @keyframes floatNote {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translateY(-30px) rotate(15deg);
+      opacity: 0.35;
+    }
+  }
+}
