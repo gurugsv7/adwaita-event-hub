@@ -141,7 +141,7 @@ const FunkieConcertPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.fullName || !formData.email || !formData.phone || !formData.institution) {
+    if (!formData.fullName || !formData.email || !formData.phone) {
       toast({ title: "Missing fields", description: "Please fill in all required fields", variant: "destructive" });
       return;
     }
@@ -186,7 +186,7 @@ const FunkieConcertPage = () => {
           name: formData.fullName.trim(),
           email: formData.email.trim().toLowerCase(),
           phone: formData.phone.trim(),
-          institution: formData.institution.trim(),
+          institution: formData.institution.trim() || 'N/A',
           ticket_type: 'funkie-general',
           ticket_price: TICKET_PRICE,
           payment_status: 'pending',
@@ -522,7 +522,7 @@ const FunkieConcertPage = () => {
                       <div className="space-y-2">
                         <Label htmlFor="institution" className="text-sm text-gray-400 flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-indigo-400" />
-                          College / Institution <span className="text-indigo-400">*</span>
+                          College / Institution <span className="text-gray-600 text-xs">(optional)</span>
                         </Label>
                         <Input id="institution" name="institution" type="text" placeholder="Your college or institution" value={formData.institution} onChange={handleInputChange}
                           className="h-12 bg-[#0A0A1B]/80 border-2 border-indigo-500/30 rounded-xl text-white placeholder:text-gray-600 focus:border-cyan-400 transition-all duration-300" />
