@@ -440,11 +440,11 @@ const AdminPage = () => {
                       <Music className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
-                        Krishh Concert
-                        <Heart className="w-4 h-4 text-pink-500 fill-pink-500" />
-                      </h3>
-                      <p className="text-muted-foreground text-sm">Valentine's Day Special</p>
+                        <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                          Concert Bookings
+                          <Music className="w-4 h-4 text-pink-500" />
+                        </h3>
+                        <p className="text-muted-foreground text-sm">Krishh & FUNKIE bookings</p>
                     </div>
                   </div>
                   <span className="bg-pink-500/20 text-pink-500 text-lg font-bold px-4 py-2 rounded-full">
@@ -620,11 +620,13 @@ const AdminPage = () => {
                         <TableCell>{booking.institution}</TableCell>
                         <TableCell>
                           <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            booking.ticket_type === 'Couple' 
+                            booking.ticket_type.startsWith('funkie')
+                              ? 'bg-indigo-500/20 text-indigo-400'
+                              : booking.ticket_type === 'couple' 
                               ? 'bg-pink-500/20 text-pink-500' 
                               : 'bg-blue-500/20 text-blue-500'
                           }`}>
-                            {booking.ticket_type}
+                            {booking.ticket_type.startsWith('funkie') ? 'FUNKIE' : booking.ticket_type}
                           </span>
                         </TableCell>
                         <TableCell>₹{booking.ticket_price}</TableCell>
