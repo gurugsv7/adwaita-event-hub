@@ -104,13 +104,6 @@ const CountdownTimer = () => {
   );
 };
 
-const bandMembers = [
-  { name: "Lead Vocalist", icon: "🎤" },
-  { name: "Guitarist", icon: "🎸" },
-  { name: "Keyboardist", icon: "🎹" },
-  { name: "Drummer", icon: "🥁" },
-  { name: "Bassist", icon: "🎸" },
-];
 
 const FunkieConcertPage = () => {
   const [formData, setFormData] = useState({
@@ -416,25 +409,6 @@ const FunkieConcertPage = () => {
 
                 {/* Band & Price */}
                 <div className="flex flex-col justify-center space-y-6">
-                  {/* Band members */}
-                  <div className="funkie-glass rounded-[30px] p-6 md:p-8" style={{ boxShadow: '0 0 40px rgba(99,102,241,0.15)' }}>
-                    <div className="flex items-center gap-3 mb-6">
-                      <Music className="w-6 h-6 text-indigo-400" />
-                      <h3 className="text-xl font-semibold text-white">The Band</h3>
-                    </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {bandMembers.map((member, i) => (
-                        <div key={i} className="funkie-glass rounded-2xl p-4 text-center hover:border-indigo-500/50 transition-all">
-                          <span className="text-2xl block mb-2">{member.icon}</span>
-                          <span className="text-sm text-gray-300">{member.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="mt-6 flex items-center justify-center gap-3 p-4 rounded-xl" style={{ background: 'linear-gradient(135deg, rgba(99,102,241,0.15), rgba(6,182,212,0.1))', border: '1px solid rgba(99,102,241,0.3)' }}>
-                      <Zap className="w-5 h-5 text-cyan-400" />
-                      <span className="text-gray-300">Full Band • Live Performance • OAT Stage</span>
-                    </div>
-                  </div>
 
                   {/* Price card */}
                   <div className="funkie-glass rounded-2xl p-6 flex items-center justify-between relative overflow-hidden" style={{ boxShadow: '0 0 30px rgba(99,102,241,0.2)' }}>
