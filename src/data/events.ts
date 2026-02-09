@@ -513,7 +513,7 @@ export const categories: Category[] = [
         teamType: "Team (12)",
         day: "9-14 Feb 2026",
         duration: "4 quarters (10 min)",
-        status: "Open",
+        status: "Closed",
         deadline: "Feb 9, 2026",
         incharge: { name: "Venkat, Sujay, Vithiya Saagar", phone: "" },
         prizes: { first: 0, second: 0, third: 0 },
