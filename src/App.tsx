@@ -14,6 +14,8 @@ import DelegatePassPage from "./pages/DelegatePassPage";
 import KrishhConcertPage from "./pages/KrishhConcertPage";
 import FunkieConcertPage from "./pages/FunkieConcertPage";
 import AdminPage from "./pages/AdminPage";
+import MerchPage from "./pages/MerchPage";
+import MerchBuyPage from "./pages/MerchBuyPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +37,8 @@ const App = () => (
           <Route path="/funkie" element={<FunkieConcertPage />} />
           <Route path="/brochure-links" element={<BrochureLinksPage />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/merch" element={<MerchPage />} />
+          <Route path="/merch/:itemId" element={<MerchBuyPage />} />
           {/* Clean URLs for event registration: /:categoryId/:eventId */}
           <Route path="/events/:categoryId/:eventId" element={<EventRegistrationPage />} />
           <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
