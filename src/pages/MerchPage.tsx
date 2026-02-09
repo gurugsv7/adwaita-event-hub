@@ -113,11 +113,6 @@ const MerchCard = ({ item, index }: { item: MerchItem; index: number }) => {
               >
                 ₹{item.price}
               </span>
-              {item.originalPrice && (
-                <span className="text-sm text-gray-500 line-through">
-                  ₹{item.originalPrice}
-                </span>
-              )}
             </div>
 
             {/* CTA that slides up on hover */}
