@@ -178,14 +178,6 @@ const MerchBuyPage = () => {
                 {/* Price */}
                 <div className="flex items-baseline gap-3">
                   <span className="text-4xl font-black" style={{ color: item.accentColor }}>₹{item.price}</span>
-                  {item.originalPrice && (
-                    <>
-                      <span className="text-lg text-gray-500 line-through">₹{item.originalPrice}</span>
-                      <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-green-500/20 text-green-400">
-                        {Math.round(((item.originalPrice - item.price) / item.originalPrice) * 100)}% OFF
-                      </span>
-                    </>
-                  )}
                 </div>
 
                 {/* Description */}

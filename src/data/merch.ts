@@ -1,16 +1,14 @@
-import merchTshirt from "@/assets/merch-tshirt-1.jpg";
-import merchHoodie from "@/assets/merch-hoodie.jpg";
-import merchPolo from "@/assets/merch-polo.jpg";
-import merchJacket from "@/assets/merch-jacket.jpg";
-import merchCap from "@/assets/merch-cap.jpg";
-import merchJoggers from "@/assets/merch-joggers.jpg";
+import merchHoodie from "@/assets/merch-hoodie-real.png";
+import merchSweatshirt from "@/assets/merch-sweatshirt.png";
+import merchOversizedTee from "@/assets/merch-oversized-tee.png";
+import merchRegularTee from "@/assets/merch-regularfit-tee.png";
+import merchCroptop from "@/assets/merch-croptop.png";
 
 export interface MerchItem {
   id: string;
   name: string;
   tagline: string;
   price: number;
-  originalPrice?: number;
   image: string;
   sizes: string[];
   description: string;
@@ -22,82 +20,65 @@ export interface MerchItem {
 
 export const merchItems: MerchItem[] = [
   {
-    id: "neon-oversized-tee",
-    name: "Neon Oversized Tee",
-    tagline: "Glow Different",
-    price: 599,
-    originalPrice: 799,
-    image: merchTshirt,
+    id: "hoodie-unisex",
+    name: "Hoodie",
+    tagline: "Unisex · Premium Fleece",
+    price: 750,
+    image: merchHoodie,
+    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+    description: "Official ADWAITA'26 unisex hoodie with premium fleece, kangaroo pocket, and drawstring hood. Built for comfort and style.",
+    features: ["Premium fleece", "Kangaroo pocket", "Drawstring hood", "Unisex fit"],
+    category: "Topwear",
+    badge: "POPULAR",
+    accentColor: "#00FFD9",
+  },
+  {
+    id: "sweatshirt-unisex",
+    name: "Sweatshirt",
+    tagline: "Unisex · Cozy Fleece",
+    price: 700,
+    image: merchSweatshirt,
+    sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
+    description: "Official ADWAITA'26 unisex sweatshirt with soft fleece lining, ribbed cuffs, and a clean crew-neck fit.",
+    features: ["Fleece lining", "Ribbed cuffs", "Crew neck", "Unisex fit"],
+    category: "Topwear",
+    accentColor: "#B44FFF",
+  },
+  {
+    id: "oversized-tshirt",
+    name: "Oversized T-Shirt",
+    tagline: "Unisex · Drop Shoulder",
+    price: 550,
+    image: merchOversizedTee,
     sizes: ["S", "M", "L", "XL", "XXL"],
-    description: "Oversized drop-shoulder tee with UV-reactive neon geometric print. The official ADWAITA 2026 signature piece.",
-    features: ["UV-reactive print", "240 GSM cotton", "Drop shoulder fit", "Unisex"],
+    description: "Official ADWAITA'26 unisex oversized tee with drop-shoulder fit and premium cotton fabric.",
+    features: ["Drop shoulder", "Premium cotton", "Relaxed fit", "Unisex"],
     category: "Topwear",
     badge: "BESTSELLER",
     accentColor: "#FF1B9F",
   },
   {
-    id: "cyber-hoodie",
-    name: "Cyber Hoodie",
-    tagline: "Fade Into The Future",
-    price: 1299,
-    originalPrice: 1599,
-    image: merchHoodie,
+    id: "regularfit-tshirt",
+    name: "Regular Fit T-Shirt",
+    tagline: "Classic Comfort",
+    price: 450,
+    image: merchRegularTee,
     sizes: ["S", "M", "L", "XL", "XXL"],
-    description: "Premium heavyweight hoodie with holographic gradient print. Kangaroo pocket, ribbed cuffs. Built for the night.",
-    features: ["Holographic print", "350 GSM fleece", "Kangaroo pocket", "Drawstring hood"],
-    category: "Topwear",
-    badge: "LIMITED",
-    accentColor: "#00FFD9",
-  },
-  {
-    id: "royal-polo",
-    name: "Royal Polo",
-    tagline: "Elegance Meets Edge",
-    price: 799,
-    image: merchPolo,
-    sizes: ["S", "M", "L", "XL"],
-    description: "Deep purple polo with gold embroidered ADWAITA crest. Premium piqué cotton for a refined festival look.",
-    features: ["Gold embroidery", "Piqué cotton", "Classic fit", "Contrast collar trim"],
+    description: "Official ADWAITA'26 regular fit tee — clean, classic, and comfortable for everyday wear.",
+    features: ["Classic fit", "Soft cotton", "Lightweight", "Everyday wear"],
     category: "Topwear",
     accentColor: "#FFD700",
   },
   {
-    id: "bomber-jacket",
-    name: "Neon Bomber",
-    tagline: "Own The Night",
-    price: 1899,
-    originalPrice: 2299,
-    image: merchJacket,
-    sizes: ["S", "M", "L", "XL"],
-    description: "Black bomber jacket with neon embroidery patches. Ribbed collar and cuffs. The ultimate festival outerwear.",
-    features: ["Neon embroidery", "Satin lining", "Ribbed trims", "Zip front"],
-    category: "Outerwear",
-    badge: "PREMIUM",
+    id: "crop-top",
+    name: "Crop Top",
+    tagline: "Bold & Trendy",
+    price: 450,
+    image: merchCroptop,
+    sizes: ["XS", "S", "M", "L", "XL", "2XL"],
+    description: "Official ADWAITA'26 crop top with a stylish cut, perfect for making a statement at the fest.",
+    features: ["Trendy crop cut", "Comfortable fit", "Soft fabric", "Statement piece"],
+    category: "Topwear",
     accentColor: "#FF1B9F",
-  },
-  {
-    id: "adwaita-snapback",
-    name: "ADWAITA Snapback",
-    tagline: "Cap The Vibe",
-    price: 449,
-    image: merchCap,
-    sizes: ["Free Size"],
-    description: "Structured snapback with reflective ADWAITA logo. Adjustable strap, curved brim. Glows under UV light.",
-    features: ["Reflective logo", "Adjustable snap", "Curved brim", "UV-reactive"],
-    category: "Accessories",
-    accentColor: "#B44FFF",
-  },
-  {
-    id: "neon-joggers",
-    name: "Neon Stripe Joggers",
-    tagline: "Move In Light",
-    price: 999,
-    originalPrice: 1199,
-    image: merchJoggers,
-    sizes: ["S", "M", "L", "XL", "XXL"],
-    description: "Black joggers with neon side stripes that glow under UV. Elastic waistband, tapered fit, zip pockets.",
-    features: ["UV-reactive stripes", "Zip pockets", "Tapered fit", "Elastic waistband"],
-    category: "Bottomwear",
-    accentColor: "#00FFD9",
   },
 ];
