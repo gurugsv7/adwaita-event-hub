@@ -66,16 +66,18 @@ const MerchPage = () => {
               />
 
 
-              <div className="relative px-6 pb-6 flex flex-col items-center">
+              <div className="relative py-6 px-6 flex flex-col items-center">
                 <img
                   alt={heroItem.name}
                   src={heroItem.image}
-                  className="w-[140%] max-w-none h-auto object-contain z-0"
-                  style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))", marginTop: "-1rem", marginBottom: "-3rem" }}
+                  className="w-[120%] max-w-none h-auto object-contain relative z-10"
+                  style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
 
+
+
                 {/* Info + CTA */}
-                <div className="relative z-20 w-full space-y-6">
+                <div className="mt-8 w-full space-y-6">
                   <div className="flex justify-between items-end">
                     <div className="space-y-1">
                       <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "'Syncopate', sans-serif" }}>
