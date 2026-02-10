@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
 import hoodieOutside from "@/assets/merch-hoodie-outside.png";
-import { Zap, ShoppingBag, Loader2 } from "lucide-react";
+import { ShoppingBag, Loader2, Instagram } from "lucide-react";
 import { useMerchCart } from "@/contexts/MerchCartContext";
+import vinceOutletsLogo from "@/assets/vince-outlets-logo.jpeg";
 
 const MerchPage = () => {
   const { cartCount } = useMerchCart();
@@ -247,35 +247,36 @@ const MerchPage = () => {
             })}
           </div>
 
-          {/* Bottom section */}
-          <div className="py-12 flex flex-col items-center text-center space-y-4">
+          {/* Merchandise Partner */}
+          <div className="py-16 flex flex-col items-center text-center space-y-6">
             <div className="w-24 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
-            <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: "#64748b" }}>
-              Secured Transaction
+            <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: "#64748b", fontFamily: "'Syncopate', sans-serif" }}>
+              MERCHANDISE PARTNER
             </p>
-            <h3 className="text-xl font-bold text-white opacity-40 italic" style={{ fontFamily: "'Syncopate', sans-serif" }}>
-              ADWAITA LEGACY 2026
+            <div className="w-28 h-28 rounded-2xl overflow-hidden border border-white/10"
+              style={{ background: "rgba(25,10,50,0.6)", boxShadow: "0 0 20px rgba(139,92,246,0.2)" }}>
+              <img src={vinceOutletsLogo} alt="Vince Outlets" className="w-full h-full object-cover" />
+            </div>
+            <h3 className="text-lg font-bold text-white" style={{ fontFamily: "'Syncopate', sans-serif" }}>
+              VINCE OUTLETS
             </h3>
-          </div>
-
-          {/* Floating Cart Badge */}
-          {cartCount > 0 && (
-            <Link
-              to="/merch/checkout"
-              className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-white text-sm tracking-widest uppercase transition-all hover:scale-105 active:scale-95"
-              style={{
-                fontFamily: "'Syncopate', sans-serif",
-                background: "linear-gradient(135deg, #22d3ee, #8b5cf6)",
-                boxShadow: "0 0 30px rgba(34,211,238,0.4), 0 10px 40px rgba(0,0,0,0.5)",
-              }}
+            <p className="text-xs" style={{ color: "#94a3b8" }}>Wear Awesome</p>
+            <a
+              href="https://www.instagram.com/vince_outlets/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm transition-colors hover:opacity-80"
+              style={{ color: "#22d3ee" }}
             >
-              <ShoppingBag className="w-5 h-5" />
-              Cart ({cartCount})
-            </Link>
-          )}
+              <Instagram className="w-4 h-4" />
+              @vince_outlets
+            </a>
+            <div className="w-24 h-[1px] mt-4" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
+            <p className="text-xs mt-2" style={{ color: "#64748b" }}>
+              © ADWAITA 26 | IGMCRI
+            </p>
+          </div>
         </main>
-
-        <Footer />
       </div>
     </>
   );
