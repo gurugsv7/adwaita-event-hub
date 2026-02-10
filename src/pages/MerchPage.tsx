@@ -87,6 +87,7 @@ const MerchPage = () => {
                 <img
                   alt={heroItem.name}
                   src={hoodieOutside}
+                  loading="eager"
                   className="w-[120%] max-w-none h-auto object-contain relative z-10"
                   style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
@@ -164,6 +165,7 @@ const MerchPage = () => {
                     <img
                       alt={item.name}
                       src={item.image}
+                      loading="lazy"
                       className={`max-w-none object-contain ${item.id === 'sweatshirt-unisex' ? 'h-[110%]' : 'h-[110%]'}`}
                       style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))", background: "transparent" }}
                     />
