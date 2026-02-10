@@ -65,20 +65,6 @@ const MerchPage = () => {
                 style={{ background: "linear-gradient(45deg, #22d3ee, transparent, #ec4899)" }}
               />
 
-              {/* Ghost text */}
-              <div className="absolute top-10 left-8 z-20 pointer-events-none select-none"
-                style={{
-                  fontSize: "4.5rem",
-                  lineHeight: 0.75,
-                  WebkitTextStroke: "1px rgba(255,255,255,0.15)",
-                  color: "transparent",
-                  fontFamily: "'Syncopate', sans-serif",
-                  fontWeight: 900,
-                  opacity: 0.2,
-                }}
-              >
-                ARCANE<br />HOODIE
-              </div>
 
               <div className="relative py-6 px-6 flex flex-col items-center">
                 <img
@@ -88,17 +74,7 @@ const MerchPage = () => {
                   style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
 
-                {/* Badges */}
-                <div className="absolute top-6 right-6 z-20 flex flex-col items-end gap-2">
-                  <span className="flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold"
-                    style={{ background: "rgba(34,211,238,0.2)", border: "1px solid rgba(34,211,238,0.4)", color: "#22d3ee" }}>
-                    <Zap className="w-3.5 h-3.5" /> UV REACTIVE
-                  </span>
-                  <span className="flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold text-white"
-                    style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>
-                    LIMITED EDITION
-                  </span>
-                </div>
+
 
                 {/* Info + CTA */}
                 <div className="mt-8 w-full space-y-6">
