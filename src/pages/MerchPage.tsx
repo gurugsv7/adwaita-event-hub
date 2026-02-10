@@ -143,11 +143,11 @@ const MerchPage = () => {
                   </div>
 
                   {/* Image */}
-                  <div className="relative h-60 mb-4 flex items-center justify-center overflow-visible">
+                  <div className="relative h-52 mb-4 flex items-center justify-center overflow-hidden">
                     <img
                       alt={item.name}
                       src={item.image}
-                      className="w-[140%] max-w-none h-auto object-contain"
+                      className="absolute inset-0 w-full h-full object-cover"
                       style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))" }}
                     />
                   </div>
