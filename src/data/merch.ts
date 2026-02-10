@@ -37,7 +37,7 @@ export const merchItems: MerchItem[] = [
     name: "Sweatshirt",
     tagline: "Unisex · Cozy Fleece",
     price: 700,
-    image: merchSweatshirt,
+    image: merchHoodie,
     sizes: ["S", "M", "L", "XL", "2XL", "3XL"],
     description: "Official ADWAITA'26 unisex sweatshirt with soft fleece lining, ribbed cuffs, and a clean crew-neck fit.",
     features: ["Fleece lining", "Ribbed cuffs", "Crew neck", "Unisex fit"],
