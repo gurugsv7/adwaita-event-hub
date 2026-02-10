@@ -70,7 +70,7 @@ const MerchCheckoutPage = () => {
     if (!email.trim()) { toast({ title: "Missing info", description: "Please enter your email", variant: "destructive" }); return false; }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) { toast({ title: "Invalid email", description: "Please enter a valid email", variant: "destructive" }); return false; }
-    if (!institution.trim()) { toast({ title: "Missing info", description: "Please enter your institution", variant: "destructive" }); return false; }
+    // institution is optional
     if (!paymentScreenshot) { toast({ title: "Payment screenshot required", description: "Please upload your payment screenshot", variant: "destructive" }); return false; }
     return true;
   };
@@ -281,7 +281,7 @@ const MerchCheckoutPage = () => {
                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 rounded-xl" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs" style={{ color: "#94a3b8" }}>Institution *</Label>
+                  <Label className="text-xs" style={{ color: "#94a3b8" }}>Institution</Label>
                   <Input value={institution} onChange={(e) => setInstitution(e.target.value)} placeholder="Your college/university"
                     className="bg-white/5 border-white/10 text-white placeholder:text-gray-600 rounded-xl" />
                 </div>
