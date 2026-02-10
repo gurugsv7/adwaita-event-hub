@@ -11,11 +11,11 @@ const MerchPage = () => {
   const gridItems = merchItems.slice(1);
 
   const displayNames: Record<string, { line1: string; line2: string; subtitle?: string }> = {
-    "hoodie-unisex": { line1: "TECH-FLEECE", line2: "", subtitle: "Heavyweight Edition" },
-    "sweatshirt-unisex": { line1: "CHILL", line2: "SWEATSHIRT" },
-    "oversized-tshirt": { line1: "BAGGY", line2: "PHANTOM" },
-    "regularfit-tshirt": { line1: "ESSENTIAL", line2: "ICON" },
-    "crop-top": { line1: "FEST", line2: "CROP TOP" },
+    "hoodie-unisex": { line1: "PHOENIX", line2: "", subtitle: "Sanctuary Fleece" },
+    "sweatshirt-unisex": { line1: "ELIXIR", line2: "WRAP" },
+    "oversized-tshirt": { line1: "MYSTIC", line2: "DRAPE" },
+    "regularfit-tshirt": { line1: "GENESIS", line2: "TEE" },
+    "crop-top": { line1: "ARCANA", line2: "CROP" },
   };
 
   const typeColors = ["#ec4899", "#22d3ee", "#8b5cf6", "#ec4899"];
@@ -49,6 +49,20 @@ const MerchPage = () => {
         ))}
 
         <main className="relative z-10 px-5 pt-24 pb-32 space-y-12 max-w-2xl mx-auto">
+
+          {/* Page Title */}
+          <section className="text-center space-y-3 pt-4">
+            <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: "#22d3ee", fontFamily: "'Syncopate', sans-serif" }}>
+              ADWAITA'26 — OFFICIAL
+            </p>
+            <h1 className="text-4xl md:text-5xl font-bold text-white" style={{ fontFamily: "'Syncopate', sans-serif" }}>
+              RELICS
+            </h1>
+            <p className="text-sm max-w-md mx-auto" style={{ color: "#94a3b8" }}>
+              Wear the legacy. Each piece is forged in the spirit of the phoenix — where ancient mysticism meets modern craft.
+            </p>
+            <div className="w-24 h-[1px] mx-auto" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
+          </section>
 
           {/* Hero Card — Hoodie */}
           <section className="relative">
