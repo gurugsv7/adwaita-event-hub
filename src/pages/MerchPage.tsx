@@ -147,7 +147,7 @@ const MerchPage = () => {
                     <img
                       alt={item.name}
                       src={item.image}
-                      className="max-w-none h-[120%] object-contain"
+                      className={`max-w-none object-contain ${item.id === 'sweatshirt-unisex' ? 'h-[100%]' : 'h-full'}`}
                       style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))", background: "transparent" }}
                     />
                   </div>
