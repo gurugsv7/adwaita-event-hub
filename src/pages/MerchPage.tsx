@@ -247,8 +247,21 @@ const MerchPage = () => {
             })}
           </div>
 
+          {/* Queries Contact */}
+          <div className="mt-12 flex items-center justify-center gap-3 py-4 px-6 rounded-2xl mx-auto"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <Phone className="w-4 h-4 flex-shrink-0" style={{ color: "#22d3ee" }} />
+            <span className="text-xs tracking-widest uppercase" style={{ color: "#64748b", fontFamily: "'Syncopate', sans-serif" }}>Queries</span>
+            <span className="w-[1px] h-4" style={{ background: "rgba(255,255,255,0.15)" }} />
+            <a href="https://wa.me/919345831990" target="_blank" rel="noopener noreferrer"
+              className="text-sm font-semibold tracking-wide hover:opacity-80 transition-opacity"
+              style={{ color: "#22d3ee", fontFamily: "'Space Grotesk', sans-serif" }}>
+              Lalithkumar — +91 93458 31990
+            </a>
+          </div>
+
           {/* Merchandise Partner */}
-          <div className="py-16 flex flex-col items-center text-center space-y-6">
+          <div className="py-20 flex flex-col items-center text-center space-y-5">
             <div className="w-24 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
             <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: "#64748b", fontFamily: "'Syncopate', sans-serif" }}>
               MERCHANDISE PARTNER
@@ -260,27 +273,20 @@ const MerchPage = () => {
             <h3 className="text-lg font-bold text-white" style={{ fontFamily: "'Syncopate', sans-serif" }}>
               VINCE OUTLETS
             </h3>
-            <p className="text-xs" style={{ color: "#94a3b8" }}>Wear Awesome</p>
+            <p className="text-xs tracking-[0.3em] uppercase" style={{ color: "#94a3b8", fontFamily: "'Space Grotesk', sans-serif" }}>Wear Awesome</p>
             <a
               href="https://www.instagram.com/vince_outlets/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm transition-colors hover:opacity-80"
-              style={{ color: "#22d3ee" }}
+              className="flex items-center gap-2 text-sm font-medium tracking-wide transition-colors hover:opacity-80"
+              style={{ color: "#22d3ee", fontFamily: "'Space Grotesk', sans-serif" }}
             >
               <Instagram className="w-4 h-4" />
               @vince_outlets
             </a>
-            <div className="w-24 h-[1px] mt-4" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
-            <div className="flex items-center gap-2 mt-4 text-xs" style={{ color: "#94a3b8" }}>
-              <Phone className="w-3.5 h-3.5" />
-              <span>For queries:</span>
-              <a href="https://wa.me/919345831990" target="_blank" rel="noopener noreferrer" className="hover:opacity-80" style={{ color: "#22d3ee" }}>
-                Lalithkumar — +91 93458 31990
-              </a>
-            </div>
-            <p className="text-xs mt-4" style={{ color: "#64748b" }}>
-              © ADWAITA 26 | IGMCRI
+            <div className="w-24 h-[1px] mt-2" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
+            <p className="text-[10px] tracking-[0.3em] uppercase mt-4" style={{ color: "#3f3f5a", fontFamily: "'Syncopate', sans-serif" }}>
+              © ADWAITA 26 · IGMCRI
             </p>
           </div>
         </main>
