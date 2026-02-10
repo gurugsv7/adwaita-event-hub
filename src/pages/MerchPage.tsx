@@ -1,16 +1,50 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
 import hoodieOutside from "@/assets/merch-hoodie-outside.png";
-import { Zap, ShoppingBag } from "lucide-react";
+import { Zap, ShoppingBag, Loader2 } from "lucide-react";
 import { useMerchCart } from "@/contexts/MerchCartContext";
 
 const MerchPage = () => {
   const { cartCount } = useMerchCart();
-  const heroItem = merchItems[0]; // Hoodie
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = hoodieOutside;
+    if (img.complete) {
+      setIsLoading(false);
+    } else {
+      img.onload = () => setIsLoading(false);
+      img.onerror = () => setIsLoading(false);
+    }
+    // Fallback timeout
+    const timer = setTimeout(() => setIsLoading(false), 4000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const heroItem = merchItems[0];
   const gridItems = merchItems.slice(1);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: "#0d041a" }}>
+        <div className="relative mb-6">
+          <div className="w-16 h-16 rounded-full flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.2), rgba(139,92,246,0.2))", border: "1px solid rgba(34,211,238,0.3)" }}>
+            <Loader2 className="w-7 h-7 animate-spin" style={{ color: "#22d3ee" }} />
+          </div>
+        </div>
+        <p className="text-xs font-bold tracking-[0.4em] uppercase animate-pulse"
+          style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee" }}>
+          LOADING RELICS
+        </p>
+      </div>
+    );
+  }
 
   const displayNames: Record<string, { line1: string; line2: string; subtitle?: string }> = {
     "hoodie-unisex": { line1: "HOODIE", line2: "", subtitle: "Unisex" },
