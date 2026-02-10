@@ -211,40 +211,44 @@ const MerchCheckoutPage = () => {
               </h2>
               <div className="space-y-3">
                 {cartItems.map((ci, index) => (
-                  <div key={index} className="flex gap-4 rounded-2xl p-4" style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                    {/* Image */}
-                    <div className="w-24 h-24 md:w-28 md:h-28 flex-shrink-0 rounded-xl overflow-hidden flex items-center justify-center" style={{ background: "rgba(255,255,255,0.06)" }}>
-                      <img src={ci.image} alt={ci.name} className="w-full h-full object-contain p-1" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.5))" }} />
-                    </div>
-                    {/* Details */}
-                    <div className="flex-1 min-w-0 flex flex-col justify-between py-1">
-                      <div>
-                        <h3 className="text-base md:text-lg font-bold text-white leading-tight" style={{ fontFamily: "'Syncopate', sans-serif" }}>{ci.name}</h3>
-                        <p className="text-xs mt-1 tracking-wider uppercase" style={{ color: "#64748b" }}>Size: <span className="font-bold" style={{ color: "#94a3b8" }}>{ci.size}</span></p>
+                  <div key={index} className="rounded-2xl p-4" style={{ background: "rgba(0,0,0,0.4)", border: "1px solid rgba(255,255,255,0.08)" }}>
+                    <div className="flex gap-3 items-start">
+                      {/* Image */}
+                      <div className="w-20 h-20 flex-shrink-0 rounded-xl overflow-hidden flex items-center justify-center" style={{ background: "rgba(255,255,255,0.06)" }}>
+                        <img src={ci.image} alt={ci.name} className="w-full h-full object-contain p-1" style={{ filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.5))" }} />
                       </div>
-                      <div className="flex items-center justify-between mt-3">
-                        <div className="flex items-center gap-2">
-                          <button type="button" onClick={() => updateQuantity(index, ci.quantity - 1)}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold transition-all hover:scale-110"
-                            style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="text-base font-bold text-white w-6 text-center">{ci.quantity}</span>
-                          <button type="button" onClick={() => updateQuantity(index, ci.quantity + 1)}
-                            className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold transition-all hover:scale-110"
-                            style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                            <Plus className="w-3.5 h-3.5" />
+                      {/* Name + Size + Delete */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <h3 className="text-sm font-bold text-white leading-tight truncate" style={{ fontFamily: "'Syncopate', sans-serif" }}>{ci.name}</h3>
+                            <p className="text-xs mt-1 tracking-wider uppercase" style={{ color: "#64748b" }}>Size: <span className="font-bold" style={{ color: "#94a3b8" }}>{ci.size}</span></p>
+                          </div>
+                          <button type="button" onClick={() => removeItem(index)} className="flex-shrink-0 p-1.5 rounded-lg hover:bg-red-500/20 transition-colors">
+                            <Trash2 className="w-4 h-4 text-red-400/70 hover:text-red-400" />
                           </button>
                         </div>
-                        <p className="text-lg md:text-xl font-bold" style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee", textShadow: "0 0 8px rgba(34,211,238,0.4)" }}>
-                          ₹{ci.price * ci.quantity}
-                        </p>
                       </div>
                     </div>
-                    {/* Delete */}
-                    <button type="button" onClick={() => removeItem(index)} className="self-start p-2 rounded-lg hover:bg-red-500/20 transition-colors mt-1">
-                      <Trash2 className="w-4 h-4 text-red-400/70 hover:text-red-400" />
-                    </button>
+                    {/* Quantity + Price row */}
+                    <div className="flex items-center justify-between mt-3 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                      <div className="flex items-center gap-2">
+                        <button type="button" onClick={() => updateQuantity(index, ci.quantity - 1)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold transition-all hover:scale-110"
+                          style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                          <Minus className="w-3.5 h-3.5" />
+                        </button>
+                        <span className="text-base font-bold text-white w-6 text-center">{ci.quantity}</span>
+                        <button type="button" onClick={() => updateQuantity(index, ci.quantity + 1)}
+                          className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold transition-all hover:scale-110"
+                          style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                          <Plus className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      <p className="text-lg font-bold" style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee", textShadow: "0 0 8px rgba(34,211,238,0.4)" }}>
+                        ₹{ci.price * ci.quantity}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
