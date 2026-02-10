@@ -90,20 +90,20 @@ const MerchCard = ({ item, index }: { item: MerchItem; index: number }) => {
           <div
             className="absolute inset-0 transition-opacity duration-500"
             style={{
-              background: `linear-gradient(180deg, transparent 40%, rgba(26,26,46,0.95) 100%)`,
-              opacity: isHovered ? 0.9 : 0.7,
+              background: `linear-gradient(180deg, transparent 10%, rgba(26,26,46,0.6) 50%, rgba(26,26,46,0.97) 75%)`,
+              opacity: isHovered ? 1 : 0.85,
             }}
           />
 
           {/* Bottom content overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-5">
+          <div className="absolute bottom-0 left-0 right-0 p-5" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>
             <p
               className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1"
-              style={{ color: item.accentColor }}
+              style={{ color: item.accentColor, textShadow: `0 0 10px ${item.accentColor}60` }}
             >
               {item.tagline}
             </p>
-            <h3 className="text-xl font-black text-white mb-2 tracking-tight">
+            <h3 className="text-xl font-black text-white mb-2 tracking-tight" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
               {item.name}
             </h3>
             <div className="flex items-center gap-3">
