@@ -4,9 +4,11 @@ import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
 import hoodieOutside from "@/assets/merch-hoodie-outside.png";
-import { Zap } from "lucide-react";
+import { Zap, ShoppingBag } from "lucide-react";
+import { useMerchCart } from "@/contexts/MerchCartContext";
 
 const MerchPage = () => {
+  const { cartCount } = useMerchCart();
   const heroItem = merchItems[0]; // Hoodie
   const gridItems = merchItems.slice(1);
 
@@ -208,6 +210,22 @@ const MerchPage = () => {
               ADWAITA LEGACY 2026
             </h3>
           </div>
+
+          {/* Floating Cart Badge */}
+          {cartCount > 0 && (
+            <Link
+              to="/merch/checkout"
+              className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-6 py-4 rounded-2xl font-bold text-white text-sm tracking-widest uppercase transition-all hover:scale-105 active:scale-95"
+              style={{
+                fontFamily: "'Syncopate', sans-serif",
+                background: "linear-gradient(135deg, #22d3ee, #8b5cf6)",
+                boxShadow: "0 0 30px rgba(34,211,238,0.4), 0 10px 40px rgba(0,0,0,0.5)",
+              }}
+            >
+              <ShoppingBag className="w-5 h-5" />
+              Cart ({cartCount})
+            </Link>
+          )}
         </main>
 
         <Footer />

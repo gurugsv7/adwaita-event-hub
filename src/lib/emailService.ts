@@ -233,7 +233,6 @@ export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promi
 
     console.log('Sending concert email with service:', EMAILJS_CONCERT_SERVICE_ID, 'template:', EMAILJS_CONCERT_TEMPLATE_ID);
     
-    // Initialize with concert-specific public key for this call
     emailjs.init(EMAILJS_CONCERT_PUBLIC_KEY);
     
     const response = await emailjs.send(
@@ -242,13 +241,71 @@ export const sendConcertBookingEmail = async (params: ConcertEmailParams): Promi
       templateParams
     );
     
-    // Re-initialize with main public key
     emailjs.init(EMAILJS_PUBLIC_KEY);
 
     console.log('Concert booking email sent successfully:', response);
     return response.status === 200;
   } catch (error) {
     console.error('Failed to send concert booking email:', error);
+    return false;
+  }
+};
+
+// Merch order email parameters
+interface MerchOrderEmailParams {
+  orderId: string;
+  name: string;
+  email: string;
+  phone: string;
+  institution: string;
+  items: { itemId: string; name: string; size: string; quantity: number; price: number }[];
+  totalAmount: number;
+  payment_screenshot_url?: string;
+}
+
+// Send merch order email to finance team
+export const sendMerchOrderEmail = async (params: MerchOrderEmailParams): Promise<boolean> => {
+  try {
+    const orderDate = new Date().toLocaleString('en-IN', {
+      dateStyle: 'full',
+      timeStyle: 'short',
+      timeZone: 'Asia/Kolkata'
+    });
+
+    const itemsList = params.items.map((item, i) =>
+      `${i + 1}. ${item.name} | Size: ${item.size} | Qty: ${item.quantity} | ₹${item.price * item.quantity}`
+    ).join('\n');
+
+    const templateParams = {
+      to_email: 'Finance.igmcrisigma@gmail.com',
+      to_name: 'Merch Order Incharge',
+      delegate_id: params.orderId,
+      delegate_name: params.name,
+      delegate_email: params.email,
+      delegate_phone: params.phone,
+      institution: params.institution,
+      tier_name: `Merch Order (${params.items.length} items)`,
+      tier_price: `₹${params.totalAmount}`,
+      registration_date: orderDate,
+    };
+
+    console.log('Sending merch order email');
+    
+    emailjs.init(EMAILJS_DELEGATE_PUBLIC_KEY);
+    
+    const response = await emailjs.send(
+      EMAILJS_DELEGATE_SERVICE_ID,
+      EMAILJS_DELEGATE_TEMPLATE_ID,
+      templateParams
+    );
+    
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+
+    console.log('Merch order email sent successfully:', response);
+    return response.status === 200;
+  } catch (error) {
+    console.error('Failed to send merch order email:', error);
+    emailjs.init(EMAILJS_PUBLIC_KEY);
     return false;
   }
 };

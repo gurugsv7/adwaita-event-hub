@@ -110,6 +110,51 @@ export type Database = {
         }
         Relationships: []
       }
+      merch_orders: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          institution: string
+          items: Json
+          name: string
+          order_id: string
+          payment_screenshot_url: string | null
+          payment_status: string
+          phone: string
+          total_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          institution: string
+          items?: Json
+          name: string
+          order_id: string
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone: string
+          total_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          institution?: string
+          items?: Json
+          name?: string
+          order_id?: string
+          payment_screenshot_url?: string | null
+          payment_status?: string
+          phone?: string
+          total_amount?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       registrations: {
         Row: {
           category_name: string

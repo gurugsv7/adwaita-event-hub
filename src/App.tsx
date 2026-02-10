@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { MerchCartProvider } from "@/contexts/MerchCartContext";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import AllEventsPage from "./pages/AllEventsPage";
@@ -16,6 +17,7 @@ import FunkieConcertPage from "./pages/FunkieConcertPage";
 import AdminPage from "./pages/AdminPage";
 import MerchPage from "./pages/MerchPage";
 import MerchBuyPage from "./pages/MerchBuyPage";
+import MerchCheckoutPage from "./pages/MerchCheckoutPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,24 +29,27 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/events" element={<AllEventsPage />} />
-          <Route path="/events/:categoryId" element={<CategoryPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/delegate-pass" element={<DelegatePassPage />} />
-          <Route path="/krishh" element={<KrishhConcertPage />} />
-          <Route path="/funkie" element={<FunkieConcertPage />} />
-          <Route path="/brochure-links" element={<BrochureLinksPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/merch" element={<MerchPage />} />
-          <Route path="/merch/:itemId" element={<MerchBuyPage />} />
-          {/* Clean URLs for event registration: /:categoryId/:eventId */}
-          <Route path="/events/:categoryId/:eventId" element={<EventRegistrationPage />} />
-          <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <MerchCartProvider>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/events" element={<AllEventsPage />} />
+            <Route path="/events/:categoryId" element={<CategoryPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/delegate-pass" element={<DelegatePassPage />} />
+            <Route path="/krishh" element={<KrishhConcertPage />} />
+            <Route path="/funkie" element={<FunkieConcertPage />} />
+            <Route path="/brochure-links" element={<BrochureLinksPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/merch" element={<MerchPage />} />
+            <Route path="/merch/checkout" element={<MerchCheckoutPage />} />
+            <Route path="/merch/:itemId" element={<MerchBuyPage />} />
+            {/* Clean URLs for event registration: /:categoryId/:eventId */}
+            <Route path="/events/:categoryId/:eventId" element={<EventRegistrationPage />} />
+            <Route path="/:categoryId/:eventId" element={<EventRegistrationPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </MerchCartProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

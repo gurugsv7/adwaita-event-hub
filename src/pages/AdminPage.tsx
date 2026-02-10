@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { supabase } from "@/integrations/supabase/client";
-import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck, ClipboardList } from "lucide-react";
+import { Lock, ArrowLeft, Loader2, Users, Calendar, ExternalLink, Search, Music, Heart, BadgeCheck, ClipboardList, ShoppingBag } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Helper function to get the proper screenshot URL
@@ -79,7 +79,21 @@ interface Delegate {
   created_at: string;
 }
 
-type ViewMode = 'events' | 'concert' | 'delegates' | 'event_details' | 'concert_details' | 'delegates_details';
+interface MerchOrder {
+  id: string;
+  order_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  institution: string;
+  items: any;
+  total_amount: number;
+  payment_screenshot_url: string | null;
+  payment_status: string;
+  created_at: string;
+}
+
+type ViewMode = 'events' | 'concert' | 'delegates' | 'event_details' | 'concert_details' | 'delegates_details' | 'merch' | 'merch_details';
 
 const AdminPage = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -92,6 +106,9 @@ const AdminPage = () => {
   const [loadingRegistrations, setLoadingRegistrations] = useState(false);
   const [loadingConcert, setLoadingConcert] = useState(false);
   const [loadingDelegates, setLoadingDelegates] = useState(false);
+  const [merchOrders, setMerchOrders] = useState<MerchOrder[]>([]);
+  const [loadingMerch, setLoadingMerch] = useState(false);
+  const [merchCount, setMerchCount] = useState(0);
   const [eventCounts, setEventCounts] = useState<Record<string, number>>({});
   const [concertCount, setConcertCount] = useState(0);
   const [delegateCount, setDelegateCount] = useState(0);
@@ -105,6 +122,7 @@ const AdminPage = () => {
       fetchEventCounts();
       fetchConcertCount();
       fetchDelegateCount();
+      fetchMerchCount();
     }
   }, [isAuthenticated, viewMode]);
 
@@ -153,6 +171,47 @@ const AdminPage = () => {
       }
     } catch (error: any) {
       console.error('Failed to fetch delegate count:', error);
+    }
+  };
+
+  const fetchMerchCount = async () => {
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-registrations', {
+        body: { password, action: 'merch_count' }
+      });
+
+      if (error) throw error;
+
+      if (data.count !== undefined) {
+        setMerchCount(data.count);
+      }
+    } catch (error: any) {
+      console.error('Failed to fetch merch count:', error);
+    }
+  };
+
+  const fetchMerchOrders = async () => {
+    setLoadingMerch(true);
+    setViewMode('merch_details');
+
+    try {
+      const { data, error } = await supabase.functions.invoke('admin-registrations', {
+        body: { password, action: 'merch_orders' }
+      });
+
+      if (error) throw error;
+
+      if (data.orders) {
+        setMerchOrders(data.orders);
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to fetch merch orders",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingMerch(false);
     }
   };
 
@@ -334,6 +393,7 @@ const AdminPage = () => {
     setRegistrations([]);
     setConcertBookings([]);
     setDelegates([]);
+    setMerchOrders([]);
     setViewMode('events');
     setSearchQuery("");
   };
@@ -354,6 +414,19 @@ const AdminPage = () => {
     delegate.delegate_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
     delegate.tier.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Filter merch orders based on search query
+  const filteredMerchOrders = merchOrders.filter(order =>
+    order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.order_id.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const parseOrderItems = (items: any): string => {
+    if (!items || !Array.isArray(items)) return '-';
+    return items.map((item: any) => `${item.name} (${item.size}) ×${item.quantity}`).join(', ');
+  };
 
   // Password protection screen
   if (!isAuthenticated) {
@@ -474,6 +547,31 @@ const AdminPage = () => {
                   </div>
                   <span className="bg-emerald-500/20 text-emerald-500 text-lg font-bold px-4 py-2 rounded-full">
                     {delegateCount}
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Merch Orders Card */}
+            <Card
+              className="cursor-pointer hover:border-primary transition-colors bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border-cyan-500/30"
+              onClick={fetchMerchOrders}
+            >
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
+                      <ShoppingBag className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground flex items-center gap-2">
+                        Merch Orders
+                      </h3>
+                      <p className="text-muted-foreground text-sm">All merchandise orders</p>
+                    </div>
+                  </div>
+                  <span className="bg-cyan-500/20 text-cyan-500 text-lg font-bold px-4 py-2 rounded-full">
+                    {merchCount}
                   </span>
                 </div>
               </CardContent>
@@ -789,6 +887,102 @@ const AdminPage = () => {
                         <TableCell className="text-sm">
                           {formatDate(delegate.created_at)}
                         </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // Merch orders table view
+  if (viewMode === 'merch_details') {
+    return (
+      <div className="min-h-screen bg-background p-4 md:p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6">
+            <Button variant="ghost" onClick={handleBackToEvents} className="mb-4">
+              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Dashboard
+            </Button>
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                  <ShoppingBag className="w-6 h-6 text-cyan-500" /> Merch Orders
+                </h1>
+                <p className="text-muted-foreground">{merchOrders.length} Order(s)</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="relative mb-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Input type="text" placeholder="Search by name, email, institution, or order ID..."
+              value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 h-12 text-base" />
+          </div>
+
+          {loadingMerch ? (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : filteredMerchOrders.length === 0 ? (
+            <Card>
+              <CardContent className="py-12 text-center">
+                <ShoppingBag className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-muted-foreground">
+                  {searchQuery ? "No orders match your search" : "No merch orders found"}
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardContent className="p-0 overflow-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Order ID</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Phone</TableHead>
+                      <TableHead>Institution</TableHead>
+                      <TableHead>Items</TableHead>
+                      <TableHead>Total (₹)</TableHead>
+                      <TableHead>Payment</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Ordered At</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredMerchOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-mono text-xs">{order.order_id}</TableCell>
+                        <TableCell className="font-medium">{order.name}</TableCell>
+                        <TableCell>{order.email}</TableCell>
+                        <TableCell>{order.phone}</TableCell>
+                        <TableCell>{order.institution}</TableCell>
+                        <TableCell className="max-w-[250px] text-xs">{parseOrderItems(order.items)}</TableCell>
+                        <TableCell>₹{order.total_amount}</TableCell>
+                        <TableCell>
+                          {order.payment_screenshot_url ? (
+                            <a href={getScreenshotUrl(order.payment_screenshot_url) || '#'} target="_blank" rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-primary hover:underline text-sm">
+                              View <ExternalLink className="w-3 h-3" />
+                            </a>
+                          ) : (
+                            <span className="text-amber-600 text-sm">Pending</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            order.payment_status === 'confirmed' ? 'bg-green-500/20 text-green-500' : 'bg-amber-500/20 text-amber-500'
+                          }`}>
+                            {order.payment_status}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-sm">{formatDate(order.created_at)}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -150,6 +150,51 @@ serve(async (req) => {
       );
     }
 
+    // If action is 'merch_count', return total merch orders count
+    if (action === 'merch_count') {
+      console.log('Fetching merch orders count');
+      const { count, error: countError } = await supabase
+        .from('merch_orders')
+        .select('*', { count: 'exact', head: true });
+      
+      if (countError) {
+        console.error('Error fetching merch count:', countError);
+        return new Response(
+          JSON.stringify({ error: countError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Merch orders count:', count);
+      return new Response(
+        JSON.stringify({ count: count || 0 }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // If action is 'merch_orders', return all merch orders
+    if (action === 'merch_orders') {
+      console.log('Fetching all merch orders');
+      const { data: merchData, error: merchError } = await supabase
+        .from('merch_orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      if (merchError) {
+        console.error('Error fetching merch orders:', merchError);
+        return new Response(
+          JSON.stringify({ error: merchError.message }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      console.log('Successfully fetched', merchData?.length || 0, 'merch orders');
+      return new Response(
+        JSON.stringify({ orders: merchData }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     let data;
     let error;
 
