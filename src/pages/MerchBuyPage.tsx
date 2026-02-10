@@ -171,10 +171,17 @@ const MerchBuyPage = () => {
                   </div>
                 </div>
 
-                {/* Add to Cart + Go to Checkout */}
+                {/* Add to Cart then two action buttons */}
                 <div className="space-y-3">
                   <button
-                    onClick={handleAddToCart}
+                    onClick={() => {
+                      if (!selectedSize) {
+                        toast({ title: "Select a size", description: "Please choose a size to continue", variant: "destructive" });
+                        return;
+                      }
+                      addItem(item.id, selectedSize, quantity);
+                      toast({ title: "Added to cart!", description: `${item.name} (${selectedSize}) × ${quantity}` });
+                    }}
                     className="w-full py-4 rounded-2xl font-black text-lg tracking-wide text-white relative overflow-hidden group transition-all duration-300 btn-morph"
                     style={{
                       background: `linear-gradient(135deg, ${item.accentColor}, #3D2862, ${item.accentColor === "#FF1B9F" ? "#00FFD9" : "#FF1B9F"})`,
@@ -190,13 +197,22 @@ const MerchBuyPage = () => {
                   </button>
 
                   {cartCount > 0 && (
-                    <Link
-                      to="/merch/checkout"
-                      className="block w-full py-3 rounded-xl text-center text-sm font-bold tracking-widest uppercase transition-all"
-                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(34,211,238,0.3)", color: "#22d3ee" }}
-                    >
-                      Go to Checkout ({cartCount} items)
-                    </Link>
+                    <div className="flex gap-3">
+                      <Link
+                        to="/merch/checkout"
+                        className="flex-1 py-3 rounded-xl text-center text-sm font-bold tracking-widest uppercase transition-all"
+                        style={{ background: "linear-gradient(135deg, #22d3ee, #8b5cf6)", color: "#fff" }}
+                      >
+                        Checkout ({cartCount})
+                      </Link>
+                      <Link
+                        to="/merch"
+                        className="flex-1 py-3 rounded-xl text-center text-sm font-bold tracking-widest uppercase transition-all"
+                        style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(34,211,238,0.3)", color: "#22d3ee" }}
+                      >
+                        Buy More
+                      </Link>
+                    </div>
                   )}
                 </div>
 
