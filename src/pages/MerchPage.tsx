@@ -147,8 +147,8 @@ const MerchPage = () => {
                     <img
                       alt={item.name}
                       src={item.image}
-                      className="w-full h-full object-contain"
-                      style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))", mixBlendMode: "normal", background: "transparent" }}
+                      className="max-w-none h-[120%] object-contain"
+                      style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))", background: "transparent" }}
                     />
                   </div>
 
