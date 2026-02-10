@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, ShoppingBag, Trash2, Upload, CheckCircle2, Loader2, IndianRupee, Minus, Plus, QrCode } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Trash2, Upload, CheckCircle2, Loader2, IndianRupee, Minus, Plus, QrCode, Phone } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -342,6 +342,13 @@ const MerchCheckoutPage = () => {
               )}
             </button>
           </form>
+          <div className="flex items-center justify-center gap-2 mt-8 text-xs" style={{ color: "#94a3b8" }}>
+            <Phone className="w-3.5 h-3.5" />
+            <span>For queries:</span>
+            <a href="https://wa.me/919345831990" target="_blank" rel="noopener noreferrer" className="hover:opacity-80" style={{ color: "#22d3ee" }}>
+              Lalithkumar — +91 93458 31990
+            </a>
+          </div>
         </main>
         <Footer />
       </div>

@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
 import hoodieOutside from "@/assets/merch-hoodie-outside.png";
-import { ShoppingBag, Loader2, Instagram } from "lucide-react";
+import { ShoppingBag, Loader2, Instagram, Phone } from "lucide-react";
 import { useMerchCart } from "@/contexts/MerchCartContext";
 import vinceOutletsLogo from "@/assets/vince-outlets-logo.jpeg";
 
@@ -272,7 +272,14 @@ const MerchPage = () => {
               @vince_outlets
             </a>
             <div className="w-24 h-[1px] mt-4" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
-            <p className="text-xs mt-2" style={{ color: "#64748b" }}>
+            <div className="flex items-center gap-2 mt-4 text-xs" style={{ color: "#94a3b8" }}>
+              <Phone className="w-3.5 h-3.5" />
+              <span>For queries:</span>
+              <a href="https://wa.me/919345831990" target="_blank" rel="noopener noreferrer" className="hover:opacity-80" style={{ color: "#22d3ee" }}>
+                Lalithkumar — +91 93458 31990
+              </a>
+            </div>
+            <p className="text-xs mt-4" style={{ color: "#64748b" }}>
               © ADWAITA 26 | IGMCRI
             </p>
           </div>
