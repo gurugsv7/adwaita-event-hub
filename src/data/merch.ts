@@ -1,4 +1,4 @@
-import merchHoodie from "@/assets/merch-hoodie-real.png";
+import merchHoodie from "@/assets/merch-hoodie-new.png";
 import merchSweatshirt from "@/assets/merch-sweatshirt.png";
 import merchOversizedTee from "@/assets/merch-oversized-tee.png";
 import merchRegularTee from "@/assets/merch-regularfit-tee.png";
