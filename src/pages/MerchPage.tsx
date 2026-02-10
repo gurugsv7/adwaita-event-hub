@@ -80,11 +80,11 @@ const MerchPage = () => {
                 ARCANE<br />HOODIE
               </div>
 
-              <div className="relative py-12 px-6 flex flex-col items-center">
+              <div className="relative py-6 px-6 flex flex-col items-center">
                 <img
                   alt={heroItem.name}
                   src={heroItem.image}
-                  className="w-full h-auto object-contain relative z-10"
+                  className="w-[120%] max-w-none h-auto object-contain relative z-10"
                   style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
 
