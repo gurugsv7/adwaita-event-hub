@@ -11,11 +11,11 @@ const MerchPage = () => {
   const gridItems = merchItems.slice(1);
 
   const displayNames: Record<string, { line1: string; line2: string; subtitle?: string }> = {
-    "hoodie-unisex": { line1: "PHOENIX", line2: "", subtitle: "Sanctuary Fleece" },
-    "sweatshirt-unisex": { line1: "ELIXIR", line2: "WRAP" },
-    "oversized-tshirt": { line1: "MYSTIC", line2: "DRAPE" },
-    "regularfit-tshirt": { line1: "GENESIS", line2: "TEE" },
-    "crop-top": { line1: "ARCANA", line2: "CROP" },
+    "hoodie-unisex": { line1: "HOODIE", line2: "", subtitle: "Unisex" },
+    "sweatshirt-unisex": { line1: "SWEAT", line2: "SHIRT", subtitle: "Unisex" },
+    "oversized-tshirt": { line1: "OVERSIZED", line2: "T-SHIRT", subtitle: "Unisex" },
+    "regularfit-tshirt": { line1: "REGULAR FIT", line2: "T-SHIRT" },
+    "crop-top": { line1: "CROP", line2: "TOP" },
   };
 
   const typeColors = ["#ec4899", "#22d3ee", "#8b5cf6", "#ec4899"];
