@@ -59,7 +59,7 @@ const MerchBuyPage = () => {
         {cartCount > 0 && (
           <Link
             to="/merch/checkout"
-            className="fixed top-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+            className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-110"
             style={{ background: "linear-gradient(135deg, #22d3ee, #8b5cf6)", boxShadow: "0 0 20px rgba(34,211,238,0.4)" }}
           >
             <ShoppingBag className="w-5 h-5 text-white" />
