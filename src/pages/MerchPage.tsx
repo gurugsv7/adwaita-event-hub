@@ -175,6 +175,9 @@ const MerchPage = () => {
                     >
                       {names?.line1}<br />{names?.line2}
                     </h4>
+                    <p className="text-[9px] tracking-widest uppercase" style={{ color: "#94a3b8" }}>
+                      {item.tagline}
+                    </p>
                     <p className="text-xl font-bold" style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee", textShadow: "0 0 8px rgba(34,211,238,0.6)" }}>
                       ₹{item.price}
                     </p>
