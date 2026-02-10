@@ -13,16 +13,27 @@ const MerchPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const img = new Image();
-    img.src = hoodieOutside;
-    if (img.complete) {
-      setIsLoading(false);
-    } else {
-      img.onload = () => setIsLoading(false);
-      img.onerror = () => setIsLoading(false);
-    }
-    // Fallback timeout
-    const timer = setTimeout(() => setIsLoading(false), 4000);
+    const allSrcs = [hoodieOutside, ...merchItems.slice(1).map(m => m.image)];
+    let loaded = 0;
+    const total = allSrcs.length;
+
+    const checkDone = () => {
+      loaded++;
+      if (loaded >= total) setIsLoading(false);
+    };
+
+    allSrcs.forEach(src => {
+      const img = new Image();
+      img.src = typeof src === 'string' ? src : src;
+      if (img.complete) {
+        checkDone();
+      } else {
+        img.onload = checkDone;
+        img.onerror = checkDone;
+      }
+    });
+
+    const timer = setTimeout(() => setIsLoading(false), 6000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -199,7 +210,7 @@ const MerchPage = () => {
                     <img
                       alt={item.name}
                       src={item.image}
-                      loading="lazy"
+                      loading="eager"
                       className={`max-w-none object-contain ${item.id === 'sweatshirt-unisex' ? 'h-[110%]' : 'h-[110%]'}`}
                       style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))", background: "transparent" }}
                     />
