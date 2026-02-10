@@ -84,7 +84,7 @@ const MerchPage = () => {
                 <img
                   alt={heroItem.name}
                   src={heroItem.image}
-                  className="w-[85%] h-auto object-contain relative z-10"
+                  className="w-full h-auto object-contain relative z-10"
                   style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
 
@@ -167,7 +167,7 @@ const MerchPage = () => {
                   </div>
 
                   {/* Image */}
-                  <div className="relative h-44 mb-4 flex items-center justify-center">
+                  <div className="relative h-60 mb-4 flex items-center justify-center">
                     <img
                       alt={item.name}
                       src={item.image}
