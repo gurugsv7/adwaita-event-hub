@@ -55,6 +55,22 @@ const MerchBuyPage = () => {
       <div className="min-h-screen concert-bg-animated">
         <Navbar />
 
+        {/* Floating cart badge */}
+        {cartCount > 0 && (
+          <Link
+            to="/merch/checkout"
+            className="fixed top-6 right-6 z-50 w-12 h-12 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+            style={{ background: "linear-gradient(135deg, #22d3ee, #8b5cf6)", boxShadow: "0 0 20px rgba(34,211,238,0.4)" }}
+          >
+            <ShoppingBag className="w-5 h-5 text-white" />
+            <span
+              className="absolute -top-1 -right-1 min-w-[20px] h-5 rounded-full flex items-center justify-center text-xs font-bold text-white px-1"
+              style={{ background: "#ef4444" }}
+            >
+              {cartCount}
+            </span>
+          </Link>
+        )}
         <main className="relative pt-20 pb-20 overflow-hidden">
           <div className="fixed inset-0 concert-bg-animated -z-10" />
           <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-20" />
