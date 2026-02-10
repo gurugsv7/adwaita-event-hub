@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
+import hoodieOutside from "@/assets/merch-hoodie-outside.png";
 import { Zap } from "lucide-react";
 
 const MerchPage = () => {
@@ -69,7 +70,7 @@ const MerchPage = () => {
               <div className="relative py-6 px-6 flex flex-col items-center">
                 <img
                   alt={heroItem.name}
-                  src={heroItem.image}
+                  src={hoodieOutside}
                   className="w-[120%] max-w-none h-auto object-contain relative z-10"
                   style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
                 />
