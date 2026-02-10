@@ -171,7 +171,7 @@ const MerchPage = () => {
                     <img
                       alt={item.name}
                       src={item.image}
-                      className="w-full h-full object-contain"
+                      className="w-full h-full object-contain scale-125"
                       style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))" }}
                     />
                   </div>
