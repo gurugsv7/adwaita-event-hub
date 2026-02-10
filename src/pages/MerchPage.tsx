@@ -1,219 +1,218 @@
-import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Helmet } from "react-helmet";
-import { ShoppingBag, Sparkles, ArrowRight, Star, Zap, Eye } from "lucide-react";
-import { merchItems, type MerchItem } from "@/data/merch";
-
-const FloatingParticles = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => { setIsMobile(window.innerWidth < 768); }, []);
-  const count = isMobile ? 6 : 15;
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {Array.from({ length: count }, (_, i) => (
-        <div
-          key={i}
-          className="floating-particle-optimized"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            width: Math.random() * 4 + 2,
-            height: Math.random() * 4 + 2,
-            animationDelay: `${Math.random() * 3}s`,
-            animationDuration: `${Math.random() * 4 + 6}s`,
-          }}
-        />
-      ))}
-    </div>
-  );
-};
-
-const MerchCard = ({ item, index }: { item: MerchItem; index: number }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <Link
-      to={`/merch/${item.id}`}
-      className="group relative block"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      style={{ animationDelay: `${index * 0.1}s` }}
-    >
-      <div
-        className="relative rounded-2xl overflow-hidden transition-all duration-500"
-        style={{
-          background: "rgba(45, 27, 78, 0.5)",
-          border: `1px solid ${isHovered ? item.accentColor + "80" : "rgba(255,27,159,0.15)"}`,
-          boxShadow: isHovered
-            ? `0 0 40px ${item.accentColor}30, 0 20px 60px rgba(0,0,0,0.5)`
-            : "0 4px 20px rgba(0,0,0,0.3)",
-          transform: isHovered ? "translateY(-8px)" : "translateY(0)",
-        }}
-      >
-        {/* Badge */}
-        {item.badge && (
-          <div
-            className="absolute top-4 left-4 z-20 px-3 py-1 rounded-full text-[10px] font-black tracking-widest text-white"
-            style={{
-              background: `linear-gradient(135deg, ${item.accentColor}, ${item.accentColor}99)`,
-              boxShadow: `0 0 20px ${item.accentColor}50`,
-            }}
-          >
-            {item.badge}
-          </div>
-        )}
-
-        {/* Quick view icon */}
-        <div
-          className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
-          style={{
-            background: isHovered ? "rgba(255,255,255,0.15)" : "transparent",
-            opacity: isHovered ? 1 : 0,
-            backdropFilter: "blur(10px)",
-          }}
-        >
-          <Eye className="w-4 h-4 text-white" />
-        </div>
-
-        {/* Image container */}
-        <div className="relative aspect-[3/4] overflow-hidden">
-          <img
-            src={item.image}
-            alt={item.name}
-            className="w-full h-full object-cover transition-transform duration-700"
-            style={{ transform: isHovered ? "scale(1.08)" : "scale(1)" }}
-            loading="lazy"
-          />
-          {/* Gradient overlay */}
-          <div
-            className="absolute inset-0 transition-opacity duration-500"
-            style={{
-              background: `linear-gradient(180deg, transparent 10%, rgba(26,26,46,0.6) 50%, rgba(26,26,46,0.97) 75%)`,
-              opacity: isHovered ? 1 : 0.85,
-            }}
-          />
-
-          {/* Bottom content overlay */}
-          <div className="absolute bottom-0 left-0 right-0 p-5" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.7)" }}>
-            <p
-              className="text-[11px] font-bold tracking-[0.3em] uppercase mb-1"
-              style={{ color: item.accentColor, textShadow: `0 0 10px ${item.accentColor}60` }}
-            >
-              {item.tagline}
-            </p>
-            <h3 className="text-xl font-black text-white mb-2 tracking-tight" style={{ textShadow: "0 1px 6px rgba(0,0,0,0.8)" }}>
-              {item.name}
-            </h3>
-            <div className="flex items-center gap-3">
-              <span
-                className="text-2xl font-black"
-                style={{ color: item.accentColor }}
-              >
-                ₹{item.price}
-              </span>
-            </div>
-
-            {/* CTA that slides up on hover */}
-            <div
-              className="flex items-center gap-2 mt-3 transition-all duration-400"
-              style={{
-                opacity: isHovered ? 1 : 0,
-                transform: isHovered ? "translateY(0)" : "translateY(10px)",
-              }}
-            >
-              <span className="text-xs font-semibold text-white/80 tracking-wider uppercase">
-                View Details
-              </span>
-              <ArrowRight className="w-3 h-3 text-white/80" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-};
+import { merchItems } from "@/data/merch";
+import { Zap } from "lucide-react";
 
 const MerchPage = () => {
+  const heroItem = merchItems[0]; // Hoodie
+  const gridItems = merchItems.slice(1);
+
+  const displayNames: Record<string, { line1: string; line2: string; subtitle?: string }> = {
+    "hoodie-unisex": { line1: "TECH-FLEECE", line2: "", subtitle: "Heavyweight Edition" },
+    "sweatshirt-unisex": { line1: "CHILL", line2: "SWEATSHIRT" },
+    "oversized-tshirt": { line1: "BAGGY", line2: "PHANTOM" },
+    "regularfit-tshirt": { line1: "ESSENTIAL", line2: "ICON" },
+    "crop-top": { line1: "FEST", line2: "CROP TOP" },
+  };
+
+  const typeColors = ["#ec4899", "#22d3ee", "#8b5cf6", "#ec4899"];
+
   return (
     <>
       <Helmet>
         <title>Official Merch | ADWAITA 2026</title>
-        <meta name="description" content="Shop the official ADWAITA 2026 merchandise collection. Limited edition futuristic streetwear — tees, hoodies, jackets & more." />
-        <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <meta name="description" content="Shop the official ADWAITA 2026 merchandise collection. Limited edition futuristic streetwear." />
+        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
       </Helmet>
 
-      <div className="min-h-screen concert-bg-animated">
+      <div className="min-h-screen" style={{ backgroundColor: "#0d041a", color: "#e2e8f0" }}>
         <Navbar />
 
-        <main className="relative pt-20 pb-20 overflow-hidden">
-          {/* Background layers */}
-          <div className="fixed inset-0 concert-bg-animated -z-10" />
-          <div className="fixed inset-0 tech-lines neon-grid -z-10 opacity-30" />
-          <FloatingParticles />
+        {/* Background effects */}
+        <div className="fixed inset-0 pointer-events-none z-0"
+          style={{
+            backgroundImage: "linear-gradient(rgba(34,211,238,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(34,211,238,0.05) 1px, transparent 1px)",
+            backgroundSize: "40px 40px",
+          }}
+        />
+        <div className="fixed top-[-10%] left-[-5%] w-[350px] h-[350px] rounded-full blur-[120px] z-0" style={{ background: "rgba(139,92,246,0.3)" }} />
+        <div className="fixed bottom-[20%] right-[-10%] w-[400px] h-[400px] rounded-full blur-[150px] z-0" style={{ background: "rgba(236,72,153,0.2)" }} />
 
-          {/* Gradient orbs */}
-          <div className="hidden md:block fixed top-[5%] right-[-5%] w-[50vw] h-[50vw] max-w-[700px] max-h-[700px] bg-gradient-to-bl from-[#FF1B9F]/15 via-[#3D2862]/10 to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: "10s" }} />
-          <div className="hidden md:block fixed bottom-[-10%] left-[-5%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-gradient-to-tr from-[#00FFD9]/10 via-transparent to-transparent rounded-full blur-3xl -z-5 animate-pulse" style={{ animationDuration: "12s" }} />
+        {/* Particles */}
+        {[10, 40, 70, 90].map((top, i) => (
+          <div key={i} className="fixed w-[2px] h-[2px] bg-white rounded-full pointer-events-none opacity-30 z-0"
+            style={{ top: `${top}%`, left: `${[20, 80, 15, 60][i]}%` }}
+          />
+        ))}
 
-          <div className="container mx-auto px-4 relative z-10">
-            {/* Hero Section */}
-            <div className="text-center pt-12 pb-16 stagger-fade-in">
-              {/* Micro badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full mb-6" style={{ background: "rgba(255,27,159,0.15)", border: "1px solid rgba(255,27,159,0.3)" }}>
-                <Sparkles className="w-3.5 h-3.5 text-[#FF1B9F]" />
-                <span className="text-[11px] font-bold tracking-[0.25em] text-[#FF1B9F] uppercase">
-                  Limited Edition Drop
-                </span>
-              </div>
+        <main className="relative z-10 px-5 pt-24 pb-32 space-y-12 max-w-2xl mx-auto">
 
-              <h1
-                className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-4"
+          {/* Hero Card — Hoodie */}
+          <section className="relative">
+            <div
+              className="rounded-[2.5rem] overflow-hidden relative"
+              style={{
+                background: "rgba(25,10,50,0.45)",
+                backdropFilter: "blur(20px)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                boxShadow: "0 0 30px rgba(34,211,238,0.2), inset 0 0 20px rgba(139,92,246,0.1)",
+              }}
+            >
+              {/* Glitch border glow */}
+              <div className="absolute -inset-[2px] -z-10 rounded-[2.5rem] opacity-50 blur-[5px]"
+                style={{ background: "linear-gradient(45deg, #22d3ee, transparent, #ec4899)" }}
+              />
+
+              {/* Ghost text */}
+              <div className="absolute top-10 left-8 z-20 pointer-events-none select-none"
                 style={{
-                  fontFamily: "'Space Mono', monospace",
-                  background: "linear-gradient(135deg, #FF1B9F 0%, #B44FFF 40%, #00FFD9 100%)",
-                  WebkitBackgroundClip: "text",
-                  backgroundClip: "text",
+                  fontSize: "4.5rem",
+                  lineHeight: 0.75,
+                  WebkitTextStroke: "1px rgba(255,255,255,0.15)",
                   color: "transparent",
+                  fontFamily: "'Syncopate', sans-serif",
+                  fontWeight: 900,
+                  opacity: 0.2,
                 }}
               >
-                MERCH
-              </h1>
+                ARCANE<br />HOODIE
+              </div>
 
-              <p className="text-gray-400 text-lg md:text-xl max-w-xl mx-auto mb-2" style={{ fontFamily: "'Space Mono', monospace" }}>
-                Wear the revolution. Own the night.
-              </p>
+              <div className="relative py-12 px-6 flex flex-col items-center">
+                <img
+                  alt={heroItem.name}
+                  src={heroItem.image}
+                  className="w-[85%] h-auto object-contain relative z-10"
+                  style={{ filter: "drop-shadow(0 25px 50px rgba(0,0,0,0.8))" }}
+                />
 
-              {/* Stats row */}
-              <div className="flex items-center justify-center gap-8 mt-8">
-                {[
-                  { icon: Zap, label: "UV Reactive", color: "#FF1B9F" },
-                  { icon: Star, label: "Premium Quality", color: "#FFD700" },
-                  { icon: ShoppingBag, label: "Limited Stock", color: "#00FFD9" },
-                ].map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <stat.icon className="w-4 h-4" style={{ color: stat.color }} />
-                    <span className="text-xs text-gray-400 tracking-wider uppercase">{stat.label}</span>
+                {/* Badges */}
+                <div className="absolute top-6 right-6 z-20 flex flex-col items-end gap-2">
+                  <span className="flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold"
+                    style={{ background: "rgba(34,211,238,0.2)", border: "1px solid rgba(34,211,238,0.4)", color: "#22d3ee" }}>
+                    <Zap className="w-3.5 h-3.5" /> UV REACTIVE
+                  </span>
+                  <span className="flex items-center gap-1 px-3 py-1 rounded-full text-[10px] font-bold text-white"
+                    style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)" }}>
+                    LIMITED EDITION
+                  </span>
+                </div>
+
+                {/* Info + CTA */}
+                <div className="mt-8 w-full space-y-6">
+                  <div className="flex justify-between items-end">
+                    <div className="space-y-1">
+                      <h3 className="text-2xl font-bold text-white" style={{ fontFamily: "'Syncopate', sans-serif" }}>
+                        {displayNames[heroItem.id]?.line1}
+                      </h3>
+                      <p className="text-xs tracking-widest uppercase" style={{ color: "#94a3b8" }}>
+                        {displayNames[heroItem.id]?.subtitle}
+                      </p>
+                    </div>
+                    <p className="text-3xl font-bold" style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee", textShadow: "0 0 8px rgba(34,211,238,0.6)" }}>
+                      ₹{heroItem.price}
+                    </p>
                   </div>
-                ))}
+                  <Link
+                    to={`/merch/${heroItem.id}`}
+                    className="block w-full py-5 rounded-xl text-white text-xs font-bold tracking-[0.3em] uppercase text-center transition-all duration-300 hover:scale-[0.98] active:scale-95"
+                    style={{
+                      fontFamily: "'Syncopate', sans-serif",
+                      background: "linear-gradient(90deg, #111, #222)",
+                      border: "1px solid #22d3ee",
+                      boxShadow: "0 0 15px rgba(34,211,238,0.3)",
+                    }}
+                  >
+                    ACQUIRE
+                  </Link>
+                </div>
               </div>
             </div>
+          </section>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
-              {merchItems.map((item, index) => (
-                <MerchCard key={item.id} item={item} index={index} />
-              ))}
-            </div>
+          {/* Grid Cards */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-12">
+            {gridItems.map((item, index) => {
+              const isLeft = index % 2 === 0;
+              const typeNum = String(index + 2).padStart(2, "0");
+              const typeColor = typeColors[index] || "#8b5cf6";
+              const names = displayNames[item.id];
 
-            {/* Bottom CTA */}
-            <div className="text-center mt-20">
-              <div className="glass-card inline-block rounded-2xl px-8 py-6" style={{ boxShadow: "0 0 40px rgba(255,27,159,0.1)" }}>
-                <p className="text-gray-400 text-sm mb-1">Pick up your merch at</p>
-                <p className="text-white font-bold text-lg">ADWAITA 2026 · Feb 12-14 · IGMCRI</p>
-              </div>
-            </div>
+              return (
+                <div
+                  key={item.id}
+                  className={`relative p-4 rounded-[2rem] ${isLeft ? "mt-4" : "-translate-y-4"}`}
+                  style={{
+                    background: "rgba(25,10,50,0.45)",
+                    backdropFilter: "blur(20px)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    transform: `perspective(1000px) rotateY(${isLeft ? "8deg" : "-8deg"}) rotateX(4deg) ${!isLeft ? "translateY(-1rem)" : ""}`,
+                  }}
+                >
+                  {/* Type label */}
+                  <div className={`absolute -top-6 z-20 ${isLeft ? "-left-2" : "-right-2 text-right"}`}>
+                    <span
+                      className="text-[8px] font-bold tracking-widest uppercase px-2 py-1"
+                      style={{
+                        fontFamily: "'Syncopate', sans-serif",
+                        color: typeColor + "cc",
+                        background: "rgba(13,4,26,0.8)",
+                        border: `1px solid ${typeColor}4d`,
+                      }}
+                    >
+                      {typeNum}. TYPE
+                    </span>
+                  </div>
+
+                  {/* Image */}
+                  <div className="relative h-44 mb-4 flex items-center justify-center">
+                    <img
+                      alt={item.name}
+                      src={item.image}
+                      className="w-full h-full object-contain"
+                      style={{ filter: "drop-shadow(0 10px 25px rgba(0,0,0,0.5))" }}
+                    />
+                  </div>
+
+                  {/* Info */}
+                  <div className="space-y-3">
+                    <h4
+                      className="text-[11px] font-bold text-white uppercase leading-tight"
+                      style={{ fontFamily: "'Syncopate', sans-serif" }}
+                    >
+                      {names?.line1}<br />{names?.line2}
+                    </h4>
+                    <p className="text-xl font-bold" style={{ fontFamily: "'Syncopate', sans-serif", color: "#22d3ee", textShadow: "0 0 8px rgba(34,211,238,0.6)" }}>
+                      ₹{item.price}
+                    </p>
+                    <Link
+                      to={`/merch/${item.id}`}
+                      className="block w-full py-3 rounded-lg text-[9px] font-bold uppercase tracking-widest text-center text-white transition-all duration-300 hover:scale-[0.98] active:scale-95 active:text-black"
+                      style={{
+                        background: "linear-gradient(90deg, #111, #222)",
+                        border: "1px solid #22d3ee",
+                        boxShadow: "0 0 15px rgba(34,211,238,0.3)",
+                      }}
+                    >
+                      ACQUIRE
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Bottom section */}
+          <div className="py-12 flex flex-col items-center text-center space-y-4">
+            <div className="w-24 h-[1px]" style={{ background: "linear-gradient(to right, transparent, #22d3ee, transparent)" }} />
+            <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: "#64748b" }}>
+              Secured Transaction
+            </p>
+            <h3 className="text-xl font-bold text-white opacity-40 italic" style={{ fontFamily: "'Syncopate', sans-serif" }}>
+              ADWAITA LEGACY 2026
+            </h3>
           </div>
         </main>
 
