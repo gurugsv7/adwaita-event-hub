@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { ArrowLeft, ShoppingBag, Trash2, Upload, CheckCircle2, Loader2, IndianRupee, Minus, Plus, QrCode, Phone } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Trash2, Upload, CheckCircle2, Loader2, IndianRupee, Minus, Plus, QrCode, Phone, Info } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -320,6 +320,25 @@ const MerchCheckoutPage = () => {
                     <Upload className="w-4 h-4" />
                     {paymentScreenshot ? paymentScreenshot.name : "Upload payment screenshot"}
                   </label>
+                </div>
+              </div>
+            </div>
+
+            {/* Important Collection Notice */}
+            <div className="rounded-2xl p-5"
+              style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.2)" }}>
+              <div className="flex items-start gap-3">
+                <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#22d3ee" }} />
+                <div className="space-y-2">
+                  <p className="text-xs font-bold tracking-widest uppercase" style={{ color: "#22d3ee", fontFamily: "'Syncopate', sans-serif" }}>
+                    IMPORTANT
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#e2e8f0", fontFamily: "'Space Grotesk', sans-serif" }}>
+                    If your ordered size is available, you can <span className="font-bold" style={{ color: "#22d3ee" }}>collect it on the day of order</span>.
+                  </p>
+                  <p className="text-sm leading-relaxed" style={{ color: "#e2e8f0", fontFamily: "'Space Grotesk', sans-serif" }}>
+                    If not, the merchandise can be collected <span className="font-bold" style={{ color: "#22d3ee" }}>3 days after booking</span> from the <span className="font-bold" style={{ color: "#22d3ee" }}>Registration Desk</span> by showing your order copy / payment proof.
+                  </p>
                 </div>
               </div>
             </div>

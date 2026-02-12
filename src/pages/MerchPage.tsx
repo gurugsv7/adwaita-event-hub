@@ -4,7 +4,7 @@ import { Navbar } from "@/components/Navbar";
 import { Helmet } from "react-helmet";
 import { merchItems } from "@/data/merch";
 import hoodieOutside from "@/assets/merch-hoodie-outside.png";
-import { ShoppingBag, Loader2, Instagram, Phone } from "lucide-react";
+import { ShoppingBag, Loader2, Instagram, Phone, Info } from "lucide-react";
 import { useMerchCart } from "@/contexts/MerchCartContext";
 import vinceOutletsLogo from "@/assets/vince-outlets-logo.jpeg";
 
@@ -245,6 +245,25 @@ const MerchPage = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Important Collection Notice */}
+          <div className="mt-12 rounded-2xl p-5 md:p-6 max-w-2xl mx-auto"
+            style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.2)" }}>
+            <div className="flex items-start gap-3">
+              <Info className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: "#22d3ee" }} />
+              <div className="space-y-2">
+                <p className="text-xs font-bold tracking-widest uppercase" style={{ color: "#22d3ee", fontFamily: "'Syncopate', sans-serif" }}>
+                  IMPORTANT
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#e2e8f0", fontFamily: "'Space Grotesk', sans-serif" }}>
+                  If your ordered size is available, you can <span className="font-bold" style={{ color: "#22d3ee" }}>collect it on the day of order</span>.
+                </p>
+                <p className="text-sm leading-relaxed" style={{ color: "#e2e8f0", fontFamily: "'Space Grotesk', sans-serif" }}>
+                  If not, the merchandise can be collected <span className="font-bold" style={{ color: "#22d3ee" }}>3 days after booking</span> from the <span className="font-bold" style={{ color: "#22d3ee" }}>Registration Desk</span> by showing your order copy / payment proof.
+                </p>
+              </div>
+            </div>
           </div>
 
           {/* Queries Contact */}
